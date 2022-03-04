@@ -448,116 +448,6 @@
 <span id="448">448</span>
 <span id="449">449</span>
 <span id="450">450</span>
-<span id="451">451</span>
-<span id="452">452</span>
-<span id="453">453</span>
-<span id="454">454</span>
-<span id="455">455</span>
-<span id="456">456</span>
-<span id="457">457</span>
-<span id="458">458</span>
-<span id="459">459</span>
-<span id="460">460</span>
-<span id="461">461</span>
-<span id="462">462</span>
-<span id="463">463</span>
-<span id="464">464</span>
-<span id="465">465</span>
-<span id="466">466</span>
-<span id="467">467</span>
-<span id="468">468</span>
-<span id="469">469</span>
-<span id="470">470</span>
-<span id="471">471</span>
-<span id="472">472</span>
-<span id="473">473</span>
-<span id="474">474</span>
-<span id="475">475</span>
-<span id="476">476</span>
-<span id="477">477</span>
-<span id="478">478</span>
-<span id="479">479</span>
-<span id="480">480</span>
-<span id="481">481</span>
-<span id="482">482</span>
-<span id="483">483</span>
-<span id="484">484</span>
-<span id="485">485</span>
-<span id="486">486</span>
-<span id="487">487</span>
-<span id="488">488</span>
-<span id="489">489</span>
-<span id="490">490</span>
-<span id="491">491</span>
-<span id="492">492</span>
-<span id="493">493</span>
-<span id="494">494</span>
-<span id="495">495</span>
-<span id="496">496</span>
-<span id="497">497</span>
-<span id="498">498</span>
-<span id="499">499</span>
-<span id="500">500</span>
-<span id="501">501</span>
-<span id="502">502</span>
-<span id="503">503</span>
-<span id="504">504</span>
-<span id="505">505</span>
-<span id="506">506</span>
-<span id="507">507</span>
-<span id="508">508</span>
-<span id="509">509</span>
-<span id="510">510</span>
-<span id="511">511</span>
-<span id="512">512</span>
-<span id="513">513</span>
-<span id="514">514</span>
-<span id="515">515</span>
-<span id="516">516</span>
-<span id="517">517</span>
-<span id="518">518</span>
-<span id="519">519</span>
-<span id="520">520</span>
-<span id="521">521</span>
-<span id="522">522</span>
-<span id="523">523</span>
-<span id="524">524</span>
-<span id="525">525</span>
-<span id="526">526</span>
-<span id="527">527</span>
-<span id="528">528</span>
-<span id="529">529</span>
-<span id="530">530</span>
-<span id="531">531</span>
-<span id="532">532</span>
-<span id="533">533</span>
-<span id="534">534</span>
-<span id="535">535</span>
-<span id="536">536</span>
-<span id="537">537</span>
-<span id="538">538</span>
-<span id="539">539</span>
-<span id="540">540</span>
-<span id="541">541</span>
-<span id="542">542</span>
-<span id="543">543</span>
-<span id="544">544</span>
-<span id="545">545</span>
-<span id="546">546</span>
-<span id="547">547</span>
-<span id="548">548</span>
-<span id="549">549</span>
-<span id="550">550</span>
-<span id="551">551</span>
-<span id="552">552</span>
-<span id="553">553</span>
-<span id="554">554</span>
-<span id="555">555</span>
-<span id="556">556</span>
-<span id="557">557</span>
-<span id="558">558</span>
-<span id="559">559</span>
-<span id="560">560</span>
 </pre><pre class="rust"><code><span class="comment">/*
  * Copyright © 2022 Neil M. Sheldon
  * 
@@ -567,130 +457,22 @@
  */</span>
 
 <span class="comment">/*
-This is a simple tool for generating and validating D&amp;D Fifth Edition monster stats, for use in homebrew and published adventures. 
 
 Prior Work:
-  - This online stat-block generator: https://tetra-cube.com/dnd/dnd-statblock.html, which has code shared on github: https://github.com/Tetra-cube/Tetra-cube.github.io is a heavy inspiration.
-  - https://www.rpgtinker.com/ - A NPC generator. While not obviously OS, when it creates a &quot;challenge rating&quot; the question mark provides a whole bunch of useful information about how that CR was generated, specific to the NPC 
+  - This online stat-block generator: https://tetra-cube.com/dnd/dnd-statblock.html, which has code shared on github: https://github.com/Tetra-cube/Tetra-cube.github.io 
+  - https://www.rpgtinker.com/ - A NPC generator. While not obviously open source, when it creates a &quot;challenge rating&quot; the question mark provides a whole bunch of useful information about how that CR was generated, specific to the NPC 
   - https://iadndmn.neocities.org/CRcalc.html - Also not OS. 
   - https://open5e.com/ - Mostly open source, this provides the data for freely available monsters. Other monsters would have to be copied.
+  - https://valloric.github.io/statblock5e/ - for HTML template
 
-[ ] Basically, attempt to port the tetra-cube code into something that will work for us.
-   [X] Input: Use CreatureCommands, but rewrite them in light of how tetra-cube&#39;s code does it.
-   [X] Test loading of monsters from text (I don&#39;t actually need to save them)
-   [X] Get the interpolation working. We need names, descriptions for actions, and additional interpolation data.
-   [X] Get the CreatureCommands working to generate CreatureData.
-       [X] Some of the commands either have to be specified in a certain order, or they have to implement &quot;hooks&quot; which get called after creation.
-   [X] Finish tests for generating statblocks from creatures.
-   [X] I need stylized text
-       [X] To do this right, I think I need a virtual machine sort of thing.
-       [X] I need to support the following functions:
-           [X] par - stop the current paragraph and start a new one
-           [X] par(..) - stop the current paragraph, start a new one, and put the specified text into a special header (see Vampire Weaknesses)
-           [X] li - stop the current paragraph and start a paragraph with a hanging indent, as used for &quot;lists&quot;. (see spellcasting, innate spellcasting)
-           [X] li(..) - a list item, but the specified text gets a special header (see Breath Weapons on metallic dragons)
-           [X] it(...) - make enclosed text italic
-           [X] bt(...) - make enclosed text bold
-       [X] Interpolation (in statblock mode only) doesn&#39;t return a string, but a vector of &quot;blocks&quot;, which contain vectors of &quot;spans&quot;.
-       [X] These are handled using &#39;commands&#39;, which are built-in identifiers that indicate the operation to take.
-   [X] Go through and finish TODO&#39;s, there may be some stuff I need to fix before I start using it.
-   [X] Create a command line tool for taking the creature commands file and generating a JSON (or something) statblock.
-   [X] Get a better command line argument parser, and also allow stdin and stdout output.
-   [X] Test the command line for outputting JSON at least.
-   [X] Interpolate names
-   [X] Look at JSON syntax to see if we need to nudge the serde attributes
-   [X] weapon attacks aren&#39;t using italic tags
-   [X] Rethinking the features once again
-       [X] Instead of a &#39;name&#39; and &#39;description&#39;, the &#39;name&#39; is just a heading on the first paragraph. So, it needs to be passed in, or it needs to be inserted above after interpolation.
-           [X] I don&#39;t need styles, but who knows if someone wants to interpolate other values into the name, in which case I still need to interpolated it,
-               which means I pass it in before. I can even prepend it with the appropriate paragraph block.
-       [X] This appears to mean that there should be three block types now, but I&#39;m leaning towards the opinion that Vampire Weaknesses is simply formatted wrong, and should look more like the others.
-       [X] In addition, legendary actions also become one big set of blocks, since the actions are subparagraphs. But, with the change above, I can also make them just start with a sub tag instead of a par.
-   [X] Implement templates using minijina
-       [X] Fonts: Merriweather and Trirong
-       [ ] FUTURE: Okay, I want to figure out how to get the templates to resolve at run time. I can add a template without getting an error, assuming it&#39;s
-           compiled at that point, maybe there&#39;s a way to get the byte-code and find the included templates?
-           [ ] This looks even more promising, since the error doesn&#39;t even occur when I just &#39;get&#39; the template, only on render.
-           [ ] And it fails, I think the only way to do this is to fork minijinja and fix it.
-       [X] Make a note that I chose minijinja after reviewing several template libraries, and chose it based on it&#39;s lack of additional dependencies.
-       [-] cargo run -- --input test-data/dragon.creature --output-format mini-jinja --template test-data/creature-template.html --include test-data/blocks-template.html --include test-data/spans-template.html --include test-data/feature-template.html &gt; test-data/dragon.html
-   [X] Look at that HTML template for monsters in tetra-cube and see if I can pull that in and use it, that would actually make it easy to output to HTML,
-       I could even have the templates built-in.
-       [X] This requires me to actually get that component to work, because their live demo doesn&#39;t
-       [X] Although, to be fair, I&#39;d rather not support web components, silly things, really.
-       [X] Need two-column version as well, need to compare the inlined version of the two-column with the regular to see what&#39;s different.
-           [X] The only difference is that we need:  data-two-column=&quot;&quot; style=&quot;--data-content-height: 820px;&quot; on the stat-block div.
-           [X] Note that 820px is something the user specifies
-       [X] I need options to just emit the HTML fragment and styles This might help me figure out the two-column thingie, but I&#39;m not certain
-       [X] Now, compile those files into the project and allow the user to specify &#39;html&#39; to get them.
-           [X] Options include getting just the actual body content and a style sheet separately so that they can embed this in their own content.
-   [X] Relook at the command line arguments. There are so many things dependent on the output format that perhaps we actually need
-       commands instead of output formats. Some commands require input, others don&#39;t...
-   [X] Need a way to list monsters in a source by type and challenge rating (what else? Look at that one database)
-       - type
-       - size
-       - alignment
-       - min cr
-       - max cr
-   [X] Get rid of monstorr-convert completely? I can always make a tag showing the last time it was there.
-   [X] Let&#39;s move the monsters we did convert into monstorr-data and give access to them.
-   [X] Need documentation for the creature commands, and some example files.
-       [X] Document usage of the monstorr tool.
-       [X] Make sure creature_commands is documented with creature file syntax, and all of it&#39;s requirements are as well.
-           [X] Next: documenting the file with &#39;CreatureCreator&#39;.
-           [X] CreatureCommands
-           [X] Armor
-           [X] Ability
-           [X] Skill
-           [X] Damage
-           [X] Language
-           [X] Weapon
-           [X] Multiattack
-           [X] CompoundAttackEffect
-           [X] AttackEffect
-           [X] Attack
-           [X] Action
-           [X] UsageLimit
-           [X] Reaction
-           [X] Feature
-           [X] LegendaryAction
-           [X] SpellcastingCommand
-           [X] InnateSpellcastingCommand
-       [X] Make sure interpolation stuff is documented in interpolation crate, and in Creature::get_property
-       [X] Make sure the stat-block JSON structure is documented appropriately for use in templating.
-   [X] Come up with an appropriate open-source license
-       [X] Mozilla requires disclosing source, so the powers-that-be can&#39;t take it over and close it. Also includes a trademark limitation,
-           which is going to be important.
-       [X] Make sure all files are marked with licenses
-       [X] Make sure we include the Open Game License content (or whatever the SRD uses now)
-   [ ] Can I generate the documentation as a github or gitlab wiki format? Readme markdown files?
-   [ ] I might be able to create a command for the Monstorr tool that takes in all &#39;creature&#39; files in a directory, processes each one,
-       grabs summary information out, and creates include content that could be put into monstorr-data.
-   [ ] publish on gitlab or github, and move the remaining issues there.
-       [ ] Before committing the code, go through and add the issues and delete them from these files (also include some of the FUTURE: stuff, but don&#39;t delete those comments, necessarily)
-   [ ] Make sure we can at least try to generate monsters in &#39;Tex&#39; format.
-       [ ] To do that, I need to know what that format actually is...I&#39;m going to have to go back into TEX to narrow that stuff down.
-   [ ] FUTURE: Watch the issues on minijinja, see if they fix the feature suggestions I made, or look for a new template, and at the
-       last resort, write my own templating language.
-   [ ] FUTURE: Add in commands for capability of validating Challenge Rating based on rules in DMG (see prior work)
-        [ ] Calculate Damage Per Round
-        [ ] Calculate Challenge Rating - Note that this calculation is circular, as it depends on DPR, which depends on Proficiency Bonus, which depends on CR again.
-            Instead of creating an infinite loop, there are ExpectChallenge/ProficiencyBonus commands on CreatureCreator which provide a default to assume. If the
-            final result is *not* consistent with these commands, an error occurs.
-        [ ] Calculate wordings of attacks and features that depend on the proficiency bonus, or knowledge of the DPR, etc. 
-            [ ] This is done by processing the text through a template engine which replaces names of properties in &quot;${...}&quot; form with their actual values.
-    [ ] FUTURE: I need a better template language with the following features:
-        - macros inside the same template, so I don&#39;t need to include files
-        - Need a way to merge the tags together, instead of having separate statements vs functions, so I don&#39;t have to make them messy
-          to work with whitespace.
-    [ ] Far in the future: convert the Open%e SRD monsters into the &#39;creature&#39; format and allow access to them from inside.
  */</span>
 
 
+<span class="comment">// need this because some important documentation is in private code</span>
+<span class="attribute">#![<span class="ident">allow</span>(<span class="ident">rustdoc::private_intra_doc_links</span>)]</span>
 <span class="comment">/* 
 NOTE: I use block comments for documentation because they don&#39;t require an extra token at the beginning of every line. The extra token confuses my indents, are an extra bit of unnecessary typing, and frankly, look messy. I also don&#39;t use asterisks at the beginning of the doc comment lines for the same reasons, and I hate that my IDE insists that I do.
 */</span>
-<span class="attribute">#![<span class="ident">allow</span>(<span class="ident">rustdoc::private_intra_doc_links</span>)]</span>
 <span class="doccomment">/*!
 
 This crate is the library for the functionality of the Monstorr program. It contains a chaotic good mess of structures and functionality for calculating D&amp;D 5e creature stats and producing stat blocks in various formats. It&#39;s not currently intended as a public API, and any published functionality here is very unstable. However, some of the stuff in this crate is public API, therefore it needs documentation.
@@ -1033,7 +815,6 @@ There are a few things that you may need to know in order to simply use Monstorr
     <span class="kw">pub</span> <span class="ident">challenge_rating</span>: <span class="ident">String</span>
 }
 
-<span class="comment">// FUTURE: Should limit this to just open5e-list formats somehow.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list_creatures</span>(<span class="ident">input_file</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>, <span class="ident">input_format</span>: <span class="ident">ListInputFormat</span>, <span class="ident">type_</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>, <span class="ident">subtype</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>, <span class="ident">size</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,<span class="ident">alignment</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,<span class="ident">max_cr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,<span class="ident">min_cr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CreatureSummary</span><span class="op">&gt;</span>,<span class="ident">String</span><span class="op">&gt;</span> {
 
     <span class="kw">let</span> <span class="ident">working_dir</span> <span class="op">=</span> <span class="ident">get_default_working_dir</span>()<span class="question-mark">?</span>;
@@ -1050,7 +831,6 @@ There are a few things that you may need to know in order to simply use Monstorr
     <span class="kw">let</span> <span class="ident">type_</span> <span class="op">=</span> <span class="ident">type_</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">trim</span>().<span class="ident">to_lowercase</span>());
     <span class="kw">let</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">size</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">trim</span>().<span class="ident">to_lowercase</span>());
     <span class="kw">let</span> <span class="ident">alignment</span> <span class="op">=</span> <span class="ident">alignment</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">trim</span>().<span class="ident">to_lowercase</span>());
-    <span class="comment">// TODO: How do we compare the challenge ratings?</span>
     <span class="kw">let</span> <span class="ident">max_cr</span> <span class="op">=</span> <span class="ident">max_cr</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">ChallengeRating</span><span class="op">&gt;</span>()).<span class="ident">transpose</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Could not parse max_cr: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">min_cr</span> <span class="op">=</span> <span class="ident">min_cr</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">ChallengeRating</span><span class="op">&gt;</span>()).<span class="ident">transpose</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Could not parse min_cr: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>;
 

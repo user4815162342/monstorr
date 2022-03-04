@@ -1689,10 +1689,6 @@
 <span id="1689">1689</span>
 <span id="1690">1690</span>
 <span id="1691">1691</span>
-<span id="1692">1692</span>
-<span id="1693">1693</span>
-<span id="1694">1694</span>
-<span id="1695">1695</span>
 </pre><pre class="rust"><code><span class="comment">/*
  * Copyright © 2022 Neil M. Sheldon
  * 
@@ -3152,10 +3148,6 @@ The documentation below is automatically produced with tools which assume you ar
             <span class="ident">CreatureCommand::Truesight</span>(<span class="ident">distance</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">add_truesight</span>(<span class="ident">distance</span>),
             <span class="ident">CreatureCommand::Tremorsense</span>(<span class="ident">distance</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">add_tremorsense</span>(<span class="ident">distance</span>),
             <span class="ident">CreatureCommand::CustomSense</span>(<span class="ident">sense</span>,<span class="ident">distance</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">add_custom_sense</span>(<span class="ident">sense</span>, <span class="ident">distance</span>),
-            <span class="comment">// FUTURE: When I add in challenge rating calculationg, the &#39;Expect...Challenge&#39; functions should return</span>
-            <span class="comment">// an error if the challenge rating is wrong. The Override will simply override without any error.</span>
-            <span class="comment">// For now, I&#39;m leaving it be so that the user can use them and then take advantage of the</span>
-            <span class="comment">// errors when the feature is finally added in. </span>
             <span class="ident">CreatureCommand::ExpectNoChallenge</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">hooks</span>.<span class="ident">expected_challenge_rating</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">ChallengeRating::None</span>),
             <span class="ident">CreatureCommand::ExpectChallenge</span>(<span class="ident">cr</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">hooks</span>.<span class="ident">expected_challenge_rating</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">ChallengeRating::Whole</span>(<span class="kw-2">*</span><span class="ident">cr</span>)),
             <span class="ident">CreatureCommand::ExpectHalfChallenge</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">hooks</span>.<span class="ident">expected_challenge_rating</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">ChallengeRating::Half</span>),
