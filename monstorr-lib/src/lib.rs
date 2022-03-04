@@ -323,7 +323,10 @@ pub fn create_stat_block(input_file: Option<&str>, input_format: InputFormat,
 pub fn list_html_template_names() -> Vec<String> {
     let mut result = Vec::new();
     result.push(monstorr_data::templates::FULL_HTML_TEMPLATE.0.to_owned());
-    for template in monstorr_data::templates::FULL_HTML_TEMPLATE_INCLUDES {
+    for template in monstorr_data::templates::STANDARD_HTML_TEMPLATE_INCLUDES {
+        result.push(template.0.to_owned())
+    }
+    for template in monstorr_data::templates::ADDITIONAL_FULL_HTML_TEMPLATE_INCLUDES {
         result.push(template.0.to_owned())
     }
     result
@@ -342,7 +345,12 @@ fn print_template_if_name_matches(name: &str,template: (&str,&str)) -> bool {
 
 pub fn print_template(name: &str) -> Result<(),String> {
     if !print_template_if_name_matches(name, monstorr_data::templates::FULL_HTML_TEMPLATE) {
-        for template in monstorr_data::templates::FULL_HTML_TEMPLATE_INCLUDES {
+        for template in monstorr_data::templates::STANDARD_HTML_TEMPLATE_INCLUDES {
+            if print_template_if_name_matches(name, template) {
+                return Ok(());
+            }
+        }
+        for template in monstorr_data::templates::ADDITIONAL_FULL_HTML_TEMPLATE_INCLUDES {
             if print_template_if_name_matches(name, template) {
                 return Ok(());
             }

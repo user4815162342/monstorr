@@ -6,10 +6,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-pub const DRAGON_GOLD_ADULT: &str = include_str!("../data/adult_gold_dragon.creature");
-pub const GOBLIN: &str = include_str!("../data/goblin.creature");
-pub const BUGBEAR: &str = include_str!("../data/bugbear.creature");
-pub const EFREETI: &str = include_str!("../data/efreeti.creature");
+pub const DRAGON_GOLD_ADULT: &str = include_str!("../data/creatures/adult_gold_dragon.creature");
+pub const GOBLIN: &str = include_str!("../data/creatures/goblin.creature");
+pub const BUGBEAR: &str = include_str!("../data/creatures/bugbear.creature");
+pub const EFREETI: &str = include_str!("../data/creatures/efreeti.creature");
 
 /* FUTURE: How could we have a built-in list? 
 The list has to have summary data (name, type, size, alignment, cr, other stuff, see monstorr-lib list_creatures) and I don't want to create all of the creatures (assuming all SRD creatures eventually get imported).None
