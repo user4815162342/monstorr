@@ -1,37 +1,13 @@
-## Welcome to GitHub Pages
+## Monstorr
 
-You can use the [editor on GitHub](https://github.com/user4815162342/monstorr/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
+Monstorr is a tool for generating and validating D&D Fifth Edition monster stats, for use in homebrew and published game content. 
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+It is a command-line utility that takes a file of "creature commands", runs those commands, calculates derived stats like armor class, hit points and attack bonuses, and spits out a stat block. There is a lot of flexibility in this, and flexibility always requires a bit of configuration, but it should still be simple to use.
 
-### Markdown
+This project is still a work in progress, although I am using it for my own projects. I will provide compiled executables if any interest is shown. I would appreciate anyone reaching out to me about bugs, feature suggestions, and encouragement.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+### Documentation
 
-```markdown
-Syntax highlighted code block
+Right now, the best documentation I can provide is the rustdoc web pages. Hopefully those who aren't knowledgeable in Rust can ignore the extra code docs and find the information they need.
 
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/user4815162342/monstorr/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+It starts with the [documentation for code of the command line tool](rustdoc/monstorr/index.html).
