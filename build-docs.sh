@@ -1,5 +1,5 @@
 #!/bin/sh
 
-rm -rf documentation
+rm -rf docs/rustdoc
 cargo doc --no-deps --workspace --document-private-items
-mv target/doc documentation
+mv target/doc docs/rustdoc
