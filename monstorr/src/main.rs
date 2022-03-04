@@ -9,7 +9,7 @@
 /*!
 Monstorr is a simple tool for generating and validating D&D Fifth Edition monster stats, for use in homebrew and published game content. 
 
-This is the main run-time crate for Monstorr. For more information about the tool, see its usage, which is also generated from doc comments inside this module. Starting at [`Arguments`].
+This is the main run-time crate for Monstorr. For more information about the tool, see its usage, which is also generated from doc comments inside this module. Starting at [`Command`].
 
 For more detailed documentation, including information on how to build a creature file, see [`monstorr_lib`].
 
@@ -19,7 +19,6 @@ use std::process;
 
 use clap::Parser;
 use clap::ArgEnum;
-use clap::Subcommand;
 use clap::Args;
 
 use monstorr_lib::create_stat_block;
@@ -116,10 +115,33 @@ enum TemplateClass {
     HTML
 }
 
-#[derive(Subcommand)]
-/// Represents a command to be called by the main function
-enum Command {
+#[derive(Parser)]
+#[clap(author="N. M. Sheldon", version)]
+/**
+A tool for building D&D 5e creature stat blocks and other neat tricks
+ 
+Monstorr's primary function is to build creature stat blocks while automatically calculating anything that can be calculated. For example, specify that the creature has a Longbow, and monstorr will calculate the appropriate attack and hit rolls based on the creatures dexterity and proficiency, and produce an appropriate attack action. There are a number of things it can calculate.
 
+Monstorr can produce plain stat-block data in JSON format, using the `json` command, or it can automatically template that data into another text format using the `mini-jinja` command. It also has some built-in templates it uses to produce html text with the `html` command. The built-in templates can be reviewed with the `list-templates` and `get-templates` commands.
+
+This tool was originally thought of as a creature database tool, and it still retains one command from that idea. The `list-creatures` command can be used to query a list file.
+
+# Input Formats
+
+Monstorr recognizes a few formats for the input data for generating stat blocks. These are used by all stat-block creation and templating commands.
+
+* `creature`: This is essentially a list of commands for designing the creature, assuming defaults for everything not added. The syntax for this file format is documented in this tool's code documentation. I hope to have a better link to this later.
+
+* `open5e-list`: This is the closest thing I could find to a standard format. This is a JSON format returned by queries to the monster database at [Open5e.com](https://open5e.com/monsters/monster-list). When generating stat-blocks from this format, a creature name is required. This format can also be queried using `list-creatures`. The stat-blocks generated from this list will not be formatted as nicely as with the `creature` format. Monstorr currently does not parse the Markdown text used in feature descriptions, calculations are not validated, and there are typos and errors in some of the creatures from that database.
+
+* `open5e`: This is simply a single creature block extracted from an `open5e-list` file, as a stand-alone JSON file.
+
+* `stored`: Monstorr contains a few pre-built creatures converted from D&D Fifth Edition System Reference Document* content. Currently, only four creatures are contained in the executable, as conversion of the creatures is a busy work task that would take some time. It is a dream that the entire SRD list of monsters be available in Monstorr, but it is likely that this will not happen before a hypothetical sixth edition happens.
+
+(I apologize for the unusual formatting of this text, the tools used to generate it do not yet support structured and formatted text in this part, so it is written in raw Markdown format.)
+
+*/
+enum Command {
     #[clap(author="N. M. Sheldon", version, about, long_about = None)]
     /** 
     Generate a stat block in JSON format.
@@ -261,44 +283,13 @@ enum Command {
     MonstorrVersion
 }
 
-#[derive(Parser)]
-#[clap(author="N. M. Sheldon", version)]
-/**
-A tool for building D&D 5e creature stat blocks and other neat tricks
- 
-Monstorr's primary function is to build creature stat blocks while automatically calculating anything that can be calculated. For example, specify that the creature has a Longbow, and monstorr will calculate the appropriate attack and hit rolls based on the creatures dexterity and proficiency, and produce an appropriate attack action. There are a number of things it can calculate.
-
-Monstorr can produce plain stat-block data in JSON format, using the `json` command, or it can automatically template that data into another text format using the `mini-jinja` command. It also has some built-in templates it uses to produce html text with the `html` command. The built-in templates can be reviewed with the `list-templates` and `get-templates` commands.
-
-This tool was originally thought of as a creature database tool, and it still retains one command from that idea. The `list-creatures` command can be used to query a list file.
-
-# Input Formats
-
-Monstorr recognizes a few formats for the input data for generating stat blocks. These are used by all stat-block creation and templating commands.
-
-* `creature`: This is essentially a list of commands for designing the creature, assuming defaults for everything not added. The syntax for this file format is documented in this tool's code documentation. I hope to have a better link to this later.
-
-* `open5e-list`: This is the closest thing I could find to a standard format. This is a JSON format returned by queries to the monster database at [Open5e.com](https://open5e.com/monsters/monster-list). When generating stat-blocks from this format, a creature name is required. This format can also be queried using `list-creatures`. The stat-blocks generated from this list will not be formatted as nicely as with the `creature` format. Monstorr currently does not parse the Markdown text used in feature descriptions, calculations are not validated, and there are typos and errors in some of the creatures from that database.
-
-* `open5e`: This is simply a single creature block extracted from an `open5e-list` file, as a stand-alone JSON file.
-
-* `stored`: Monstorr contains a few pre-built creatures converted from D&D Fifth Edition System Reference Document* content. Currently, only four creatures are contained in the executable, as conversion of the creatures is a busy work task that would take some time. It is a dream that the entire SRD list of monsters be available in Monstorr, but it is likely that this will not happen before a hypothetical sixth edition happens.
-
-(I apologize for the unusual formatting of this text, the tools used to generate it do not yet support structured and formatted text in this part, so it is written in raw Markdown format.)
-
-*/
-struct Arguments {
-    #[clap(subcommand)]
-    command: Command
-}
-
 
 /**
 Runs the tool with the given arguments.
 */
-fn run(args: Arguments) -> Result<(),String> {
+fn run(args: Command) -> Result<(),String> {
 
-    match args.command {
+    match args {
         Command::MonstorrVersion => {
             println!("monstorr creature commands version: {}",MONSTORR_VERSION);
             process::exit(0);
@@ -364,7 +355,7 @@ Parses the command line arguments, runs the tool, and prints out any error messa
 */
 fn main() {
 
-    if let Err(e) = run(Arguments::parse()) {
+    if let Err(e) = run(Command::parse()) {
         eprintln!("{}",e);
         process::exit(1);
     }
