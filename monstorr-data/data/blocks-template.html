@@ -1,0 +1,39 @@
+{#
+    Copyright © 2022 Neil M. Sheldon
+    
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, You can obtain one at https://mozilla.org/MPL/2.0/.
+#}
+{%  for block in blocks %}{% 
+    if block.block=="paragraph" %}
+        <p>{%
+        if block.heading 
+            %}<b class="heading">{% 
+            with spans=block.heading %}{% 
+                include 'spans-template.html' %}{% 
+            endwith 
+            %}</b> {%
+        endif %}{% 
+        with spans=block.body %}{% 
+            include 'spans-template.html' %}{% 
+        endwith 
+        %}</p>{% 
+    elif block.block=="subparagraph" %}
+        <p class="subproperty">{%
+        if block.heading 
+            %}<b class="heading">{% 
+            with spans=block.heading %}{% 
+                include 'spans-template.html' %}{% 
+            endwith 
+            %}</b> {%
+        endif %}{% 
+        with spans=block.body %}{% 
+            include 'spans-template.html' %}{% 
+        endwith 
+        %}</p>{% 
+    else
+        %}
+        <p><b><i>UNKNOWN BLOCK TYPE {{ block.block }}</i></b></p>{% 
+    endif %}{% 
+endfor %}

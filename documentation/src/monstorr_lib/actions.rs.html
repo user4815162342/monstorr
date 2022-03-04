@@ -1,0 +1,788 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `monstorr-lib&#x2F;src&#x2F;actions.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>actions.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../monstorr_lib/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
+<span id="2">  2</span>
+<span id="3">  3</span>
+<span id="4">  4</span>
+<span id="5">  5</span>
+<span id="6">  6</span>
+<span id="7">  7</span>
+<span id="8">  8</span>
+<span id="9">  9</span>
+<span id="10"> 10</span>
+<span id="11"> 11</span>
+<span id="12"> 12</span>
+<span id="13"> 13</span>
+<span id="14"> 14</span>
+<span id="15"> 15</span>
+<span id="16"> 16</span>
+<span id="17"> 17</span>
+<span id="18"> 18</span>
+<span id="19"> 19</span>
+<span id="20"> 20</span>
+<span id="21"> 21</span>
+<span id="22"> 22</span>
+<span id="23"> 23</span>
+<span id="24"> 24</span>
+<span id="25"> 25</span>
+<span id="26"> 26</span>
+<span id="27"> 27</span>
+<span id="28"> 28</span>
+<span id="29"> 29</span>
+<span id="30"> 30</span>
+<span id="31"> 31</span>
+<span id="32"> 32</span>
+<span id="33"> 33</span>
+<span id="34"> 34</span>
+<span id="35"> 35</span>
+<span id="36"> 36</span>
+<span id="37"> 37</span>
+<span id="38"> 38</span>
+<span id="39"> 39</span>
+<span id="40"> 40</span>
+<span id="41"> 41</span>
+<span id="42"> 42</span>
+<span id="43"> 43</span>
+<span id="44"> 44</span>
+<span id="45"> 45</span>
+<span id="46"> 46</span>
+<span id="47"> 47</span>
+<span id="48"> 48</span>
+<span id="49"> 49</span>
+<span id="50"> 50</span>
+<span id="51"> 51</span>
+<span id="52"> 52</span>
+<span id="53"> 53</span>
+<span id="54"> 54</span>
+<span id="55"> 55</span>
+<span id="56"> 56</span>
+<span id="57"> 57</span>
+<span id="58"> 58</span>
+<span id="59"> 59</span>
+<span id="60"> 60</span>
+<span id="61"> 61</span>
+<span id="62"> 62</span>
+<span id="63"> 63</span>
+<span id="64"> 64</span>
+<span id="65"> 65</span>
+<span id="66"> 66</span>
+<span id="67"> 67</span>
+<span id="68"> 68</span>
+<span id="69"> 69</span>
+<span id="70"> 70</span>
+<span id="71"> 71</span>
+<span id="72"> 72</span>
+<span id="73"> 73</span>
+<span id="74"> 74</span>
+<span id="75"> 75</span>
+<span id="76"> 76</span>
+<span id="77"> 77</span>
+<span id="78"> 78</span>
+<span id="79"> 79</span>
+<span id="80"> 80</span>
+<span id="81"> 81</span>
+<span id="82"> 82</span>
+<span id="83"> 83</span>
+<span id="84"> 84</span>
+<span id="85"> 85</span>
+<span id="86"> 86</span>
+<span id="87"> 87</span>
+<span id="88"> 88</span>
+<span id="89"> 89</span>
+<span id="90"> 90</span>
+<span id="91"> 91</span>
+<span id="92"> 92</span>
+<span id="93"> 93</span>
+<span id="94"> 94</span>
+<span id="95"> 95</span>
+<span id="96"> 96</span>
+<span id="97"> 97</span>
+<span id="98"> 98</span>
+<span id="99"> 99</span>
+<span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+</pre><pre class="rust"><code><span class="comment">/*
+ * Copyright © 2022 Neil M. Sheldon
+ * 
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */</span>
+
+<span class="kw">use</span> <span class="ident">serde::Deserialize</span>;
+<span class="kw">use</span> <span class="ident">serde::Serialize</span>;
+
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::dice_expression::DiceExpression</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::attacks::Attack</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::attacks::AttackEffect</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::attacks::CompoundAttackEffect</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::attacks::Weapon</span>;
+
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>,<span class="ident">PartialEq</span>,<span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>,<span class="ident">Deserialize</span>)]</span>
+<span class="doccomment">/**
+Specifies usage limits for actions, reactions and other features.
+*/</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">UsageLimit</span> {
+    <span class="doccomment">/**
+    `Recharge(&lt;integer&gt;)`
+
+    Specifies that the action recharges on a random roll. This is phrased in the name of the action as &quot;Recharge &lt;number&gt;-6&quot;.
+    */</span>
+    <span class="ident">Recharge</span>(<span class="ident">u8</span>), <span class="comment">// the roll equal or above that the monster must roll to recharge a feature (i.e. Recharge 5-6 would be 5)</span>
+    <span class="doccomment">/**
+    `PerDay(&lt;integer&gt;)`
+
+    The action can be used a limited number of times per day. This is phrased in the name as &quot;&lt;number&gt;/Day&quot;
+    */</span>
+    <span class="ident">PerDay</span>(<span class="ident">u8</span>), <span class="comment">// the number of times per day that the monster can use the feature</span>
+    <span class="doccomment">/**
+    `RechargeAfterRest`
+    
+    The action can be used once and recharges only after a short or long rest.
+    */</span>
+    <span class="ident">RechargeAfterRest</span>, <span class="comment">// the feature recharges after a short or long rest</span>
+    <span class="doccomment">/**
+    `AlternateFormOnly(&lt;string&gt;)`
+
+    The action can only be used while the creature is in an alternate form. The string describes this alternate form.
+    */</span>
+    <span class="ident">AlternateFormOnly</span>(<span class="ident">String</span>), <span class="comment">// The feature is only available while the monster is in an alternate form</span>
+}
+
+<span class="kw">impl</span> <span class="ident">std::fmt::Display</span> <span class="kw">for</span> <span class="ident">UsageLimit</span> {
+
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident">UsageLimit::Recharge</span>(<span class="number">6</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Recharge 6&quot;</span>),
+            <span class="ident">UsageLimit::Recharge</span>(<span class="ident">roll</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Recharge {}-6&quot;</span>,<span class="ident">roll</span>),
+            <span class="ident">UsageLimit::PerDay</span>(<span class="ident">count</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;{}/Day&quot;</span>,<span class="ident">count</span>),
+            <span class="ident">UsageLimit::RechargeAfterRest</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;Recharges after a Short or Long Rest&quot;</span>),
+            <span class="ident">UsageLimit::AlternateFormOnly</span>(<span class="ident">form</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;{} Form Only&quot;</span>,<span class="ident">form</span>)
+        }
+    }
+
+}
+
+<span class="comment">// The built-in actions come with free descriptions, so you don&#39;t have to rewrite what is given for monsters which use these in the SRD.</span>
+<span class="comment">// Some of these automaticaly effect CR as well.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">PartialEq</span>,<span class="ident">Debug</span>,<span class="ident">Clone</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>,<span class="ident">Deserialize</span>)]</span>
+<span class="doccomment">/**
+
+Many of the variants in this value are attempts to mimic common actions found in the SRD, as well as actions which the Dungeon Master&#39;s Guide says may have an effect on the challenge rating. However, since the SRD does not use consistent phrasing for all actions, you may not get the output you expect. If you want to use an action with one of the specified names, use that, even if you have to override the description to fix it later. That way, you&#39;ll get the benefits of challenge rating calculation when that is available.
+
+*/</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Action</span> {
+    
+    <span class="doccomment">/**
+    `ChangeShape(&lt;string&gt;)`
+
+    The specified string is a description of the form the creature can turn into, such as &quot;a humanoid or beast that has a challenge rating no higher than its own&quot;
+    */</span>
+    <span class="ident">ChangeShape</span>(<span class="ident">String</span>), <span class="comment">// Description of the form the creature can turn into</span>
+    
+    <span class="doccomment">/**
+    `Charm(&lt;integer&gt;,&lt;integer&gt;)`
+
+    The first number is the range of the effect, and the second is the Wisdom save DC.
+
+    */</span>
+    <span class="ident">Charm</span>(<span class="ident">u8</span>,<span class="ident">u8</span>), <span class="comment">// distance, save dc (Wisdom)</span>
+    
+    <span class="doccomment">/**
+    `Enlarge`
+    */</span>
+    <span class="ident">Enlarge</span>,
+    
+    <span class="doccomment">/**
+    `Etherealness`
+    */</span>
+    <span class="ident">Etherealness</span>,
+    
+    <span class="doccomment">/**
+    `FrightfulPresence(&lt;integer&gt;,&lt;integer&gt;,&lt;boolean&gt;)`
+
+    The first integer is the range of the effect, the second is the Wisdom save DC. The last boolean indicates whether re-saves are done at a disadvantage, as with the Tarrasque.
+
+    */</span>
+    <span class="ident">FrightfulPresence</span>(<span class="ident">u8</span>,<span class="ident">u8</span>,<span class="ident">bool</span>), <span class="comment">// distance, DC (Wisdom), whether re-saves are done at disadvantage (Tarrasque-style)</span>
+    
+    <span class="doccomment">/**
+    `HorrifyingVisage(&lt;integer&gt;,&lt;integer&gt;)`
+
+    The first integer is the range of the effect, the second is the Wisdom save DC.
+    */</span>
+    <span class="ident">HorrifyingVisage</span>(<span class="ident">u8</span>,<span class="ident">u8</span>), <span class="comment">// distance, DC (Wisdom)</span>
+    
+    <span class="doccomment">/**
+    `IllusoryAppearance(&lt;integer&gt;)`
+
+    The integer is the investigation (Intelligence) check DC to discern the true appearance.
+    */</span>
+    <span class="ident">IllusoryAppearance</span>(<span class="ident">u8</span>), <span class="comment">// DC to discern (Investigation)</span>
+    
+    <span class="doccomment">/**
+    `Leadership`
+    */</span>
+    <span class="ident">Leadership</span>,
+    
+    <span class="doccomment">/**
+    `Possession(&lt;integer&gt;)`
+
+    The integer is the Charisma save DC.
+    */</span>
+    <span class="ident">Possession</span>(<span class="ident">u8</span>), <span class="comment">// Save DC (Charisma)</span>
+    
+    <span class="doccomment">/**
+    `ReadThoughts(&lt;integer&gt;)`
+
+    The integer is the range of the effect.
+    */</span>
+    <span class="ident">ReadThoughts</span>(<span class="ident">u8</span>), <span class="comment">// distance</span>
+    
+    <span class="doccomment">/**
+    `Reel`
+    */</span>
+    <span class="ident">Reel</span>,
+    
+    <span class="doccomment">/**
+    `Swallow(&lt;dice-expression-string&gt;,&lt;integer&gt;,&lt;integer&gt;,&lt;integer&gt;)`
+
+    The first argument is the acid damage inflected while swallowed. The second is the damage required to cause the creature to vomit. The third is the Constitution save DC the creature must roll. The last is the distance required to escape.
+    */</span>
+    <span class="ident">Swallow</span>(<span class="ident">DiceExpression</span>,<span class="ident">u8</span>,<span class="ident">u8</span>,<span class="ident">u8</span>), <span class="comment">// damage (acid) while swallowed, damage required to vomit, creature DC to save (Constitution), distance to escape corpse</span>
+    
+    <span class="doccomment">/**
+    `Teleport(&lt;integer&gt;)`
+    `Teleport(&lt;integer&gt;,option(&lt;string&gt;))`
+
+    The first argument is the distance the creature can teleport. The second is the name of an optional action which can be taken prior to teleporting.
+    */</span>
+    <span class="ident">Teleport</span>(<span class="ident">u8</span>,
+        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
+        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+        <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>), <span class="comment">// distance of teleport, an optional attack which can be made prior to teleport</span>
+
+    <span class="doccomment">/**
+    `Attack(&lt;string&gt;,&lt;Attack&gt;,&lt;AttackEffect&gt;)`
+    `Attack(&lt;string&gt;,&lt;Attack&gt;,&lt;AttackEffect&gt;,option(&lt;CompoundAttackEffect&gt;))`
+
+    This variant adds a custom attack to the creature. The first argument is the name of the attack, the other arguments describe the attack, and are used to generate the description. See [`crate::attacks::Attack`], [`crate::attacks::AttackEffect`], and [`crate::attacks::CompoundAttackEffect`].
+    */</span>
+    <span class="ident">Attack</span>(<span class="ident">String</span>,<span class="ident">Attack</span>,<span class="ident">AttackEffect</span>,
+        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
+        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+        <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CompoundAttackEffect</span><span class="op">&gt;</span>),
+
+    <span class="doccomment">/**
+    `Action(&lt;string&gt;,&lt;string&gt;,option(&lt;AttackEffect&gt;))`
+    `Action(&lt;string&gt;,&lt;string&gt;,option(&lt;AttackEffect&gt;),option(&lt;CompoundAttackEffect&gt;))`
+
+    This variant adds a custom action that isn&#39;t an attack, or at least doesn&#39;t require an attack roll to hit. The first argument is the name, the second is the description, which will be interpolated. The remaining arguments describe the effects of the action, and are used to calculate damage per round. These effects aren&#39;t used to calculate the final description.
+    */</span>
+    <span class="ident">Action</span>(<span class="ident">String</span>,<span class="ident">String</span>,
+        <span class="comment">// I can&#39;t skip serializing this one, as the deserializing would get confused if we had None,Some for these last two</span>
+        <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">AttackEffect</span><span class="op">&gt;</span>,
+        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
+        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+        <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CompoundAttackEffect</span><span class="op">&gt;</span>), <span class="comment">// name, description, damage effect if necessary.</span>
+
+    <span class="comment">// Breath weapon details vary so much between creatures, with each species of dragon (and other creatures) having their </span>
+    <span class="comment">// own unique powers, that they are just a custom action. Even some of them are named different (and how do I handle the</span>
+    <span class="comment">// dual weapons for metallic dragons?) However, they may be important to future Challenge Rating calculation.</span>
+
+    <span class="doccomment">/**
+    `BreathWeapon(&lt;string&gt;,&lt;string&gt;,option(&lt;AttackEffect&gt;))`
+    `BreathWeapon(&lt;string&gt;,&lt;string&gt;,option(&lt;AttackEffect&gt;),option(&lt;CompoundAttackEffect&gt;))`
+
+    Follows the same signatures as the `Action` variant. Breath weapon actions vary so much between creatures, with each species having their own unique powers, that these are just custom actions. But, their existence does change the challenge rating.
+    */</span>
+    <span class="ident">BreathWeapon</span>(<span class="ident">String</span>,<span class="ident">String</span>,
+        <span class="comment">// I can&#39;t skip serializing this one, as the deserializing would get confused if we had None,Some for these last two</span>
+        <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">AttackEffect</span><span class="op">&gt;</span>,
+        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
+        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
+        <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CompoundAttackEffect</span><span class="op">&gt;</span>), <span class="comment">// name, description, damage effect if necessary.</span>
+    
+
+}
+
+<span class="kw">impl</span> <span class="ident">Action</span> {
+
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident">Action::ChangeShape</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Change Shape&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::Charm</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Charm&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::Enlarge</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Enlarge&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::Etherealness</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Etherealness&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::FrightfulPresence</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Frightful Presence&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::HorrifyingVisage</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Horrifying Visage&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::IllusoryAppearance</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Illusory Appearance&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::Leadership</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Leadership&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::Possession</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Possession&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::ReadThoughts</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Read Thoughts&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::Reel</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Reel&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::Swallow</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Swallow&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::Teleport</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Teleport&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::Attack</span>(<span class="ident">name</span>,..) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">name</span>.<span class="ident">clone</span>(),
+            <span class="ident">Action::Action</span>(<span class="ident">name</span>,..) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">name</span>.<span class="ident">clone</span>(),
+            <span class="ident">Action::BreathWeapon</span>(<span class="ident">name</span>,..) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">name</span>.<span class="ident">clone</span>(),
+        }
+    }
+
+
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+          <span class="ident">Action::ChangeShape</span>(<span class="ident">form</span>) <span class="op">=</span><span class="op">&gt;</span> 
+                <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} magically polymorphs into {}, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (${{poss}} choice). In a new form, ${{subj}} retains its alignment, hit points, Hit Dice, ability to speak, proficiencies, Legendary Resistance, lair actions, and Intelligence, Wisdom, and Charisma scores, as well as this action. Its statistics and capabilities are otherwise replaced by those of the new form, except any class features or legendary actions of that form.&quot;</span>,<span class="ident">form</span>), 
+            <span class="ident">Action::Charm</span>(<span class="ident">distance</span>,<span class="ident">save_dc</span>) <span class="op">=</span><span class="op">&gt;</span> 
+                <span class="macro">format!</span>(<span class="string">&quot;One humanoid ${{subj}} can see within {} feet of it must succeed on a DC {} Wisdom saving throw or be magically charmed for 1 day. The charmed target obeys ${{poss}} verbal or telepathic commands. If the target suffers any harm or receives a suicidal command, it can repeat the saving throw, ending the effect on a success. If the target successfully saves against the effect, or if the effect on it ends, the target is immune to this ${{name}}&#39;s Charm for the next 24 hours.${{par}}${{Subj}} can have only one target charmed at a time. If it charms another, the effect on the previous target ends.&quot;</span>,<span class="ident">distance</span>,<span class="ident">save_dc</span>), 
+            <span class="ident">Action::Enlarge</span> <span class="op">=</span><span class="op">&gt;</span> 
+                <span class="macro">format!</span>(<span class="string">&quot;For 1 minute, ${{subj}} magically increases in size, along with anything it is wearing or carrying. While enlarged, ${{subj}} is Large, doubles its damage dice on Strength-based weapon attacks (included in the attacks), and makes Strength checks and Strength saving throws with advantage. If ${{subj}} lacks the room to become Large, it attains the maximum size possible in the space available.&quot;</span>),
+            <span class="ident">Action::Etherealness</span> <span class="op">=</span><span class="op">&gt;</span> 
+                <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} enters the Ethereal Plane from the Material Plane, or vice versa. It is visible on the Material Plane while it is in the Border Ethereal, and vice versa, yet it can&#39;t affect or be affected by anything on the other plane.&quot;</span>),
+            <span class="ident">Action::FrightfulPresence</span>(<span class="ident">distance</span>,<span class="ident">save_dc</span>,<span class="ident">resave_disadvantage</span>) <span class="op">=</span><span class="op">&gt;</span> 
+                <span class="macro">format!</span>(<span class="string">&quot;Each creature of ${{poss}} choice that is within {} feet of ${{subj}} and aware of it must succeed on a DC {} Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, {}ending the effect on itself on a success. If a creature&#39;s saving throw is successful or the effect ends for it, the creature is immune to ${{poss}} Frightful Presence for the next 24 hours.&quot;</span>,<span class="ident">distance</span>,<span class="ident">save_dc</span>,<span class="kw">if</span> <span class="kw-2">*</span><span class="ident">resave_disadvantage</span> {<span class="string">&quot;with disadvantage if ${{subj}} is within line of sight, &quot;</span>} <span class="kw">else</span> {<span class="string">&quot;&quot;</span>}),
+            <span class="ident">Action::HorrifyingVisage</span>(<span class="ident">distance</span>,<span class="ident">save_dc</span>) <span class="op">=</span><span class="op">&gt;</span> 
+                <span class="macro">format!</span>(<span class="string">&quot;Each non-undead creature within {} ft. of ${{subj}} that can see it must succeed on a DC {} Wisdom saving throw or be frightened for 1 minute. If the save fails by 5 or more, the target also ages 1d4 x 10 years. A frightened target can repeat the saving throw at the end of each of its turns, ending the frightened condition on itself on a success. If a target&#39;s saving throw is successful or the effect ends for it, the target is immune to this ${{name}}&#39;s Horrifying Visage for the next 24 hours. The aging effect can be reversed with a greater restoration spell, but only within 24 hours of it occurring.&quot;</span>,<span class="ident">distance</span>,<span class="ident">save_dc</span>), 
+            <span class="ident">Action::IllusoryAppearance</span>(<span class="ident">discern_dc</span>) <span class="op">=</span><span class="op">&gt;</span> 
+                <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} covers itself and anything it is wearing or carrying with a magical illusion that makes it look like another creature of its general size and humanoid shape. The illusion ends if ${{subj}} takes a bonus action to end it or if it dies.${{par}}The changes wrought by this effect fail to hold up to physical inspection. Otherwise, a creature must take an action to visually inspect the illusion and succeed on a DC {} Intelligence (Investigation) check to discern that ${{subj}} is disguised.&quot;</span>,<span class="ident">discern_dc</span>), 
+            <span class="ident">Action::Leadership</span> <span class="op">=</span><span class="op">&gt;</span> 
+                <span class="macro">format!</span>(<span class="string">&quot;For 1 minute, ${{subj}} can utter a special command or warning whenever a nonhostile creature that it can see within 30 ft. of it makes an attack roll or a saving throw. The creature can add a d4 to its roll provided it can hear and understand ${{subj}}. A creature can benefit from only one Leadership die at a time. This effect ends if the knight is incapacitated.&quot;</span>),
+            <span class="ident">Action::Possession</span>(<span class="ident">save_dc</span>) <span class="op">=</span><span class="op">&gt;</span> 
+                <span class="macro">format!</span>(<span class="string">&quot;One humanoid that ${{subj}} can see within 5 ft. of it must succeed on a DC {} Charisma saving throw or be possessed by ${{subj}}; ${{subj}} then disappears, and the target is incapacitated and loses control of its body. ${{Subj}} now controls the body but doesn&#39;t deprive the target of awareness. ${{Subj}} can&#39;t be targeted by any attack, spell, or other effect, except ones that turn undead, and it retains its alignment, Intelligence, Wisdom, Charisma, and immunity to being charmed and frightened. It otherwise uses the possessed target&#39;s statistics, but doesn&#39;t gain access to the target&#39;s knowledge, class features, or proficiencies.${{par}}The possession lasts until the body drops to 0 hit points, the ghost ends it as a bonus action, or ${{subj}} is turned or forced out by an effect like the dispel evil and good spell. When the possession ends, ${{subj}} reappears in an unoccupied space within 5 ft. of the body. The target is immune to this ghost&#39;s Possession for 24 hours after succeeding on the saving throw or after the possession ends.&quot;</span>,<span class="ident">save_dc</span>), 
+            <span class="ident">Action::ReadThoughts</span>(<span class="ident">distance</span>) <span class="op">=</span><span class="op">&gt;</span> 
+                <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} magically reads the surface thoughts of one creature within {} ft. of it. The effect can penetrate barriers, but 3 ft. of wood or dirt, 2 ft. of stone, 2 inches of metal, or a thin sheet of lead blocks it. While the target is in range, ${{subj}} can continue reading its thoughts, as long as ${{poss}} concentration isn&#39;t broken (as if concentrating on a spell). While reading the target&#39;s mind, ${{subj}} has advantage on Wisdom (Insight) and Charisma (Deception, Intimidation, and Persuasion) checks against the target.&quot;</span>,<span class="ident">distance</span>), 
+            <span class="ident">Action::Reel</span> <span class="op">=</span><span class="op">&gt;</span> 
+                <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} pulls each creature grappled by it up to 25 ft. straight toward it.&quot;</span>),
+            <span class="ident">Action::Swallow</span>(<span class="ident">damage</span>,<span class="ident">vomit_damage</span>,<span class="ident">vomit_save_dc</span>,<span class="ident">escape_distance</span>) <span class="op">=</span><span class="op">&gt;</span> 
+                <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} makes one bite attack against a Medium or smaller creature it is grappling. If the attack hits, that creature takes the bite&#39;s damage and is swallowed, and the grapple ends. While swallowed, the creature is blinded and restrained, it has total cover against attacks and other effects outside ${{subj}}, and it takes {} acid damage at the start of each of ${{poss}} turns.${{par}}If ${{subj}} takes {} damage or more on a single turn from a creature inside it, ${{subj}} must succeed on a DC {} Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet oft he ${{name}}. If ${{subj}} dies, a swallowed creature is no longer restrained by it and can escape from the corpse using {} feet of movement, exiting prone.&quot;</span>,<span class="ident">damage</span>,<span class="ident">vomit_damage</span>,<span class="ident">vomit_save_dc</span>,<span class="ident">escape_distance</span>), 
+            <span class="ident">Action::Teleport</span>(<span class="ident">distance</span>,<span class="ident">opt_attack</span>) <span class="op">=</span><span class="op">&gt;</span> 
+                <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} magically teleports, along with any equipment it is wearing or carrying, up to {} ft. to an unoccupied space it can see.{}&quot;</span>,<span class="ident">distance</span>,<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">attack</span>) <span class="op">=</span> <span class="ident">opt_attack</span> {
+                     <span class="macro">format!</span>(<span class="string">&quot; Before or after teleporting, ${{subj}} can make one {} attack.&quot;</span>,<span class="ident">attack</span>)
+                 } <span class="kw">else</span> { <span class="string">&quot;&quot;</span>.<span class="ident">to_owned</span>() }),
+            <span class="ident">Action::Attack</span>(<span class="kw">_</span>,<span class="ident">attack</span>,<span class="ident">effect</span>,<span class="ident">compound_effect</span>) <span class="op">=</span><span class="op">&gt;</span> 
+                <span class="ident">attack</span>.<span class="ident">get_description</span>(<span class="ident">effect</span>,<span class="ident">compound_effect</span>),
+            <span class="comment">// This is for custom actions that aren&#39;t attacks. Although some might still cause damage, these actions don&#39;t require an attack roll.</span>
+            <span class="ident">Action::Action</span>(<span class="kw">_</span>,<span class="ident">description</span>,..) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">description</span>.<span class="ident">clone</span>(),
+            <span class="ident">Action::BreathWeapon</span>(<span class="kw">_</span>,<span class="ident">description</span>,..) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">description</span>.<span class="ident">clone</span>()
+        }
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_attack</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Attack</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident">Action::ChangeShape</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Charm</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Enlarge</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Etherealness</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::FrightfulPresence</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::HorrifyingVisage</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::IllusoryAppearance</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Leadership</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Possession</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::ReadThoughts</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Reel</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Swallow</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Teleport</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Attack</span>(<span class="kw">_</span>,<span class="ident">attack</span>,..) <span class="op">=</span><span class="op">&gt;</span> 
+                 <span class="prelude-val">Some</span>(<span class="ident">attack</span>.<span class="ident">clone</span>()),
+            <span class="comment">// This is for custom actions that aren&#39;t attacks. Although some might still cause damage, these actions don&#39;t require an attack roll.</span>
+            <span class="ident">Action::Action</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::BreathWeapon</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+        }        
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_effect</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">AttackEffect</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident">Action::ChangeShape</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Charm</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Enlarge</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Etherealness</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::FrightfulPresence</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::HorrifyingVisage</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::IllusoryAppearance</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Leadership</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Possession</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::ReadThoughts</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Reel</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Swallow</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Teleport</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Attack</span>(<span class="kw">_</span>,<span class="kw">_</span>,<span class="ident">effect</span>,<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> 
+                 <span class="prelude-val">Some</span>(<span class="ident">effect</span>.<span class="ident">clone</span>()),
+            <span class="comment">// This is for custom actions that aren&#39;t attacks. Although some might still cause damage, these actions don&#39;t require an attack roll.</span>
+            <span class="ident">Action::Action</span>(<span class="kw">_</span>,<span class="kw">_</span>,<span class="ident">effect</span>,<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">effect</span>.<span class="ident">clone</span>(),
+            <span class="ident">Action::BreathWeapon</span>(<span class="kw">_</span>,<span class="kw">_</span>,<span class="ident">effect</span>,<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">effect</span>.<span class="ident">clone</span>(),
+        }
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_compound_effect</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CompoundAttackEffect</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident">Action::ChangeShape</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Charm</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Enlarge</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Etherealness</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::FrightfulPresence</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::HorrifyingVisage</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::IllusoryAppearance</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Leadership</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Possession</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::ReadThoughts</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Reel</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Swallow</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Teleport</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Attack</span>(<span class="kw">_</span>,<span class="kw">_</span>,<span class="kw">_</span>,<span class="ident">compound_effect</span>) <span class="op">=</span><span class="op">&gt;</span> 
+                 <span class="ident">compound_effect</span>.<span class="ident">clone</span>(),
+            <span class="comment">// This is for custom actions that aren&#39;t attacks. Although some might still cause damage, these actions don&#39;t require an attack roll.</span>
+            <span class="ident">Action::Action</span>(<span class="kw">_</span>,<span class="kw">_</span>,<span class="kw">_</span>,<span class="ident">compound_effect</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">compound_effect</span>.<span class="ident">clone</span>(),
+            <span class="ident">Action::BreathWeapon</span>(<span class="kw">_</span>,<span class="kw">_</span>,<span class="kw">_</span>,<span class="ident">compound_effect</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">compound_effect</span>.<span class="ident">clone</span>()
+        }        
+    }
+
+
+
+
+}
+
+
+
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">PartialEq</span>,<span class="ident">Debug</span>,<span class="ident">Clone</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>,<span class="ident">Deserialize</span>)]</span>
+<span class="doccomment">/**
+Used to add legendary actions to the descriptions.
+*/</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">LegendaryAction</span> {
+    <span class="comment">// an action that&#39;s defined elsewhere</span>
+    <span class="doccomment">/**
+    `UseAction(&lt;integer&gt;,&lt;string&gt;,&lt;string&gt;,&lt;string&gt;)`
+
+    This legendary action allows the creature to use an action that is already described. 
+
+    The first argument is the legendary action cost per round, the second and third are the name and description, which will be interpolated. The last is the name of the action from which damage-per-round data is taken.
+    */</span>
+    <span class="ident">UseAction</span>(<span class="ident">u8</span>,<span class="ident">String</span>,<span class="ident">String</span>,<span class="ident">String</span>), <span class="comment">// costs per round, name of legendary action, description of legendary action, name of an action to use</span>
+    <span class="comment">// use a weapon</span>
+    <span class="doccomment">/**
+    `UseWeapon(&lt;integer&gt;,&lt;string&gt;,&lt;string&gt;,&lt;Weapon&gt;)`
+
+    This legendary action allows the creature to use a weapon attack that is already described. 
+    
+    The first argument is the legendary action cost per round, the second and third are the name and description, which will be interpolated. The last is the weapon from which damage-per-round data is taken.
+    */</span>
+    <span class="ident">UseWeapon</span>(<span class="ident">u8</span>,<span class="ident">String</span>,<span class="ident">String</span>,<span class="ident">Weapon</span>),<span class="comment">// costs per round, name of legendary action, description of legendary action, weapon to use</span>
+    <span class="comment">// An action which isn&#39;t defined elsewhere.</span>
+    <span class="doccomment">/**
+    `LegendaryAction(&lt;integer&gt;,&lt;Action&gt;)`
+
+    A custom legendary action not taken from its normal list.
+
+    The first action is the legendary cost per round, the second describes the action which is taken. See [`Action`].
+    */</span>
+    <span class="ident">LegendaryAction</span>(<span class="ident">u8</span>,<span class="ident">Action</span>), <span class="comment">// costs per round, name, description, damage effect if necessary.</span>
+
+}
+
+<span class="kw">impl</span> <span class="ident">LegendaryAction</span> {
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_main_description</span>(<span class="ident">amount</span>: <span class="kw-2">&amp;</span><span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+        <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can take {} legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature&#39;s turn. ${{Subj}} regains spent legendary actions at the start of its turn.&quot;</span>,<span class="ident">amount</span>)
+    }
+
+}
+</code></pre></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="monstorr_lib" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
+    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script>
+</body></html>

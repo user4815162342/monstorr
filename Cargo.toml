@@ -1,0 +1,8 @@
+[workspace]
+
+members = [
+  "monstorr",
+  "monstorr-lib",
+  "monstorr-data",
+  "monstorr-open5e"
+]

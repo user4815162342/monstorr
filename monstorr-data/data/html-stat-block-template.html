@@ -1,0 +1,96 @@
+{#
+    Copyright © 2022 Neil M. Sheldon
+    
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, You can obtain one at https://mozilla.org/MPL/2.0/.
+#}{# for one column, delete the two-column include, 
+   for two columns, replace the include with
+       data-two-column="" style="--data-content-height: 820px;"
+   replacing 820 with a height you can find through trial and error #}
+<div class="stat-block"{% include 'two-column' %}>
+    <div class="bar"></div>
+    <div class="stat-block-content-wrap">
+        <div class="creature-heading">
+            <h1>{{ name }}</h1>
+            <h2>{{ size }} {{ type }}{% if subtype %} ({{subtype}}){%endif%}, {{ alignment }}</h2>
+        </div>
+
+        <div class="top-stats">
+            {% include 'tapered-rule.html' %}
+            <p class="property-line"><b>Armor Class</b> {{ armor }}</p>
+            <p class="property-line"><b>Hit Points</b> {{ hit_points }}</p>
+            <p class="property-line"><b>Speed</b> {{ speed }}</p>
+
+            {% include 'tapered-rule.html' %}
+            <table class="abilities-block">
+                <tbody>
+                    <tr>
+                        <th>STR</th>
+                        <th>DEX</th>
+                        <th>CON</th>
+                        <th>INT</th>
+                        <th>WIS</th>
+                        <th>CHA</th>
+                    </tr>
+                    <tr>
+                        <td id="str">{{ strength }}</td>
+                        <td id="dex">{{ dexterity }}</td>
+                        <td id="con">{{ constitution }}</td>
+                        <td id="int">{{ intelligence }}</td>
+                        <td id="wis">{{ wisdom }}</td>
+                        <td id="cha">{{ charisma }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {% include 'tapered-rule.html' %}
+
+            {% if saving_throws %}<p class="property-line"><b>Saving Throws</b> {{ saving_throws }}</p>{% endif %}
+            {% if skills %}<p class="property-line"><b>Skills</b> {{ skills }}</p>{% endif %}
+            {% if damage_vulnerabilities %}<p class="property-line"><b>Damage Vulnerabilities</b> {{ damage_vulnerabilities }}</p>{% endif %}
+            {% if damage_resistances %}<p class="property-line"><b>Damage Resistances</b> {{ damage_resistances }}</p>{% endif %}
+            {% if damage_immunities %}<p class="property-line"><b>Damage Immunities</b> {{ damage_immunities }}</p>{% endif %}
+            {% if condition_immunities %}<p class="property-line"><b>Condition Immunities</b> {{ condition_immunities }}</p>{% endif %}
+            {% if senses %}<p class="property-line"><b>Senses</b> {{ senses }}</p>{% endif %}
+            <p class="property-line"><b>Languages</b> {% if languages %}{{ languages }}{% else %}—{% endif %}</p>
+            <p class="property-line"><b>Challenge</b> {{ challenge_rating }}</p>
+            {% include 'tapered-rule.html' %}
+        </div>
+        {% for feature in special_abilities %}{% 
+            include 'feature-template.html' %}{% 
+        endfor %}{% 
+        if actions %}
+
+        <h3>Actions</h3>{% 
+        for feature in actions %}{% 
+            include 'feature-template.html' %}{% 
+        endfor %}{% 
+        endif %}{%
+        if reactions %}
+        
+        <h3>Reactions</h3>{% 
+        for feature in reactions %}{% 
+            include 'feature-template.html' %}{% 
+        endfor %}{% 
+        endif %}{%
+        if legendary_actions %}
+        <h3>Legendary Actions</h3>
+        <div class="property-block">{%  
+            with blocks = legendary_actions.description 
+                    %}{% 
+                    include 'blocks-template.html' %}{% 
+                endwith %}{%   
+        for feature in legendary_actions.actions %}{% 
+            with blocks=feature.text %}{% 
+                include 'blocks-template.html'%}{% 
+            endwith %}{% 
+        endfor %}
+        </div>{% endif %}{%
+        if source %}
+        <div class="top-stats">
+            {% include 'tapered-rule.html' %}
+            <p class="property-line"><i><b>Source</b> {{source}}</i></p>
+        </div>{%endif%}
+    </div>
+    <div class="bar"></div>
+</div>

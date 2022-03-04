@@ -1,0 +1,20 @@
+#
+# Copyright © 2022 Neil M. Sheldon
+# 
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+# 
+
+
+[package]
+name = "monstorr-open5e"
+version = "0.1.0"
+authors = ["Neil M. Sheldon <neilmsheldon@townsedgetechnology.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+serde = { version = "1.0.130", features = ["derive"]}
+serde_json = "1.0.68"

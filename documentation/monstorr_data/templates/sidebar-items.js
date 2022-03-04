@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["FULL_HTML_TEMPLATE",""],["FULL_HTML_TEMPLATE_INCLUDES",""],["STAT_BLOCK_HTML_TEMPLATE",""],["STAT_BLOCK_HTML_TEMPLATE_INCLUDES",""]],"fn":[["full_html_template_includes",""],["html_template_includes",""],["stat_block_html_template_includes",""]],"macro":[["template",""]]});

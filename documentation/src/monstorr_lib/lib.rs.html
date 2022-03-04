@@ -1,0 +1,1124 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `monstorr-lib&#x2F;src&#x2F;lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../monstorr_lib/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
+<span id="2">  2</span>
+<span id="3">  3</span>
+<span id="4">  4</span>
+<span id="5">  5</span>
+<span id="6">  6</span>
+<span id="7">  7</span>
+<span id="8">  8</span>
+<span id="9">  9</span>
+<span id="10"> 10</span>
+<span id="11"> 11</span>
+<span id="12"> 12</span>
+<span id="13"> 13</span>
+<span id="14"> 14</span>
+<span id="15"> 15</span>
+<span id="16"> 16</span>
+<span id="17"> 17</span>
+<span id="18"> 18</span>
+<span id="19"> 19</span>
+<span id="20"> 20</span>
+<span id="21"> 21</span>
+<span id="22"> 22</span>
+<span id="23"> 23</span>
+<span id="24"> 24</span>
+<span id="25"> 25</span>
+<span id="26"> 26</span>
+<span id="27"> 27</span>
+<span id="28"> 28</span>
+<span id="29"> 29</span>
+<span id="30"> 30</span>
+<span id="31"> 31</span>
+<span id="32"> 32</span>
+<span id="33"> 33</span>
+<span id="34"> 34</span>
+<span id="35"> 35</span>
+<span id="36"> 36</span>
+<span id="37"> 37</span>
+<span id="38"> 38</span>
+<span id="39"> 39</span>
+<span id="40"> 40</span>
+<span id="41"> 41</span>
+<span id="42"> 42</span>
+<span id="43"> 43</span>
+<span id="44"> 44</span>
+<span id="45"> 45</span>
+<span id="46"> 46</span>
+<span id="47"> 47</span>
+<span id="48"> 48</span>
+<span id="49"> 49</span>
+<span id="50"> 50</span>
+<span id="51"> 51</span>
+<span id="52"> 52</span>
+<span id="53"> 53</span>
+<span id="54"> 54</span>
+<span id="55"> 55</span>
+<span id="56"> 56</span>
+<span id="57"> 57</span>
+<span id="58"> 58</span>
+<span id="59"> 59</span>
+<span id="60"> 60</span>
+<span id="61"> 61</span>
+<span id="62"> 62</span>
+<span id="63"> 63</span>
+<span id="64"> 64</span>
+<span id="65"> 65</span>
+<span id="66"> 66</span>
+<span id="67"> 67</span>
+<span id="68"> 68</span>
+<span id="69"> 69</span>
+<span id="70"> 70</span>
+<span id="71"> 71</span>
+<span id="72"> 72</span>
+<span id="73"> 73</span>
+<span id="74"> 74</span>
+<span id="75"> 75</span>
+<span id="76"> 76</span>
+<span id="77"> 77</span>
+<span id="78"> 78</span>
+<span id="79"> 79</span>
+<span id="80"> 80</span>
+<span id="81"> 81</span>
+<span id="82"> 82</span>
+<span id="83"> 83</span>
+<span id="84"> 84</span>
+<span id="85"> 85</span>
+<span id="86"> 86</span>
+<span id="87"> 87</span>
+<span id="88"> 88</span>
+<span id="89"> 89</span>
+<span id="90"> 90</span>
+<span id="91"> 91</span>
+<span id="92"> 92</span>
+<span id="93"> 93</span>
+<span id="94"> 94</span>
+<span id="95"> 95</span>
+<span id="96"> 96</span>
+<span id="97"> 97</span>
+<span id="98"> 98</span>
+<span id="99"> 99</span>
+<span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
+</pre><pre class="rust"><code><span class="comment">/*
+ * Copyright © 2022 Neil M. Sheldon
+ * 
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */</span>
+
+<span class="comment">/*
+This is a simple tool for generating and validating D&amp;D Fifth Edition monster stats, for use in homebrew and published adventures. 
+
+Prior Work:
+  - This online stat-block generator: https://tetra-cube.com/dnd/dnd-statblock.html, which has code shared on github: https://github.com/Tetra-cube/Tetra-cube.github.io is a heavy inspiration.
+  - https://www.rpgtinker.com/ - A NPC generator. While not obviously OS, when it creates a &quot;challenge rating&quot; the question mark provides a whole bunch of useful information about how that CR was generated, specific to the NPC 
+  - https://iadndmn.neocities.org/CRcalc.html - Also not OS. 
+  - https://open5e.com/ - Mostly open source, this provides the data for freely available monsters. Other monsters would have to be copied.
+
+[ ] Basically, attempt to port the tetra-cube code into something that will work for us.
+   [X] Input: Use CreatureCommands, but rewrite them in light of how tetra-cube&#39;s code does it.
+   [X] Test loading of monsters from text (I don&#39;t actually need to save them)
+   [X] Get the interpolation working. We need names, descriptions for actions, and additional interpolation data.
+   [X] Get the CreatureCommands working to generate CreatureData.
+       [X] Some of the commands either have to be specified in a certain order, or they have to implement &quot;hooks&quot; which get called after creation.
+   [X] Finish tests for generating statblocks from creatures.
+   [X] I need stylized text
+       [X] To do this right, I think I need a virtual machine sort of thing.
+       [X] I need to support the following functions:
+           [X] par - stop the current paragraph and start a new one
+           [X] par(..) - stop the current paragraph, start a new one, and put the specified text into a special header (see Vampire Weaknesses)
+           [X] li - stop the current paragraph and start a paragraph with a hanging indent, as used for &quot;lists&quot;. (see spellcasting, innate spellcasting)
+           [X] li(..) - a list item, but the specified text gets a special header (see Breath Weapons on metallic dragons)
+           [X] it(...) - make enclosed text italic
+           [X] bt(...) - make enclosed text bold
+       [X] Interpolation (in statblock mode only) doesn&#39;t return a string, but a vector of &quot;blocks&quot;, which contain vectors of &quot;spans&quot;.
+       [X] These are handled using &#39;commands&#39;, which are built-in identifiers that indicate the operation to take.
+   [X] Go through and finish TODO&#39;s, there may be some stuff I need to fix before I start using it.
+   [X] Create a command line tool for taking the creature commands file and generating a JSON (or something) statblock.
+   [X] Get a better command line argument parser, and also allow stdin and stdout output.
+   [X] Test the command line for outputting JSON at least.
+   [X] Interpolate names
+   [X] Look at JSON syntax to see if we need to nudge the serde attributes
+   [X] weapon attacks aren&#39;t using italic tags
+   [X] Rethinking the features once again
+       [X] Instead of a &#39;name&#39; and &#39;description&#39;, the &#39;name&#39; is just a heading on the first paragraph. So, it needs to be passed in, or it needs to be inserted above after interpolation.
+           [X] I don&#39;t need styles, but who knows if someone wants to interpolate other values into the name, in which case I still need to interpolated it,
+               which means I pass it in before. I can even prepend it with the appropriate paragraph block.
+       [X] This appears to mean that there should be three block types now, but I&#39;m leaning towards the opinion that Vampire Weaknesses is simply formatted wrong, and should look more like the others.
+       [X] In addition, legendary actions also become one big set of blocks, since the actions are subparagraphs. But, with the change above, I can also make them just start with a sub tag instead of a par.
+   [X] Implement templates using minijina
+       [X] Fonts: Merriweather and Trirong
+       [ ] FUTURE: Okay, I want to figure out how to get the templates to resolve at run time. I can add a template without getting an error, assuming it&#39;s
+           compiled at that point, maybe there&#39;s a way to get the byte-code and find the included templates?
+           [ ] This looks even more promising, since the error doesn&#39;t even occur when I just &#39;get&#39; the template, only on render.
+           [ ] And it fails, I think the only way to do this is to fork minijinja and fix it.
+       [X] Make a note that I chose minijinja after reviewing several template libraries, and chose it based on it&#39;s lack of additional dependencies.
+       [-] cargo run -- --input test-data/dragon.creature --output-format mini-jinja --template test-data/creature-template.html --include test-data/blocks-template.html --include test-data/spans-template.html --include test-data/feature-template.html &gt; test-data/dragon.html
+   [X] Look at that HTML template for monsters in tetra-cube and see if I can pull that in and use it, that would actually make it easy to output to HTML,
+       I could even have the templates built-in.
+       [X] This requires me to actually get that component to work, because their live demo doesn&#39;t
+       [X] Although, to be fair, I&#39;d rather not support web components, silly things, really.
+       [X] Need two-column version as well, need to compare the inlined version of the two-column with the regular to see what&#39;s different.
+           [X] The only difference is that we need:  data-two-column=&quot;&quot; style=&quot;--data-content-height: 820px;&quot; on the stat-block div.
+           [X] Note that 820px is something the user specifies
+       [X] I need options to just emit the HTML fragment and styles This might help me figure out the two-column thingie, but I&#39;m not certain
+       [X] Now, compile those files into the project and allow the user to specify &#39;html&#39; to get them.
+           [X] Options include getting just the actual body content and a style sheet separately so that they can embed this in their own content.
+   [X] Relook at the command line arguments. There are so many things dependent on the output format that perhaps we actually need
+       commands instead of output formats. Some commands require input, others don&#39;t...
+   [X] Need a way to list monsters in a source by type and challenge rating (what else? Look at that one database)
+       - type
+       - size
+       - alignment
+       - min cr
+       - max cr
+   [X] Get rid of monstorr-convert completely? I can always make a tag showing the last time it was there.
+   [X] Let&#39;s move the monsters we did convert into monstorr-data and give access to them.
+   [X] Need documentation for the creature commands, and some example files.
+       [X] Document usage of the monstorr tool.
+       [X] Make sure creature_commands is documented with creature file syntax, and all of it&#39;s requirements are as well.
+           [X] Next: documenting the file with &#39;CreatureCreator&#39;.
+           [X] CreatureCommands
+           [X] Armor
+           [X] Ability
+           [X] Skill
+           [X] Damage
+           [X] Language
+           [X] Weapon
+           [X] Multiattack
+           [X] CompoundAttackEffect
+           [X] AttackEffect
+           [X] Attack
+           [X] Action
+           [X] UsageLimit
+           [X] Reaction
+           [X] Feature
+           [X] LegendaryAction
+           [X] SpellcastingCommand
+           [X] InnateSpellcastingCommand
+       [X] Make sure interpolation stuff is documented in interpolation crate, and in Creature::get_property
+       [X] Make sure the stat-block JSON structure is documented appropriately for use in templating.
+   [X] Come up with an appropriate open-source license
+       [X] Mozilla requires disclosing source, so the powers-that-be can&#39;t take it over and close it. Also includes a trademark limitation,
+           which is going to be important.
+       [X] Make sure all files are marked with licenses
+       [X] Make sure we include the Open Game License content (or whatever the SRD uses now)
+   [ ] Can I generate the documentation as a github or gitlab wiki format? Readme markdown files?
+   [ ] I might be able to create a command for the Monstorr tool that takes in all &#39;creature&#39; files in a directory, processes each one,
+       grabs summary information out, and creates include content that could be put into monstorr-data.
+   [ ] publish on gitlab or github, and move the remaining issues there.
+       [ ] Before committing the code, go through and add the issues and delete them from these files (also include some of the FUTURE: stuff, but don&#39;t delete those comments, necessarily)
+   [ ] Make sure we can at least try to generate monsters in &#39;Tex&#39; format.
+       [ ] To do that, I need to know what that format actually is...I&#39;m going to have to go back into TEX to narrow that stuff down.
+   [ ] FUTURE: Watch the issues on minijinja, see if they fix the feature suggestions I made, or look for a new template, and at the
+       last resort, write my own templating language.
+   [ ] FUTURE: Add in commands for capability of validating Challenge Rating based on rules in DMG (see prior work)
+        [ ] Calculate Damage Per Round
+        [ ] Calculate Challenge Rating - Note that this calculation is circular, as it depends on DPR, which depends on Proficiency Bonus, which depends on CR again.
+            Instead of creating an infinite loop, there are ExpectChallenge/ProficiencyBonus commands on CreatureCreator which provide a default to assume. If the
+            final result is *not* consistent with these commands, an error occurs.
+        [ ] Calculate wordings of attacks and features that depend on the proficiency bonus, or knowledge of the DPR, etc. 
+            [ ] This is done by processing the text through a template engine which replaces names of properties in &quot;${...}&quot; form with their actual values.
+    [ ] FUTURE: I need a better template language with the following features:
+        - macros inside the same template, so I don&#39;t need to include files
+        - Need a way to merge the tags together, instead of having separate statements vs functions, so I don&#39;t have to make them messy
+          to work with whitespace.
+    [ ] Far in the future: convert the Open%e SRD monsters into the &#39;creature&#39; format and allow access to them from inside.
+ */</span>
+
+
+<span class="comment">/* 
+NOTE: I use block comments for documentation because they don&#39;t require an extra token at the beginning of every line. The extra token confuses my indents, are an extra bit of unnecessary typing, and frankly, look messy. I also don&#39;t use asterisks at the beginning of the doc comment lines for the same reasons, and I hate that my IDE insists that I do.
+*/</span>
+<span class="attribute">#![<span class="ident">allow</span>(<span class="ident">rustdoc::private_intra_doc_links</span>)]</span>
+<span class="doccomment">/*!
+
+This crate is the library for the functionality of the Monstorr program. It contains a chaotic good mess of structures and functionality for calculating D&amp;D 5e creature stats and producing stat blocks in various formats. It&#39;s not currently intended as a public API, and any published functionality here is very unstable. However, some of the stuff in this crate is public API, therefore it needs documentation.
+
+**Project Status.** This project is newly created and poorly tested. It works, but there may be weird issues, please report any that you find so I can fix them. While feature suggestions are also appreciated, they will probably not be addressed anytime soon. One great way to test this would be to convert the SRD monsters over to creature files, which could then be included in the monstorr-data crate.
+
+# Points of Interest
+
+There are a few things that you may need to know in order to simply use Monstorr.
+
+* For the Monstorr command line tool usage, run `monstorr help`.
+* For the creature file syntax, see [`crate::creature_commands`].
+&lt;!--* For templating information, see [`crate::template`], but for its syntax use [MiniJinja](https://docs.rs/minijinja/0.13.0/minijinja/syntax/index.html)
+* For how to use this with the Open5e monster database, see [`crate::open5e_convertor`] as well as the separate `monstorr-open5e` crate.--&gt;
+
+# Development
+
+**Organization and Coding Style.** I originally intended this as a creature database tool which would pull in Open5e-style JSON, verifying calculations, store them for later use, and spitting out LaTeX documents (for my own needs) as needed. Little thought was put into organization, formatting and keeping to the rusty ways of doing things. It was only later when I realized the true goal of this tool that I began to clean a few things up. I apologize for this confusion, you&#39;re welcome to fork this code and clean it up. Testing would be most appreciated.
+
+ */</span>
+<span class="kw">use</span> <span class="ident">std::fs</span>;
+<span class="kw">use</span> <span class="ident">std::path::PathBuf</span>;
+<span class="kw">use</span> <span class="ident">std::io::BufRead</span>;
+<span class="kw">use</span> <span class="ident">std::io::Write</span>;
+
+<span class="kw">use</span> <span class="ident">monstorr_open5e::Open5eMonster</span>;
+<span class="kw">use</span> <span class="ident">monstorr_open5e::Open5eMonsterList</span>;
+<span class="kw">use</span> <span class="ident">monstorr_data</span>;
+
+<span class="kw">mod</span> <span class="ident">utils</span>;
+<span class="kw">mod</span> <span class="ident">parse_position</span>;
+<span class="kw">mod</span> <span class="ident">errors</span>;
+<span class="kw">mod</span> <span class="ident">dice</span>;
+<span class="kw">mod</span> <span class="ident">tokenizer</span>;
+<span class="kw">mod</span> <span class="ident">dice_expression</span>;
+<span class="kw">mod</span> <span class="ident">structured_text</span>;
+<span class="kw">mod</span> <span class="ident">interpolation</span>;
+<span class="kw">mod</span> <span class="ident">stats</span>;
+<span class="kw">mod</span> <span class="ident">attacks</span>;
+<span class="kw">mod</span> <span class="ident">actions</span>;
+<span class="kw">mod</span> <span class="ident">reactions</span>;
+<span class="kw">mod</span> <span class="ident">features</span>;
+<span class="kw">mod</span> <span class="ident">spellcasting</span>;
+<span class="kw">mod</span> <span class="ident">creature_commands</span>;
+<span class="kw">mod</span> <span class="ident">stat_block</span>;
+<span class="kw">mod</span> <span class="ident">creature</span>;
+<span class="kw">mod</span> <span class="ident">open5e_convertor</span>;
+<span class="kw">mod</span> <span class="ident">template</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span> <span class="kw">mod</span> <span class="ident">tests</span>;
+
+
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::creature_commands::CreatureCreator</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::stat_block::TryIntoStatBlock</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::stats::ChallengeRating</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::template::process_template</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::utils::path_relative_from</span>;
+
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">creature_commands::MONSTORR_VERSION</span>;
+
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">InputFormat</span> {
+    <span class="ident">Creature</span>,
+    <span class="ident">Open5e</span>,
+    <span class="ident">Open5eList</span>(<span class="ident">String</span>),
+    <span class="ident">Stored</span>(<span class="ident">String</span>)
+}
+
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ListInputFormat</span> {
+    <span class="ident">Open5eList</span>
+}
+
+<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">InputFormat</span> {
+
+    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="ident"><span class="self">Self</span>::Creature</span>
+    }
+}
+
+
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">OutputFormat</span> {
+    <span class="ident">JSON</span>(<span class="ident">bool</span>), <span class="comment">// whether to print ugly</span>
+    <span class="ident">MiniJinjaTemplate</span>(<span class="ident">String</span>,<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>), <span class="comment">// path to template, paths to templates to be included</span>
+    <span class="ident">HTML</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,<span class="ident">bool</span>) <span class="comment">// an optional usize indicating that they want a two-column stat-block instead of one-column, a bool indicating that only a fragment should be output</span>
+}
+
+<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">OutputFormat</span> {
+
+    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="ident"><span class="self">Self</span>::JSON</span>(<span class="bool-val">false</span>)
+    }
+}
+
+<span class="kw">fn</span> <span class="ident">resolve_file</span>(<span class="ident">working_dir</span>: <span class="kw-2">&amp;</span><span class="ident">PathBuf</span>, <span class="ident">file</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PathBuf</span> {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">working_dir</span>.<span class="ident">clone</span>();
+    <span class="ident">result</span>.<span class="ident">push</span>(<span class="ident">file</span>);
+    <span class="ident">result</span>
+
+}
+
+<span class="kw">fn</span> <span class="ident">resolve_existing_file</span>(<span class="ident">working_dir</span>: <span class="kw-2">&amp;</span><span class="ident">PathBuf</span>, <span class="ident">file</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PathBuf</span>,<span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">resolve_file</span>(<span class="ident">working_dir</span>, <span class="ident">file</span>);
+    <span class="kw">if</span> <span class="op">!</span><span class="ident">result</span>.<span class="ident">is_file</span>() {
+        <span class="prelude-val">Err</span>(<span class="macro">format!</span>(<span class="string">&quot;Path {} does not exist or is not a file&quot;</span>,<span class="ident">file</span>))
+    } <span class="kw">else</span> {
+        <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
+    }
+}
+
+<span class="kw">fn</span> <span class="ident">get_default_working_dir</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PathBuf</span>,<span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="ident">std::env::current_dir</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Error getting current directory: {}&quot;</span>,<span class="ident">e</span>))
+}
+
+<span class="kw">fn</span> <span class="ident">get_working_dir_relative_to_source_or_default</span>(<span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span>, <span class="ident">default_working_dir</span>: <span class="kw-2">&amp;</span><span class="ident">PathBuf</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PathBuf</span> {
+    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">source_file</span>) <span class="op">=</span> <span class="ident">source</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">working_dir</span> <span class="op">=</span> <span class="ident">source_file</span>.<span class="ident">clone</span>();
+        <span class="ident">working_dir</span>.<span class="ident">pop</span>();
+        <span class="ident">working_dir</span>
+    } <span class="kw">else</span> {
+        <span class="ident">default_working_dir</span>.<span class="ident">clone</span>()
+    }
+}
+
+<span class="kw">fn</span> <span class="ident">read_source</span>(<span class="ident">source_file</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PathBuf</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>,<span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">source_file</span>) <span class="op">=</span> <span class="ident">source_file</span> {
+        <span class="ident">fs::read_to_string</span>(<span class="kw-2">&amp;</span><span class="ident">source_file</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Error reading input file: {}&quot;</span>,<span class="ident">e</span>))
+    } <span class="kw">else</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="ident">String::new</span>();
+        <span class="kw">let</span> <span class="ident">stdin</span> <span class="op">=</span> <span class="ident">std::io::stdin</span>();
+        <span class="kw">let</span> <span class="ident">stdin</span> <span class="op">=</span> <span class="ident">stdin</span>.<span class="ident">lock</span>();
+        <span class="kw">for</span> <span class="ident">line</span> <span class="kw">in</span> <span class="ident">stdin</span>.<span class="ident">lines</span>() {
+            <span class="ident">buffer</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="ident">line</span>.<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Error reading from stdin: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>)
+        }
+        <span class="prelude-val">Ok</span>(<span class="ident">buffer</span>)
+    }
+}
+
+<span class="kw">fn</span> <span class="ident">write_target</span>(<span class="ident">target_file</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span>, <span class="ident">content</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">target_file</span>) <span class="op">=</span> <span class="ident">target_file</span> {
+        <span class="ident">fs::write</span>(<span class="ident">target_file</span>, <span class="ident">content</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Error writing file: {}&quot;</span>,<span class="ident">e</span>))
+    } <span class="kw">else</span> {
+        <span class="ident">std::io::stdout</span>().<span class="ident">write_all</span>(<span class="ident">content</span>.<span class="ident">as_bytes</span>()).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Error writing to stdout: {}&quot;</span>,<span class="ident">e</span>))
+    }
+}
+
+<span class="kw">fn</span> <span class="ident">get_source_file</span>(<span class="ident">working_dir</span>: <span class="kw-2">&amp;</span><span class="ident">PathBuf</span>, <span class="ident">input_file</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span>,<span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="prelude-val">Ok</span>(<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">input_file</span>) <span class="op">=</span> <span class="ident">input_file</span> {
+        <span class="prelude-val">Some</span>(<span class="ident">resolve_existing_file</span>(<span class="kw-2">&amp;</span><span class="ident">working_dir</span>, <span class="ident">input_file</span>)<span class="question-mark">?</span>)
+    } <span class="kw">else</span> {
+        <span class="prelude-val">None</span>
+    })
+
+}
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">validate_creature</span>(<span class="ident">input_file</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>, <span class="ident">input_format</span>: <span class="ident">InputFormat</span>, 
+                         <span class="ident">output_file</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">working_dir</span> <span class="op">=</span> <span class="ident">get_default_working_dir</span>()<span class="question-mark">?</span>;
+
+    <span class="kw">let</span> <span class="ident">target_file</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">output_file</span>) <span class="op">=</span> <span class="ident">output_file</span> {
+        <span class="prelude-val">Some</span>(<span class="ident">resolve_file</span>(<span class="kw-2">&amp;</span><span class="ident">working_dir</span>, <span class="ident">output_file</span>))
+    } <span class="kw">else</span> {
+        <span class="prelude-val">None</span>
+    };
+
+    <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">input_format</span> {
+        <span class="ident">InputFormat::Creature</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">source_file</span> <span class="op">=</span> <span class="ident">get_source_file</span>(<span class="kw-2">&amp;</span><span class="ident">working_dir</span>, <span class="ident">input_file</span>)<span class="question-mark">?</span>;
+            <span class="comment">// get the data from the file</span>
+            <span class="ident">read_source</span>(<span class="ident">source_file</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>
+        },
+        <span class="ident">InputFormat::Stored</span>(<span class="ident">creature_name</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="kw">match</span> <span class="ident">creature_name</span>.<span class="ident">as_str</span>() {
+                <span class="string">&quot;dragon&quot;</span> <span class="op">|</span> <span class="string">&quot;adult gold dragon&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">monstorr_data::creatures::DRAGON_GOLD_ADULT</span>,
+                <span class="string">&quot;goblin&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">monstorr_data::creatures::GOBLIN</span>,
+                <span class="string">&quot;bugbear&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">monstorr_data::creatures::BUGBEAR</span>,
+                <span class="string">&quot;efreeti&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">monstorr_data::creatures::EFREETI</span>,
+                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="string">&quot;Couldn&#39;t find creature in list.&quot;</span>.<span class="ident">to_owned</span>())<span class="question-mark">?</span>
+            }.<span class="ident">to_owned</span>()
+        },
+        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="string">&quot;Input must be a creature file.&quot;</span>.<span class="ident">to_owned</span>())<span class="question-mark">?</span>
+    };
+
+    <span class="comment">// deserialize the commands</span>
+    <span class="kw">let</span> <span class="ident">creator</span> <span class="op">=</span> <span class="ident">CreatureCreator::load_from_str</span>(<span class="kw-2">&amp;</span><span class="ident">source</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Error loading creature commands: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">output</span> <span class="op">=</span> <span class="ident">creator</span>.<span class="ident">save_to_string</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Error writing creature to string: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>;
+
+
+    <span class="ident">write_target</span>(<span class="ident">target_file</span>, <span class="kw-2">&amp;</span><span class="ident">output</span>)
+
+    
+}
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create_stat_block</span>(<span class="ident">input_file</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>, <span class="ident">input_format</span>: <span class="ident">InputFormat</span>, 
+                         <span class="ident">output_file</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>, <span class="ident">output_format</span>: <span class="ident">OutputFormat</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">working_dir</span> <span class="op">=</span> <span class="ident">get_default_working_dir</span>()<span class="question-mark">?</span>;
+
+    <span class="kw">let</span> <span class="ident">target_file</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">output_file</span>) <span class="op">=</span> <span class="ident">output_file</span> {
+        <span class="prelude-val">Some</span>(<span class="ident">resolve_file</span>(<span class="kw-2">&amp;</span><span class="ident">working_dir</span>, <span class="ident">output_file</span>))
+    } <span class="kw">else</span> {
+        <span class="prelude-val">None</span>
+    };
+
+
+    <span class="kw">let</span> <span class="ident">stat_block</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">input_format</span> {
+        <span class="ident">InputFormat::Creature</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">source_file</span> <span class="op">=</span> <span class="ident">get_source_file</span>(<span class="kw-2">&amp;</span><span class="ident">working_dir</span>, <span class="ident">input_file</span>)<span class="question-mark">?</span>;
+            <span class="comment">// get the data from the file</span>
+            <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="ident">read_source</span>(<span class="ident">source_file</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>;
+            <span class="comment">// the final working directory should be the directory in which the source file is located.</span>
+            <span class="kw">let</span> <span class="ident">working_dir</span> <span class="op">=</span> <span class="ident">get_working_dir_relative_to_source_or_default</span>(<span class="kw-2">&amp;</span><span class="ident">source_file</span>, <span class="kw-2">&amp;</span><span class="ident">working_dir</span>);
+            <span class="comment">// deserialize the commands</span>
+            <span class="kw">let</span> <span class="ident">creator</span> <span class="op">=</span> <span class="ident">CreatureCreator::load_from_str</span>(<span class="kw-2">&amp;</span><span class="ident">source</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Error loading creature commands: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">creature</span> <span class="op">=</span> <span class="ident">creator</span>.<span class="ident">create_creature</span>(<span class="kw-2">&amp;</span><span class="ident">working_dir</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>;
+            <span class="ident">creature</span>.<span class="ident">try_into_stat_block</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>
+        },
+        <span class="ident">InputFormat::Open5e</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">source_file</span> <span class="op">=</span> <span class="ident">get_source_file</span>(<span class="kw-2">&amp;</span><span class="ident">working_dir</span>, <span class="ident">input_file</span>)<span class="question-mark">?</span>;
+            <span class="comment">// get the data from the file</span>
+            <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="ident">read_source</span>(<span class="ident">source_file</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>;
+            <span class="comment">// deserialize the stat block</span>
+            <span class="kw">let</span> <span class="ident">creature</span> <span class="op">=</span> <span class="ident">Open5eMonster::load_from_str</span>(<span class="kw-2">&amp;</span><span class="ident">source</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Error loading open5e monster: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>;
+            <span class="ident">creature</span>.<span class="ident">try_into_stat_block</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>
+
+        },
+        <span class="ident">InputFormat::Open5eList</span>(<span class="ident">creature_name</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">source_file</span> <span class="op">=</span> <span class="ident">get_source_file</span>(<span class="kw-2">&amp;</span><span class="ident">working_dir</span>, <span class="ident">input_file</span>)<span class="question-mark">?</span>;
+            <span class="comment">// get the data from the file</span>
+            <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="ident">read_source</span>(<span class="ident">source_file</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>;
+            <span class="comment">// deserialize the stat block</span>
+            <span class="kw">let</span> <span class="ident">list</span> <span class="op">=</span> <span class="ident">Open5eMonsterList::load_from_str</span>(<span class="kw-2">&amp;</span><span class="ident">source</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Error loading open5e monster: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>;
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">creature</span>) <span class="op">=</span> <span class="ident">list</span>.<span class="ident">results</span>.<span class="ident">into_iter</span>().<span class="ident">find</span>(<span class="op">|</span><span class="ident">creature</span><span class="op">|</span> (<span class="ident">creature</span>.<span class="ident">slug</span> <span class="op">=</span><span class="op">=</span> <span class="ident">creature_name</span>) <span class="op">|</span><span class="op">|</span> (<span class="ident">creature</span>.<span class="ident">name</span> <span class="op">=</span><span class="op">=</span> <span class="ident">creature_name</span>)) {
+                <span class="ident">creature</span>.<span class="ident">try_into_stat_block</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>
+            } <span class="kw">else</span> {
+                <span class="prelude-val">Err</span>(<span class="string">&quot;Couldn&#39;t find creature in list.&quot;</span>.<span class="ident">to_owned</span>())<span class="question-mark">?</span>
+            }
+        },
+        <span class="ident">InputFormat::Stored</span>(<span class="ident">creature_name</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">creature_name</span>.<span class="ident">as_str</span>() {
+                <span class="string">&quot;dragon&quot;</span> <span class="op">|</span> <span class="string">&quot;adult gold dragon&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">monstorr_data::creatures::DRAGON_GOLD_ADULT</span>,
+                <span class="string">&quot;goblin&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">monstorr_data::creatures::GOBLIN</span>,
+                <span class="string">&quot;bugbear&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">monstorr_data::creatures::BUGBEAR</span>,
+                <span class="string">&quot;efreeti&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">monstorr_data::creatures::EFREETI</span>,
+                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="string">&quot;Couldn&#39;t find creature in list.&quot;</span>.<span class="ident">to_owned</span>())<span class="question-mark">?</span>
+            };
+            <span class="comment">// deserialize the commands</span>
+            <span class="kw">let</span> <span class="ident">creator</span> <span class="op">=</span> <span class="ident">CreatureCreator::load_from_str</span>(<span class="ident">source</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Error loading creature commands: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">creature</span> <span class="op">=</span> <span class="ident">creator</span>.<span class="ident">create_creature</span>(<span class="kw-2">&amp;</span><span class="ident">working_dir</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>;
+            <span class="ident">creature</span>.<span class="ident">try_into_stat_block</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>
+        }
+    };
+
+    <span class="kw">let</span> <span class="ident">output</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">output_format</span> {
+        <span class="ident">OutputFormat::JSON</span>(<span class="ident">ugly</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">stat_block</span>.<span class="ident">write_to_string</span>(<span class="ident">ugly</span>)<span class="question-mark">?</span>,
+        <span class="ident">OutputFormat::MiniJinjaTemplate</span>(<span class="ident">template</span>,<span class="ident">include_files</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="comment">// use the default working dir instead of making it relative to the source.</span>
+            <span class="kw">let</span> <span class="ident">template_file</span> <span class="op">=</span> <span class="ident">resolve_existing_file</span>(<span class="kw-2">&amp;</span><span class="ident">working_dir</span>, <span class="kw-2">&amp;</span><span class="ident">template</span>)<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">main_template</span> <span class="op">=</span> (<span class="ident">template</span>,<span class="ident">read_source</span>(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">template_file</span>))<span class="question-mark">?</span>).<span class="ident">into</span>();
+            
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">includes</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">template_dir</span> <span class="op">=</span> <span class="ident">template_file</span>.<span class="ident">clone</span>();
+            <span class="ident">template_dir</span>.<span class="ident">pop</span>();
+
+            <span class="kw">for</span> <span class="ident">include</span> <span class="kw">in</span> <span class="ident">include_files</span> {
+                <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">resolve_existing_file</span>(<span class="kw-2">&amp;</span><span class="ident">working_dir</span>, <span class="kw-2">&amp;</span><span class="ident">include</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">name</span>) <span class="op">=</span> <span class="ident">path_relative_from</span>(<span class="kw-2">&amp;</span><span class="ident">file</span>, <span class="kw-2">&amp;</span><span class="ident">template_dir</span>) {
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">name</span>) <span class="op">=</span> <span class="ident">name</span>.<span class="ident">to_str</span>() {
+                        <span class="ident">name</span>.<span class="ident">to_owned</span>()
+                    } <span class="kw">else</span> {
+                        <span class="ident">include</span>
+                    }
+                } <span class="kw">else</span> {
+                    <span class="ident">include</span>
+                };
+                <span class="ident">includes</span>.<span class="ident">push</span>((<span class="ident">name</span>,<span class="ident">read_source</span>(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">file</span>))<span class="question-mark">?</span>).<span class="ident">into</span>());
+            }
+            
+            <span class="ident">process_template</span>(<span class="ident">main_template</span>,<span class="ident">includes</span>,<span class="kw-2">&amp;</span><span class="ident">stat_block</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Error processing template: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>
+        },
+        <span class="ident">OutputFormat::HTML</span>(<span class="ident">two_column_height</span>,<span class="ident">fragment</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> (<span class="ident">main_template</span>,<span class="ident">includes</span>) <span class="op">=</span> <span class="kw">if</span> <span class="ident">fragment</span> {
+                <span class="kw">let</span> <span class="ident">main_template</span> <span class="op">=</span> <span class="ident">monstorr_data::templates::STAT_BLOCK_HTML_TEMPLATE</span>.<span class="ident">into</span>();
+                <span class="kw">let</span> <span class="ident">includes</span> <span class="op">=</span> <span class="ident">monstorr_data::templates::stat_block_html_template_includes</span>(<span class="ident">two_column_height</span>).<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">into</span>()).<span class="ident">collect</span>();
+                (<span class="ident">main_template</span>,<span class="ident">includes</span>)
+
+            } <span class="kw">else</span> {
+                <span class="kw">let</span> <span class="ident">main_template</span> <span class="op">=</span> <span class="ident">monstorr_data::templates::FULL_HTML_TEMPLATE</span>.<span class="ident">into</span>();
+                <span class="kw">let</span> <span class="ident">includes</span> <span class="op">=</span> <span class="ident">monstorr_data::templates::full_html_template_includes</span>(<span class="ident">two_column_height</span>).<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">into</span>()).<span class="ident">collect</span>();
+                (<span class="ident">main_template</span>,<span class="ident">includes</span>)
+    
+            };
+            <span class="ident">process_template</span>(<span class="ident">main_template</span>, <span class="ident">includes</span>, <span class="kw-2">&amp;</span><span class="ident">stat_block</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Error producing HTML: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>
+        }
+    };
+
+    <span class="ident">write_target</span>(<span class="ident">target_file</span>, <span class="kw-2">&amp;</span><span class="ident">output</span>)
+
+    
+}
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list_html_template_names</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
+    <span class="ident">result</span>.<span class="ident">push</span>(<span class="ident">monstorr_data::templates::FULL_HTML_TEMPLATE</span>.<span class="number">0</span>.<span class="ident">to_owned</span>());
+    <span class="kw">for</span> <span class="ident">template</span> <span class="kw">in</span> <span class="ident">monstorr_data::templates::FULL_HTML_TEMPLATE_INCLUDES</span> {
+        <span class="ident">result</span>.<span class="ident">push</span>(<span class="ident">template</span>.<span class="number">0</span>.<span class="ident">to_owned</span>())
+    }
+    <span class="ident">result</span>
+
+}
+
+<span class="kw">fn</span> <span class="ident">print_template_if_name_matches</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,<span class="ident">template</span>: (<span class="kw-2">&amp;</span><span class="ident">str</span>,<span class="kw-2">&amp;</span><span class="ident">str</span>)) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">if</span> <span class="ident">name</span> <span class="op">=</span><span class="op">=</span> <span class="ident">template</span>.<span class="number">0</span> {
+        <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>,<span class="ident">template</span>.<span class="number">1</span>);
+        <span class="bool-val">true</span>
+    } <span class="kw">else</span> {
+        <span class="bool-val">false</span>
+    }
+
+}
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">print_template</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">if</span> <span class="op">!</span><span class="ident">print_template_if_name_matches</span>(<span class="ident">name</span>, <span class="ident">monstorr_data::templates::FULL_HTML_TEMPLATE</span>) {
+        <span class="kw">for</span> <span class="ident">template</span> <span class="kw">in</span> <span class="ident">monstorr_data::templates::FULL_HTML_TEMPLATE_INCLUDES</span> {
+            <span class="kw">if</span> <span class="ident">print_template_if_name_matches</span>(<span class="ident">name</span>, <span class="ident">template</span>) {
+                <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+            }
+        }
+    } <span class="kw">else</span> {
+        <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+    }
+    <span class="prelude-val">Err</span>(<span class="macro">format!</span>(<span class="string">&quot;This program does not contain a template named &#39;{}&#39;&quot;</span>,<span class="ident">name</span>))
+    
+}
+
+
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CreatureSummary</span> {
+    <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">slug</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">type_</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">subtype</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">size</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">alignment</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">challenge_rating</span>: <span class="ident">String</span>
+}
+
+<span class="comment">// FUTURE: Should limit this to just open5e-list formats somehow.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list_creatures</span>(<span class="ident">input_file</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>, <span class="ident">input_format</span>: <span class="ident">ListInputFormat</span>, <span class="ident">type_</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>, <span class="ident">subtype</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>, <span class="ident">size</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,<span class="ident">alignment</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,<span class="ident">max_cr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,<span class="ident">min_cr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CreatureSummary</span><span class="op">&gt;</span>,<span class="ident">String</span><span class="op">&gt;</span> {
+
+    <span class="kw">let</span> <span class="ident">working_dir</span> <span class="op">=</span> <span class="ident">get_default_working_dir</span>()<span class="question-mark">?</span>;
+
+    <span class="kw">let</span> <span class="ident">source_file</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">input_file</span>) <span class="op">=</span> <span class="ident">input_file</span> {
+        <span class="prelude-val">Some</span>(<span class="ident">resolve_existing_file</span>(<span class="kw-2">&amp;</span><span class="ident">working_dir</span>, <span class="ident">input_file</span>)<span class="question-mark">?</span>)
+    } <span class="kw">else</span> {
+        <span class="prelude-val">None</span>
+    };
+
+    <span class="comment">// get the data from the file</span>
+    <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="ident">read_source</span>(<span class="ident">source_file</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>;
+
+    <span class="kw">let</span> <span class="ident">type_</span> <span class="op">=</span> <span class="ident">type_</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">trim</span>().<span class="ident">to_lowercase</span>());
+    <span class="kw">let</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">size</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">trim</span>().<span class="ident">to_lowercase</span>());
+    <span class="kw">let</span> <span class="ident">alignment</span> <span class="op">=</span> <span class="ident">alignment</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">trim</span>().<span class="ident">to_lowercase</span>());
+    <span class="comment">// TODO: How do we compare the challenge ratings?</span>
+    <span class="kw">let</span> <span class="ident">max_cr</span> <span class="op">=</span> <span class="ident">max_cr</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">ChallengeRating</span><span class="op">&gt;</span>()).<span class="ident">transpose</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Could not parse max_cr: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">min_cr</span> <span class="op">=</span> <span class="ident">min_cr</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">ChallengeRating</span><span class="op">&gt;</span>()).<span class="ident">transpose</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Could not parse min_cr: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>;
+
+    <span class="kw">match</span> <span class="ident">input_format</span> {
+        <span class="ident">ListInputFormat::Open5eList</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="comment">// deserialize the stat block</span>
+            <span class="kw">let</span> <span class="ident">list</span> <span class="op">=</span> <span class="ident">Open5eMonsterList::load_from_str</span>(<span class="kw-2">&amp;</span><span class="ident">source</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Error loading open5e monster: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
+            <span class="kw">for</span> <span class="ident">creature</span> <span class="kw">in</span> <span class="ident">list</span>.<span class="ident">results</span> {
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">type_</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">type_</span> {
+                    <span class="kw">if</span> <span class="kw-2">&amp;</span><span class="ident">creature</span>.<span class="ident">type_</span>.<span class="ident">to_lowercase</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">type_</span> {
+                        <span class="kw">continue</span>;
+                    }
+                }
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">subtype</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">subtype</span> {
+                    <span class="kw">if</span> <span class="kw-2">&amp;</span><span class="ident">creature</span>.<span class="ident">subtype</span>.<span class="ident">to_lowercase</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">subtype</span> {
+                        <span class="kw">continue</span>;
+                    }
+                }
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">size</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">size</span> {
+                    <span class="kw">if</span> <span class="kw-2">&amp;</span><span class="ident">creature</span>.<span class="ident">size</span>.<span class="ident">to_lowercase</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">size</span> {
+                        <span class="kw">continue</span>;
+                    }
+                }
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">alignment</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">alignment</span> {
+                    <span class="kw">if</span> <span class="kw-2">&amp;</span><span class="ident">creature</span>.<span class="ident">alignment</span>.<span class="ident">to_lowercase</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">alignment</span> {
+                        <span class="kw">continue</span>;
+                    }
+                }
+                
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">max_cr</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">max_cr</span> {
+                    <span class="kw">if</span> <span class="kw-2">&amp;</span><span class="ident">creature</span>.<span class="ident">challenge_rating</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">ChallengeRating</span><span class="op">&gt;</span>().
+                    <span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Could not parse cr on creature &#39;{}&#39;: {}&quot;</span>,<span class="ident">creature</span>.<span class="ident">name</span>,<span class="ident">e</span>))<span class="question-mark">?</span> <span class="op">&gt;</span> 
+                    <span class="ident">max_cr</span> {
+                        <span class="kw">continue</span>;
+                    }
+                }
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">min_cr</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">min_cr</span> {
+                    <span class="kw">if</span> <span class="kw-2">&amp;</span><span class="ident">creature</span>.<span class="ident">challenge_rating</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">ChallengeRating</span><span class="op">&gt;</span>().
+                            <span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Could not parse cr on creature &#39;{}&#39;: {}&quot;</span>,<span class="ident">creature</span>.<span class="ident">name</span>,<span class="ident">e</span>))<span class="question-mark">?</span> <span class="op">&lt;</span> 
+                            <span class="ident">min_cr</span> {
+                        <span class="kw">continue</span>;
+                    }
+                }
+
+                <span class="kw">let</span> <span class="ident">subtype</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">creature</span>.<span class="ident">subtype</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;&quot;</span> {
+                    <span class="prelude-val">None</span>
+                } <span class="kw">else</span> {
+                    <span class="prelude-val">Some</span>(<span class="ident">creature</span>.<span class="ident">subtype</span>.<span class="ident">clone</span>())
+                };
+
+                <span class="ident">result</span>.<span class="ident">push</span>(<span class="ident">CreatureSummary</span> {
+                    <span class="ident">name</span>: <span class="ident">creature</span>.<span class="ident">name</span>.<span class="ident">clone</span>(),
+                    <span class="ident">slug</span>: <span class="ident">creature</span>.<span class="ident">slug</span>.<span class="ident">clone</span>(),
+                    <span class="ident">type_</span>: <span class="ident">creature</span>.<span class="ident">type_</span>.<span class="ident">clone</span>(),
+                    <span class="ident">subtype</span>,
+                    <span class="ident">size</span>: <span class="ident">creature</span>.<span class="ident">size</span>.<span class="ident">clone</span>(),
+                    <span class="ident">alignment</span>: <span class="ident">creature</span>.<span class="ident">alignment</span>.<span class="ident">clone</span>(),
+                    <span class="ident">challenge_rating</span>: <span class="ident">creature</span>.<span class="ident">challenge_rating</span>.<span class="ident">clone</span>()
+                });
+            };
+            <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
+        }
+    }
+    
+}
+
+</code></pre></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="monstorr_lib" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
+    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script>
+</body></html>

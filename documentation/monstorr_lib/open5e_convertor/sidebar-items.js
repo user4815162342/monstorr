@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["actions_to_stat_block",""],["armor_to_stat_block",""],["legendary_to_stat_block",""],["saving_throws_to_stat_block",""],["str_to_option",""]]});

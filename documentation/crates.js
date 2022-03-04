@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["monstorr","monstorr_data","monstorr_lib","monstorr_open5e"];

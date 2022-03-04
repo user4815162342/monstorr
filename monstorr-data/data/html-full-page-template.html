@@ -1,0 +1,36 @@
+{#
+    Copyright © 2022 Neil M. Sheldon
+    
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, You can obtain one at https://mozilla.org/MPL/2.0/.
+#}
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- 
+            Some HTML and CSS text copied from Statblock5e, which is released under Apache License 2.0
+            https://github.com/Valloric/statblock5e
+            Except for the some of the font choices, the style and appearance can be attributed to the above project.
+        -->
+        <meta charset="utf-8"/>
+        <title>Statblock example</title>
+        <!-- NMS: statblock5e didn't have the 'https:', and the fonts weren't downloading on my linux firefox -->
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,400;0,800;1,400;1,800&display=swap" rel="stylesheet"> 
+        <!-- NOTE: Noto Sans is closer to what is used in the official books, but I find Merriweather Sans (above) is a lot easier to read. (I'm also 50 years old with mild presbyopia and astigmatism.) If you switch to Noto Sans, you will want to make the font-weights 700 instead of 800.
+             <link href="https://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic,700italic" rel="stylesheet" type="text/css"/>-->
+             <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet"> 
+        <style>
+            body {
+                margin: 0;
+            }
+
+        </style>
+        {% include 'html-styles-fragment.html' %}
+
+
+    </head>
+    <body>
+        {% include 'html-stat-block-template.html' %}
+    </body>
+</html>

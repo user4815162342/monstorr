@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["FULL_CAST_SLOTS",""],["HALF_CAST_SLOTS",""],["THIRD_CAST_SLOTS",""],["WARLOCK_CAST_SLOTS",""]],"enum":[["SpellcastingStyle",""]],"struct":[["InnateSpellcasting",""],["Spellcasting",""]]});

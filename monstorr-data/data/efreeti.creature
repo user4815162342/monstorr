@@ -1,0 +1,66 @@
+([
+    Monstorr(1),
+    Source("D&D 5E System Reference Document"),
+    Name("Efreeti"),
+    Large,
+    Elemental,
+    LawfulEvil,
+    Armor(Natural(6)),
+    HitDiceCount(16),
+    Walk(40),
+    Fly(60),
+    Str(22),
+    Dex(12),
+    Con(24),
+    Int(16),
+    Wis(15),
+    Cha(16),
+    Saves([
+        Intelligence,
+        Wisdom,
+        Charisma,
+    ]),
+    Immunity(Fire),
+    Darkvision(120),
+    Languages([
+        Ignan,
+    ]),
+    OverrideChallenge(11),
+    Feature(Feature("Elemental Demise", "If ${subj} dies, its body disintegrates in a flash of fire and puff of smoke, leaving behind only equipment ${subj} was wearing or carrying.")),
+    InnateSpellcasting([
+        Ability(Charisma),
+        SaveDC(15),
+        Attack(7),
+        AtWill([
+            "detect magic",
+        ]),
+        PerDay(3, [
+            "enlarge/reduce",
+            "tongues",
+        ]),
+        PerDay(1, [
+            "conjure elemental",
+            "gaseous form",
+            "invisibility",
+            "major image",
+            "plane shift",
+            "wall of fire",
+        ]),
+        SpellRestriction("conjure elemental", "fire elemental only"),
+    ]),
+    Multiattack("${Subj} makes two scimitar attacks or uses its Hurl Flame twice.", Or([
+        Count(2, [
+            Attack("Scimitar"),
+        ]),
+        Count(2, [
+            Attack("Hurl Flame"),
+        ]),
+    ])),
+    Weapon(Scimitar(0), Some(Plus(Damage("2d6", Fixed(0), Fire)))),
+    Action(Attack("Hurl Flame", (
+        type: Some(Spell),
+        bonus: Charisma,
+        range: Some(120),
+        target: "one target",
+    ), Damage("5d6", Fixed(0), Fire))),
+])
