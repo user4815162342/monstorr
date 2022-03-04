@@ -304,6 +304,15 @@ pub trait InterpolationObject {
     }
 }
 
+impl InterpolationObject for () {
+
+    fn get_property(&self, _property: &Rc<str>) -> Option<InterpolationValue> {
+        None
+    }
+
+}
+
+// TODO: Get rid of this.
 pub struct OverriddenInterpolationObject {
     overridden_namespace: Rc<str>,
     overridden: Rc<dyn InterpolationObject>,
@@ -1121,3 +1130,122 @@ pub fn interpolate_str_for_statblock<Data: InterpolationObject>(source: &str, so
     }
 }
 
+
+pub fn interpolate_simple_markdown_naively(heading_source: &str, source: &str, source_name: &str, use_sub_block: bool, show_text_in_error: bool) -> Result<Vec<TextBlock>,InterpolationErrorDetails> {
+
+    // simple parsing
+    let mut current_string = String::new();
+    let mut operations = Vec::new();
+
+    let mut chars = source.chars().enumerate().peekable();
+    let mut start = 0;
+    let mut end = 0;
+    let mut bold = false;
+    let mut italic = false;
+
+    fn get_position(start: usize, end: usize) -> PositionRange {
+        PositionRange {
+            start: Position {
+                line: 1,
+                column: start
+            },
+            end: Position {
+                line: 1,
+                column: end
+            }
+
+        }
+    }
+
+    // push the name on as the heading start
+    if use_sub_block {
+        operations.push((InterpolationOperation::StartListItem,get_position(start, end)));
+    } else {
+        operations.push((InterpolationOperation::StartParagraph,get_position(start, end)));
+    }
+    operations.push((InterpolationOperation::CreateString(Rc::from(heading_source)),get_position(0, 0)));
+    operations.push((InterpolationOperation::Append,get_position(0,0)));
+    operations.push((InterpolationOperation::EndBlockStart,get_position(start, end)));
+
+    while let Some((position,char)) = chars.next() {
+        end = position;
+        match char {
+            '\n' => {
+                let use_sub = if let Some((_,'•')) = chars.peek() {
+                    chars.next();
+                    true
+                } else {
+                    false
+                };
+                let new_string = std::mem::replace(&mut current_string, String::new());
+                operations.push((InterpolationOperation::CreateString(Rc::from(new_string)),get_position(start, end)));
+                start = end;
+                operations.push((InterpolationOperation::Append,get_position(start, end)));
+                if use_sub {
+                    operations.push((InterpolationOperation::StartListItem,get_position(start, end)));
+                } else {
+
+                    operations.push((InterpolationOperation::StartParagraph,get_position(start, end)));
+                }
+                operations.push((InterpolationOperation::EndBlockStart,get_position(start, end)));
+            },
+            '*' => {
+                if let Some((_,'*')) = chars.peek() {
+                    chars.next();
+                    let new_string = std::mem::replace(&mut current_string, String::new());
+                    operations.push((InterpolationOperation::CreateString(Rc::from(new_string)),get_position(start,end)));
+                    start = end;
+                    operations.push((InterpolationOperation::Append,get_position(start,end)));
+                    if bold {
+                        operations.push((InterpolationOperation::EndBold,get_position(start,end)));
+                        bold = false;
+                    } else {
+                        operations.push((InterpolationOperation::StartBold,get_position(start,end)));
+                        bold = true;
+                    }
+                } else {
+                    current_string.push('*');
+                }
+            },
+            '_' => {
+                if let Some((_,'_')) = chars.peek() {
+                    chars.next();
+                }
+                let new_string = std::mem::replace(&mut current_string, String::new());
+                operations.push((InterpolationOperation::CreateString(Rc::from(new_string)),get_position(start,end)));
+                start = end;
+                operations.push((InterpolationOperation::Append,get_position(start,end)));
+                if italic {
+                    operations.push((InterpolationOperation::EndItalic,get_position(start,end)));
+                    italic = false;
+                } else {
+                    operations.push((InterpolationOperation::StartItalic,get_position(start,end)));
+                    italic = true;
+                }
+            },
+            c => {
+                current_string.push(c);
+            }
+        }
+    };
+
+    operations.push((InterpolationOperation::CreateString(Rc::from(current_string)),get_position(start, end)));
+    start = end;
+    operations.push((InterpolationOperation::Append,get_position(start, end)));
+
+    let document = Document {
+        operations
+    };
+
+    match document.interpolate(source_name,&()) {
+        Ok(value) => Ok(value),
+        Err(err) => if show_text_in_error {
+            Err(err.with_full_text(source))
+        } else {
+            Err(err)
+        }
+    }
+
+
+
+}

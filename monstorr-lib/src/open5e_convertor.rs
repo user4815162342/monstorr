@@ -15,8 +15,8 @@ use crate::stat_block::CreatureStatBlock;
 use crate::stat_block::StatBlockFeature;
 use crate::stat_block::StatBlockLegendary;
 use crate::stats::Ability;
-use crate::structured_text::TextBlock;
-use crate::structured_text::TextSpan;
+use crate::interpolation::interpolate_simple_markdown_naively;
+use crate::errors::InterpolationErrorDetails;
 
 fn str_to_option(source: String) -> Option<String> {
     if source.is_empty() {
@@ -64,50 +64,25 @@ fn saving_throws_to_stat_block(strength: Option<i8>, dexterity: Option<i8>, cons
 
 }
 
-fn actions_to_stat_block(source: Vec<Open5eMonsterAction>) -> Vec<StatBlockFeature> {
+fn actions_to_stat_block(source: Vec<Open5eMonsterAction>) -> Result<Vec<StatBlockFeature>,InterpolationErrorDetails> {
 
-    source.iter().map(|a| StatBlockFeature {
-        text: vec![
-            TextBlock::Paragraph{
-                heading: Some(vec![
-                    TextSpan::Normal(a.name.clone())
-                ]),
-                body: vec![
-                    TextSpan::Normal(a.desc.clone()) // FUTURE: I need to parse this from markdown
-                ]
-            }
-        ]
-    }).collect()
+    source.iter().map(|a| Ok(StatBlockFeature {
+        text: interpolate_simple_markdown_naively(&a.name, &a.desc, &a.name, false, true)?
+    })).collect()
 }
 
-fn legendary_to_stat_block(description: String, actions: Vec<Open5eMonsterAction>) -> Option<StatBlockLegendary> {
-    if description.is_empty() && actions.is_empty() {
+fn legendary_to_stat_block(description: String, actions: Vec<Open5eMonsterAction>) -> Result<Option<StatBlockLegendary>,InterpolationErrorDetails> {
+    Ok(if description.is_empty() && actions.is_empty() {
         None
     } else {
         Some(StatBlockLegendary {
-            description: vec![
-                TextBlock::Paragraph {
-                    heading: None,
-                    body: vec![
-                        TextSpan::Normal(description) // FUTURE: I need to parse this from markdown
-                    ]
-                }
-            ],
+            description: interpolate_simple_markdown_naively("", &description, "legendary description", false, true)?,
             // this isn't exactly the same as actions_to_statblock, since we want subparagraphs
-            actions: actions.iter().map(|a| StatBlockFeature {
-                text: vec![
-                    TextBlock::SubParagraph{
-                        heading: Some(vec![
-                            TextSpan::Normal(a.name.clone())
-                        ]),
-                        body: vec![
-                            TextSpan::Normal(a.desc.clone()) // FUTURE: I need to parse this from markdown
-                        ]
-                    }
-                ]
-            }).collect()
+            actions: actions.iter().map(|a| Ok(StatBlockFeature {
+                text: interpolate_simple_markdown_naively(&a.name, &a.desc, "legendary action", true, true)?
+            })).collect::<Result<Vec<StatBlockFeature>,InterpolationErrorDetails>>()?
         })    
-    }
+    })
 }
 
 impl TryFrom<Open5eMonster> for CreatureStatBlock {
@@ -147,10 +122,10 @@ impl TryFrom<Open5eMonster> for CreatureStatBlock {
             senses: creature.senses,
             languages: str_to_option(creature.languages),
             challenge_rating: creature.challenge_rating,
-            actions: actions_to_stat_block(creature.actions),
-            reactions: actions_to_stat_block(creature.reactions),
-            legendary_actions: legendary_to_stat_block(creature.legendary_desc,creature.legendary_actions),
-            special_abilities: actions_to_stat_block(creature.special_abilities),
+            actions: actions_to_stat_block(creature.actions).map_err(|e| format!("{}",e))?,
+            reactions: actions_to_stat_block(creature.reactions).map_err(|e| format!("{}",e))?,
+            legendary_actions: legendary_to_stat_block(creature.legendary_desc,creature.legendary_actions).map_err(|e| format!("{}",e))?,
+            special_abilities: actions_to_stat_block(creature.special_abilities).map_err(|e| format!("{}",e))?,
             lair_actions: None,
             regional_effects: None,
             source: str_to_option(creature.document_title)

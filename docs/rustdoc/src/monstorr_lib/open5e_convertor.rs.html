@@ -133,31 +133,6 @@
 <span id="133">133</span>
 <span id="134">134</span>
 <span id="135">135</span>
-<span id="136">136</span>
-<span id="137">137</span>
-<span id="138">138</span>
-<span id="139">139</span>
-<span id="140">140</span>
-<span id="141">141</span>
-<span id="142">142</span>
-<span id="143">143</span>
-<span id="144">144</span>
-<span id="145">145</span>
-<span id="146">146</span>
-<span id="147">147</span>
-<span id="148">148</span>
-<span id="149">149</span>
-<span id="150">150</span>
-<span id="151">151</span>
-<span id="152">152</span>
-<span id="153">153</span>
-<span id="154">154</span>
-<span id="155">155</span>
-<span id="156">156</span>
-<span id="157">157</span>
-<span id="158">158</span>
-<span id="159">159</span>
-<span id="160">160</span>
 </pre><pre class="rust"><code><span class="comment">/*
  * Copyright © 2022 Neil M. Sheldon
  * 
@@ -175,8 +150,8 @@
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::stat_block::StatBlockFeature</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::stat_block::StatBlockLegendary</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::stats::Ability</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::structured_text::TextBlock</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::structured_text::TextSpan</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::interpolation::interpolate_simple_markdown_naively</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::errors::InterpolationErrorDetails</span>;
 
 <span class="kw">fn</span> <span class="ident">str_to_option</span>(<span class="ident">source</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
     <span class="kw">if</span> <span class="ident">source</span>.<span class="ident">is_empty</span>() {
@@ -224,50 +199,25 @@
 
 }
 
-<span class="kw">fn</span> <span class="ident">actions_to_stat_block</span>(<span class="ident">source</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Open5eMonsterAction</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">StatBlockFeature</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">actions_to_stat_block</span>(<span class="ident">source</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Open5eMonsterAction</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">StatBlockFeature</span><span class="op">&gt;</span>,<span class="ident">InterpolationErrorDetails</span><span class="op">&gt;</span> {
 
-    <span class="ident">source</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">StatBlockFeature</span> {
-        <span class="ident">text</span>: <span class="macro">vec!</span>[
-            <span class="ident">TextBlock::Paragraph</span>{
-                <span class="ident">heading</span>: <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[
-                    <span class="ident">TextSpan::Normal</span>(<span class="ident">a</span>.<span class="ident">name</span>.<span class="ident">clone</span>())
-                ]),
-                <span class="ident">body</span>: <span class="macro">vec!</span>[
-                    <span class="ident">TextSpan::Normal</span>(<span class="ident">a</span>.<span class="ident">desc</span>.<span class="ident">clone</span>()) <span class="comment">// FUTURE: I need to parse this from markdown</span>
-                ]
-            }
-        ]
-    }).<span class="ident">collect</span>()
+    <span class="ident">source</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="ident">StatBlockFeature</span> {
+        <span class="ident">text</span>: <span class="ident">interpolate_simple_markdown_naively</span>(<span class="kw-2">&amp;</span><span class="ident">a</span>.<span class="ident">name</span>, <span class="kw-2">&amp;</span><span class="ident">a</span>.<span class="ident">desc</span>, <span class="kw-2">&amp;</span><span class="ident">a</span>.<span class="ident">name</span>, <span class="bool-val">false</span>, <span class="bool-val">true</span>)<span class="question-mark">?</span>
+    })).<span class="ident">collect</span>()
 }
 
-<span class="kw">fn</span> <span class="ident">legendary_to_stat_block</span>(<span class="ident">description</span>: <span class="ident">String</span>, <span class="ident">actions</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Open5eMonsterAction</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">StatBlockLegendary</span><span class="op">&gt;</span> {
-    <span class="kw">if</span> <span class="ident">description</span>.<span class="ident">is_empty</span>() <span class="op">&amp;&amp;</span> <span class="ident">actions</span>.<span class="ident">is_empty</span>() {
+<span class="kw">fn</span> <span class="ident">legendary_to_stat_block</span>(<span class="ident">description</span>: <span class="ident">String</span>, <span class="ident">actions</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Open5eMonsterAction</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">StatBlockLegendary</span><span class="op">&gt;</span>,<span class="ident">InterpolationErrorDetails</span><span class="op">&gt;</span> {
+    <span class="prelude-val">Ok</span>(<span class="kw">if</span> <span class="ident">description</span>.<span class="ident">is_empty</span>() <span class="op">&amp;&amp;</span> <span class="ident">actions</span>.<span class="ident">is_empty</span>() {
         <span class="prelude-val">None</span>
     } <span class="kw">else</span> {
         <span class="prelude-val">Some</span>(<span class="ident">StatBlockLegendary</span> {
-            <span class="ident">description</span>: <span class="macro">vec!</span>[
-                <span class="ident">TextBlock::Paragraph</span> {
-                    <span class="ident">heading</span>: <span class="prelude-val">None</span>,
-                    <span class="ident">body</span>: <span class="macro">vec!</span>[
-                        <span class="ident">TextSpan::Normal</span>(<span class="ident">description</span>) <span class="comment">// FUTURE: I need to parse this from markdown</span>
-                    ]
-                }
-            ],
+            <span class="ident">description</span>: <span class="ident">interpolate_simple_markdown_naively</span>(<span class="string">&quot;&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">description</span>, <span class="string">&quot;legendary description&quot;</span>, <span class="bool-val">false</span>, <span class="bool-val">true</span>)<span class="question-mark">?</span>,
             <span class="comment">// this isn&#39;t exactly the same as actions_to_statblock, since we want subparagraphs</span>
-            <span class="ident">actions</span>: <span class="ident">actions</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">StatBlockFeature</span> {
-                <span class="ident">text</span>: <span class="macro">vec!</span>[
-                    <span class="ident">TextBlock::SubParagraph</span>{
-                        <span class="ident">heading</span>: <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[
-                            <span class="ident">TextSpan::Normal</span>(<span class="ident">a</span>.<span class="ident">name</span>.<span class="ident">clone</span>())
-                        ]),
-                        <span class="ident">body</span>: <span class="macro">vec!</span>[
-                            <span class="ident">TextSpan::Normal</span>(<span class="ident">a</span>.<span class="ident">desc</span>.<span class="ident">clone</span>()) <span class="comment">// FUTURE: I need to parse this from markdown</span>
-                        ]
-                    }
-                ]
-            }).<span class="ident">collect</span>()
+            <span class="ident">actions</span>: <span class="ident">actions</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="ident">StatBlockFeature</span> {
+                <span class="ident">text</span>: <span class="ident">interpolate_simple_markdown_naively</span>(<span class="kw-2">&amp;</span><span class="ident">a</span>.<span class="ident">name</span>, <span class="kw-2">&amp;</span><span class="ident">a</span>.<span class="ident">desc</span>, <span class="string">&quot;legendary action&quot;</span>, <span class="bool-val">true</span>, <span class="bool-val">true</span>)<span class="question-mark">?</span>
+            })).<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">StatBlockFeature</span><span class="op">&gt;</span>,<span class="ident">InterpolationErrorDetails</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
         })    
-    }
+    })
 }
 
 <span class="kw">impl</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">Open5eMonster</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">CreatureStatBlock</span> {
@@ -307,10 +257,10 @@
             <span class="ident">senses</span>: <span class="ident">creature</span>.<span class="ident">senses</span>,
             <span class="ident">languages</span>: <span class="ident">str_to_option</span>(<span class="ident">creature</span>.<span class="ident">languages</span>),
             <span class="ident">challenge_rating</span>: <span class="ident">creature</span>.<span class="ident">challenge_rating</span>,
-            <span class="ident">actions</span>: <span class="ident">actions_to_stat_block</span>(<span class="ident">creature</span>.<span class="ident">actions</span>),
-            <span class="ident">reactions</span>: <span class="ident">actions_to_stat_block</span>(<span class="ident">creature</span>.<span class="ident">reactions</span>),
-            <span class="ident">legendary_actions</span>: <span class="ident">legendary_to_stat_block</span>(<span class="ident">creature</span>.<span class="ident">legendary_desc</span>,<span class="ident">creature</span>.<span class="ident">legendary_actions</span>),
-            <span class="ident">special_abilities</span>: <span class="ident">actions_to_stat_block</span>(<span class="ident">creature</span>.<span class="ident">special_abilities</span>),
+            <span class="ident">actions</span>: <span class="ident">actions_to_stat_block</span>(<span class="ident">creature</span>.<span class="ident">actions</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>,
+            <span class="ident">reactions</span>: <span class="ident">actions_to_stat_block</span>(<span class="ident">creature</span>.<span class="ident">reactions</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>,
+            <span class="ident">legendary_actions</span>: <span class="ident">legendary_to_stat_block</span>(<span class="ident">creature</span>.<span class="ident">legendary_desc</span>,<span class="ident">creature</span>.<span class="ident">legendary_actions</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>,
+            <span class="ident">special_abilities</span>: <span class="ident">actions_to_stat_block</span>(<span class="ident">creature</span>.<span class="ident">special_abilities</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>,
             <span class="ident">lair_actions</span>: <span class="prelude-val">None</span>,
             <span class="ident">regional_effects</span>: <span class="prelude-val">None</span>,
             <span class="ident">source</span>: <span class="ident">str_to_option</span>(<span class="ident">creature</span>.<span class="ident">document_title</span>)
