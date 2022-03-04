@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["monstorr"] = [{"text":"impl Parser for <a class=\"struct\" href=\"monstorr/struct.Arguments.html\" title=\"struct monstorr::Arguments\">Arguments</a>","synthetic":false,"types":["monstorr::Arguments"]}];
+implementors["monstorr"] = [{"text":"impl Parser for <a class=\"enum\" href=\"monstorr/enum.Command.html\" title=\"enum monstorr::Command\">Command</a>","synthetic":false,"types":["monstorr::Command"]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

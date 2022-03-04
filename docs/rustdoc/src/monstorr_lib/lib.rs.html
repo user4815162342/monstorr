@@ -448,6 +448,130 @@
 <span id="448">448</span>
 <span id="449">449</span>
 <span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
+<span id="561">561</span>
+<span id="562">562</span>
+<span id="563">563</span>
+<span id="564">564</span>
+<span id="565">565</span>
+<span id="566">566</span>
+<span id="567">567</span>
+<span id="568">568</span>
+<span id="569">569</span>
+<span id="570">570</span>
+<span id="571">571</span>
+<span id="572">572</span>
+<span id="573">573</span>
+<span id="574">574</span>
 </pre><pre class="rust"><code><span class="comment">/*
  * Copyright © 2022 Neil M. Sheldon
  * 
@@ -501,6 +625,7 @@ There are a few things that you may need to know in order to simply use Monstorr
 <span class="kw">use</span> <span class="ident">monstorr_open5e::Open5eMonster</span>;
 <span class="kw">use</span> <span class="ident">monstorr_open5e::Open5eMonsterList</span>;
 <span class="kw">use</span> <span class="ident">monstorr_data</span>;
+<span class="kw">use</span> <span class="ident">monstorr_data::creatures::CreatureSummary</span>;
 
 <span class="kw">mod</span> <span class="ident">utils</span>;
 <span class="kw">mod</span> <span class="ident">parse_position</span>;
@@ -529,6 +654,7 @@ There are a few things that you may need to know in order to simply use Monstorr
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::stats::ChallengeRating</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::template::process_template</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::utils::path_relative_from</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::utils::to_kebab_case</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">creature_commands::MONSTORR_VERSION</span>;
 
@@ -540,7 +666,8 @@ There are a few things that you may need to know in order to simply use Monstorr
 }
 
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ListInputFormat</span> {
-    <span class="ident">Open5eList</span>
+    <span class="ident">Open5eList</span>,
+    <span class="ident">Stored</span>
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">InputFormat</span> {
@@ -575,6 +702,15 @@ There are a few things that you may need to know in order to simply use Monstorr
     <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">resolve_file</span>(<span class="ident">working_dir</span>, <span class="ident">file</span>);
     <span class="kw">if</span> <span class="op">!</span><span class="ident">result</span>.<span class="ident">is_file</span>() {
         <span class="prelude-val">Err</span>(<span class="macro">format!</span>(<span class="string">&quot;Path {} does not exist or is not a file&quot;</span>,<span class="ident">file</span>))
+    } <span class="kw">else</span> {
+        <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
+    }
+}
+
+<span class="kw">fn</span> <span class="ident">resolve_existing_dir</span>(<span class="ident">working_dir</span>: <span class="kw-2">&amp;</span><span class="ident">PathBuf</span>, <span class="ident">file</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PathBuf</span>,<span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">resolve_file</span>(<span class="ident">working_dir</span>, <span class="ident">file</span>);
+    <span class="kw">if</span> <span class="op">!</span><span class="ident">result</span>.<span class="ident">is_dir</span>() {
+        <span class="prelude-val">Err</span>(<span class="macro">format!</span>(<span class="string">&quot;Path {} does not exist or is not a directory&quot;</span>,<span class="ident">file</span>))
     } <span class="kw">else</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
     }
@@ -642,13 +778,11 @@ There are a few things that you may need to know in order to simply use Monstorr
             <span class="ident">read_source</span>(<span class="ident">source_file</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>
         },
         <span class="ident">InputFormat::Stored</span>(<span class="ident">creature_name</span>) <span class="op">=</span><span class="op">&gt;</span> {
-            <span class="kw">match</span> <span class="ident">creature_name</span>.<span class="ident">as_str</span>() {
-                <span class="string">&quot;dragon&quot;</span> <span class="op">|</span> <span class="string">&quot;adult gold dragon&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">monstorr_data::creatures::DRAGON_GOLD_ADULT</span>,
-                <span class="string">&quot;goblin&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">monstorr_data::creatures::GOBLIN</span>,
-                <span class="string">&quot;bugbear&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">monstorr_data::creatures::BUGBEAR</span>,
-                <span class="string">&quot;efreeti&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">monstorr_data::creatures::EFREETI</span>,
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="string">&quot;Couldn&#39;t find creature in list.&quot;</span>.<span class="ident">to_owned</span>())<span class="question-mark">?</span>
-            }.<span class="ident">to_owned</span>()
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">entry</span>) <span class="op">=</span> <span class="ident">monstorr_data::creatures::STORED_CREATURES</span>.<span class="ident">iter</span>().<span class="ident">find</span>(<span class="op">|</span>(<span class="ident">creature</span>,<span class="kw">_</span>)<span class="op">|</span> (<span class="ident">creature</span>.<span class="ident">slug</span> <span class="op">=</span><span class="op">=</span> <span class="ident">creature_name</span>) <span class="op">|</span><span class="op">|</span> (<span class="ident">creature</span>.<span class="ident">name</span> <span class="op">=</span><span class="op">=</span> <span class="ident">creature_name</span>)) {
+                <span class="ident">entry</span>.<span class="number">1</span>.<span class="ident">to_owned</span>()
+            } <span class="kw">else</span> {
+                <span class="prelude-val">Err</span>(<span class="string">&quot;Couldn&#39;t find creature in list.&quot;</span>.<span class="ident">to_owned</span>())<span class="question-mark">?</span>
+            }
         },
         <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="string">&quot;Input must be a creature file.&quot;</span>.<span class="ident">to_owned</span>())<span class="question-mark">?</span>
     };
@@ -708,12 +842,10 @@ There are a few things that you may need to know in order to simply use Monstorr
             }
         },
         <span class="ident">InputFormat::Stored</span>(<span class="ident">creature_name</span>) <span class="op">=</span><span class="op">&gt;</span> {
-            <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">creature_name</span>.<span class="ident">as_str</span>() {
-                <span class="string">&quot;dragon&quot;</span> <span class="op">|</span> <span class="string">&quot;adult gold dragon&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">monstorr_data::creatures::DRAGON_GOLD_ADULT</span>,
-                <span class="string">&quot;goblin&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">monstorr_data::creatures::GOBLIN</span>,
-                <span class="string">&quot;bugbear&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">monstorr_data::creatures::BUGBEAR</span>,
-                <span class="string">&quot;efreeti&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">monstorr_data::creatures::EFREETI</span>,
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="string">&quot;Couldn&#39;t find creature in list.&quot;</span>.<span class="ident">to_owned</span>())<span class="question-mark">?</span>
+            <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">entry</span>) <span class="op">=</span> <span class="ident">monstorr_data::creatures::STORED_CREATURES</span>.<span class="ident">iter</span>().<span class="ident">find</span>(<span class="op">|</span>(<span class="ident">creature</span>,<span class="kw">_</span>)<span class="op">|</span> (<span class="ident">creature</span>.<span class="ident">slug</span> <span class="op">=</span><span class="op">=</span> <span class="ident">creature_name</span>) <span class="op">|</span><span class="op">|</span> (<span class="ident">creature</span>.<span class="ident">name</span> <span class="op">=</span><span class="op">=</span> <span class="ident">creature_name</span>)) {
+                <span class="ident">entry</span>.<span class="number">1</span>
+            } <span class="kw">else</span> {
+                <span class="prelude-val">Err</span>(<span class="string">&quot;Couldn&#39;t find creature in list.&quot;</span>.<span class="ident">to_owned</span>())<span class="question-mark">?</span>
             };
             <span class="comment">// deserialize the commands</span>
             <span class="kw">let</span> <span class="ident">creator</span> <span class="op">=</span> <span class="ident">CreatureCreator::load_from_str</span>(<span class="ident">source</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Error loading creature commands: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>;
@@ -773,7 +905,10 @@ There are a few things that you may need to know in order to simply use Monstorr
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list_html_template_names</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
     <span class="ident">result</span>.<span class="ident">push</span>(<span class="ident">monstorr_data::templates::FULL_HTML_TEMPLATE</span>.<span class="number">0</span>.<span class="ident">to_owned</span>());
-    <span class="kw">for</span> <span class="ident">template</span> <span class="kw">in</span> <span class="ident">monstorr_data::templates::FULL_HTML_TEMPLATE_INCLUDES</span> {
+    <span class="kw">for</span> <span class="ident">template</span> <span class="kw">in</span> <span class="ident">monstorr_data::templates::STANDARD_HTML_TEMPLATE_INCLUDES</span> {
+        <span class="ident">result</span>.<span class="ident">push</span>(<span class="ident">template</span>.<span class="number">0</span>.<span class="ident">to_owned</span>())
+    }
+    <span class="kw">for</span> <span class="ident">template</span> <span class="kw">in</span> <span class="ident">monstorr_data::templates::ADDITIONAL_FULL_HTML_TEMPLATE_INCLUDES</span> {
         <span class="ident">result</span>.<span class="ident">push</span>(<span class="ident">template</span>.<span class="number">0</span>.<span class="ident">to_owned</span>())
     }
     <span class="ident">result</span>
@@ -792,7 +927,12 @@ There are a few things that you may need to know in order to simply use Monstorr
 
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">print_template</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">String</span><span class="op">&gt;</span> {
     <span class="kw">if</span> <span class="op">!</span><span class="ident">print_template_if_name_matches</span>(<span class="ident">name</span>, <span class="ident">monstorr_data::templates::FULL_HTML_TEMPLATE</span>) {
-        <span class="kw">for</span> <span class="ident">template</span> <span class="kw">in</span> <span class="ident">monstorr_data::templates::FULL_HTML_TEMPLATE_INCLUDES</span> {
+        <span class="kw">for</span> <span class="ident">template</span> <span class="kw">in</span> <span class="ident">monstorr_data::templates::STANDARD_HTML_TEMPLATE_INCLUDES</span> {
+            <span class="kw">if</span> <span class="ident">print_template_if_name_matches</span>(<span class="ident">name</span>, <span class="ident">template</span>) {
+                <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+            }
+        }
+        <span class="kw">for</span> <span class="ident">template</span> <span class="kw">in</span> <span class="ident">monstorr_data::templates::ADDITIONAL_FULL_HTML_TEMPLATE_INCLUDES</span> {
             <span class="kw">if</span> <span class="ident">print_template_if_name_matches</span>(<span class="ident">name</span>, <span class="ident">template</span>) {
                 <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
             }
@@ -805,28 +945,8 @@ There are a few things that you may need to know in order to simply use Monstorr
 }
 
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CreatureSummary</span> {
-    <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">slug</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">type_</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">subtype</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">size</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">alignment</span>: <span class="ident">String</span>,
-    <span class="kw">pub</span> <span class="ident">challenge_rating</span>: <span class="ident">String</span>
-}
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list_creatures</span>(<span class="ident">input_file</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>, <span class="ident">input_format</span>: <span class="ident">ListInputFormat</span>, <span class="ident">type_</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>, <span class="ident">subtype</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>, <span class="ident">size</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,<span class="ident">alignment</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,<span class="ident">max_cr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,<span class="ident">min_cr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CreatureSummary</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>,<span class="ident">String</span><span class="op">&gt;</span> {
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list_creatures</span>(<span class="ident">input_file</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>, <span class="ident">input_format</span>: <span class="ident">ListInputFormat</span>, <span class="ident">type_</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>, <span class="ident">subtype</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>, <span class="ident">size</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,<span class="ident">alignment</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,<span class="ident">max_cr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,<span class="ident">min_cr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CreatureSummary</span><span class="op">&gt;</span>,<span class="ident">String</span><span class="op">&gt;</span> {
-
-    <span class="kw">let</span> <span class="ident">working_dir</span> <span class="op">=</span> <span class="ident">get_default_working_dir</span>()<span class="question-mark">?</span>;
-
-    <span class="kw">let</span> <span class="ident">source_file</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">input_file</span>) <span class="op">=</span> <span class="ident">input_file</span> {
-        <span class="prelude-val">Some</span>(<span class="ident">resolve_existing_file</span>(<span class="kw-2">&amp;</span><span class="ident">working_dir</span>, <span class="ident">input_file</span>)<span class="question-mark">?</span>)
-    } <span class="kw">else</span> {
-        <span class="prelude-val">None</span>
-    };
-
-    <span class="comment">// get the data from the file</span>
-    <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="ident">read_source</span>(<span class="ident">source_file</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>;
 
     <span class="kw">let</span> <span class="ident">type_</span> <span class="op">=</span> <span class="ident">type_</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">trim</span>().<span class="ident">to_lowercase</span>());
     <span class="kw">let</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">size</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">trim</span>().<span class="ident">to_lowercase</span>());
@@ -834,71 +954,198 @@ There are a few things that you may need to know in order to simply use Monstorr
     <span class="kw">let</span> <span class="ident">max_cr</span> <span class="op">=</span> <span class="ident">max_cr</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">ChallengeRating</span><span class="op">&gt;</span>()).<span class="ident">transpose</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Could not parse max_cr: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">min_cr</span> <span class="op">=</span> <span class="ident">min_cr</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">ChallengeRating</span><span class="op">&gt;</span>()).<span class="ident">transpose</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Could not parse min_cr: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>;
 
+    <span class="macro">macro_rules!</span> <span class="ident">match_filter</span> {
+        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">creature</span>: <span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> {{
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">type_</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">type_</span> {
+                <span class="kw">if</span> <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">creature</span>.<span class="ident">type_</span>.<span class="ident">to_lowercase</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">type_</span> {
+                    <span class="kw">continue</span>;
+                }
+            }
+        
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">subtype</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">subtype</span> {
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">creature_subtype</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">creature</span>.<span class="ident">subtype</span> {
+                    <span class="kw">if</span> <span class="kw-2">&amp;</span><span class="ident">creature_subtype</span>.<span class="ident">to_lowercase</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">subtype</span> {
+                        <span class="kw">continue</span>;
+                    }
+                } <span class="kw">else</span> {
+                    <span class="kw">continue</span>;
+                }
+                
+            }
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">size</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">size</span> {
+                <span class="kw">if</span> <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">creature</span>.<span class="ident">size</span>.<span class="ident">to_lowercase</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">size</span> {
+                    <span class="kw">continue</span>;
+                }
+            }
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">alignment</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">alignment</span> {
+                <span class="kw">if</span> <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">creature</span>.<span class="ident">alignment</span>.<span class="ident">to_lowercase</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">alignment</span> {
+                    <span class="kw">continue</span>;
+                }
+            }
+            
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">max_cr</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">max_cr</span> {
+                <span class="kw">if</span> <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">creature</span>.<span class="ident">challenge_rating</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">ChallengeRating</span><span class="op">&gt;</span>().
+                <span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Could not parse cr on creature &#39;{}&#39;: {}&quot;</span>,<span class="macro-nonterminal">$</span><span class="macro-nonterminal">creature</span>.<span class="ident">name</span>,<span class="ident">e</span>))<span class="question-mark">?</span> <span class="op">&gt;</span> 
+                <span class="ident">max_cr</span> {
+                    <span class="kw">continue</span>;
+                }
+            }
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">min_cr</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">min_cr</span> {
+                <span class="kw">if</span> <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">creature</span>.<span class="ident">challenge_rating</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">ChallengeRating</span><span class="op">&gt;</span>().
+                        <span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Could not parse cr on creature &#39;{}&#39;: {}&quot;</span>,<span class="macro-nonterminal">$</span><span class="macro-nonterminal">creature</span>.<span class="ident">name</span>,<span class="ident">e</span>))<span class="question-mark">?</span> <span class="op">&lt;</span> 
+                        <span class="ident">min_cr</span> {
+                    <span class="kw">continue</span>;
+                }
+            }
+        }};
+    }
+
     <span class="kw">match</span> <span class="ident">input_format</span> {
         <span class="ident">ListInputFormat::Open5eList</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">working_dir</span> <span class="op">=</span> <span class="ident">get_default_working_dir</span>()<span class="question-mark">?</span>;
+
+            <span class="kw">let</span> <span class="ident">source_file</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">input_file</span>) <span class="op">=</span> <span class="ident">input_file</span> {
+                <span class="prelude-val">Some</span>(<span class="ident">resolve_existing_file</span>(<span class="kw-2">&amp;</span><span class="ident">working_dir</span>, <span class="ident">input_file</span>)<span class="question-mark">?</span>)
+            } <span class="kw">else</span> {
+                <span class="prelude-val">None</span>
+            };
+        
+            <span class="comment">// get the data from the file</span>
+            <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="ident">read_source</span>(<span class="ident">source_file</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>;
+
             <span class="comment">// deserialize the stat block</span>
             <span class="kw">let</span> <span class="ident">list</span> <span class="op">=</span> <span class="ident">Open5eMonsterList::load_from_str</span>(<span class="kw-2">&amp;</span><span class="ident">source</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Error loading open5e monster: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
             <span class="kw">for</span> <span class="ident">creature</span> <span class="kw">in</span> <span class="ident">list</span>.<span class="ident">results</span> {
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">type_</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">type_</span> {
-                    <span class="kw">if</span> <span class="kw-2">&amp;</span><span class="ident">creature</span>.<span class="ident">type_</span>.<span class="ident">to_lowercase</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">type_</span> {
-                        <span class="kw">continue</span>;
-                    }
-                }
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">subtype</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">subtype</span> {
-                    <span class="kw">if</span> <span class="kw-2">&amp;</span><span class="ident">creature</span>.<span class="ident">subtype</span>.<span class="ident">to_lowercase</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">subtype</span> {
-                        <span class="kw">continue</span>;
-                    }
-                }
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">size</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">size</span> {
-                    <span class="kw">if</span> <span class="kw-2">&amp;</span><span class="ident">creature</span>.<span class="ident">size</span>.<span class="ident">to_lowercase</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">size</span> {
-                        <span class="kw">continue</span>;
-                    }
-                }
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">alignment</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">alignment</span> {
-                    <span class="kw">if</span> <span class="kw-2">&amp;</span><span class="ident">creature</span>.<span class="ident">alignment</span>.<span class="ident">to_lowercase</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">alignment</span> {
-                        <span class="kw">continue</span>;
-                    }
-                }
-                
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">max_cr</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">max_cr</span> {
-                    <span class="kw">if</span> <span class="kw-2">&amp;</span><span class="ident">creature</span>.<span class="ident">challenge_rating</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">ChallengeRating</span><span class="op">&gt;</span>().
-                    <span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Could not parse cr on creature &#39;{}&#39;: {}&quot;</span>,<span class="ident">creature</span>.<span class="ident">name</span>,<span class="ident">e</span>))<span class="question-mark">?</span> <span class="op">&gt;</span> 
-                    <span class="ident">max_cr</span> {
-                        <span class="kw">continue</span>;
-                    }
-                }
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">min_cr</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">min_cr</span> {
-                    <span class="kw">if</span> <span class="kw-2">&amp;</span><span class="ident">creature</span>.<span class="ident">challenge_rating</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">ChallengeRating</span><span class="op">&gt;</span>().
-                            <span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Could not parse cr on creature &#39;{}&#39;: {}&quot;</span>,<span class="ident">creature</span>.<span class="ident">name</span>,<span class="ident">e</span>))<span class="question-mark">?</span> <span class="op">&lt;</span> 
-                            <span class="ident">min_cr</span> {
-                        <span class="kw">continue</span>;
-                    }
-                }
 
-                <span class="kw">let</span> <span class="ident">subtype</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">creature</span>.<span class="ident">subtype</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;&quot;</span> {
-                    <span class="prelude-val">None</span>
-                } <span class="kw">else</span> {
-                    <span class="prelude-val">Some</span>(<span class="ident">creature</span>.<span class="ident">subtype</span>.<span class="ident">clone</span>())
-                };
+                <span class="macro">match_filter!</span>(<span class="ident">creature</span>);
 
                 <span class="ident">result</span>.<span class="ident">push</span>(<span class="ident">CreatureSummary</span> {
                     <span class="ident">name</span>: <span class="ident">creature</span>.<span class="ident">name</span>.<span class="ident">clone</span>(),
                     <span class="ident">slug</span>: <span class="ident">creature</span>.<span class="ident">slug</span>.<span class="ident">clone</span>(),
                     <span class="ident">type_</span>: <span class="ident">creature</span>.<span class="ident">type_</span>.<span class="ident">clone</span>(),
-                    <span class="ident">subtype</span>,
+                    <span class="ident">subtype</span>: <span class="ident">creature</span>.<span class="ident">subtype</span>.<span class="ident">clone</span>(),
                     <span class="ident">size</span>: <span class="ident">creature</span>.<span class="ident">size</span>.<span class="ident">clone</span>(),
                     <span class="ident">alignment</span>: <span class="ident">creature</span>.<span class="ident">alignment</span>.<span class="ident">clone</span>(),
                     <span class="ident">challenge_rating</span>: <span class="ident">creature</span>.<span class="ident">challenge_rating</span>.<span class="ident">clone</span>()
                 });
             };
             <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
-        }
+        },
+        <span class="ident">ListInputFormat::Stored</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="comment">// we have summary data already.</span>
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
+            <span class="kw">for</span> (<span class="ident">creature</span>,<span class="kw">_</span>) <span class="kw">in</span> <span class="ident">monstorr_data::creatures::STORED_CREATURES</span> {
+                
+                <span class="macro">match_filter!</span>(<span class="ident">creature</span>);
+
+                <span class="ident">result</span>.<span class="ident">push</span>(<span class="ident">CreatureSummary</span> {
+                    <span class="ident">name</span>: <span class="ident">creature</span>.<span class="ident">name</span>.<span class="ident">to_owned</span>(),
+                    <span class="ident">slug</span>: <span class="ident">creature</span>.<span class="ident">slug</span>.<span class="ident">to_owned</span>(),
+                    <span class="ident">type_</span>: <span class="ident">creature</span>.<span class="ident">type_</span>.<span class="ident">to_owned</span>(),
+                    <span class="ident">subtype</span>: <span class="ident">creature</span>.<span class="ident">subtype</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">to_owned</span>()),
+                    <span class="ident">size</span>: <span class="ident">creature</span>.<span class="ident">size</span>.<span class="ident">to_owned</span>(),
+                    <span class="ident">alignment</span>: <span class="ident">creature</span>.<span class="ident">alignment</span>.<span class="ident">to_owned</span>(),
+                    <span class="ident">challenge_rating</span>: <span class="ident">creature</span>.<span class="ident">challenge_rating</span>.<span class="ident">to_owned</span>()
+                });
+            };
+            <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
+        }        
     }
     
 }
 
-</code></pre></div>
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">generate_creatures_as_rust_array</span>(<span class="ident">search_directory</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">working_dir</span> <span class="op">=</span> <span class="ident">get_default_working_dir</span>()<span class="question-mark">?</span>;
+
+    <span class="kw">let</span> <span class="ident">search_directory</span> <span class="op">=</span> <span class="ident">resolve_existing_dir</span>(<span class="kw-2">&amp;</span><span class="ident">working_dir</span>, <span class="ident">search_directory</span>)<span class="question-mark">?</span>;
+
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">target_file</span> <span class="op">=</span> <span class="ident">search_directory</span>.<span class="ident">clone</span>();
+    <span class="ident">target_file</span>.<span class="ident">push</span>(<span class="string">&quot;creature_database.rs.inc&quot;</span>);
+    <span class="kw">let</span> <span class="ident">target_file</span> <span class="op">=</span> <span class="ident">target_file</span>;
+
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">files</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
+
+    <span class="comment">// I&#39;m looping twice because I want to collect the files *now* before someone adds a new one or something...</span>
+    <span class="kw">for</span> <span class="ident">file</span> <span class="kw">in</span> <span class="ident">fs::read_dir</span>(<span class="kw-2">&amp;</span><span class="ident">search_directory</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span> {
+        <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">file</span>.<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">path</span>: <span class="ident">PathBuf</span> <span class="op">=</span> <span class="ident">file</span>.<span class="ident">path</span>();
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">extension</span>) <span class="op">=</span> <span class="ident">path</span>.<span class="ident">extension</span>() {
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="string">&quot;creature&quot;</span>) <span class="op">=</span> <span class="ident">extension</span>.<span class="ident">to_str</span>() {
+                <span class="ident">files</span>.<span class="ident">push</span>(<span class="ident">path</span>);
+            }
+        }
+    }
+
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">output</span> <span class="op">=</span> <span class="ident">String::new</span>();
+
+    <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;// This file was automatically generated, do not edit. Use `build-data.sh` to regenerate\n&quot;</span>));
+
+    <span class="comment">// wrap in a struct so the compiler can warn me if I&#39;m missing something I&#39;ll need in list_creatures</span>
+    <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;pub const STORED_CREATURES: [(CreatureSummary&lt;&amp;&#39;static str&gt;, &amp;&#39;static str); {}] = [&quot;</span>,<span class="ident">files</span>.<span class="ident">len</span>()));
+<span class="comment">/*
+const TEST: CreatureSummary&lt;&amp;str&gt; = CreatureSummary {
+    name: &quot;test&quot;,
+    slug: &quot;test&quot;,
+    type_: &quot;type&quot;,
+    subtype: Some(&quot;test&quot;),
+    size: &quot;test&quot;,
+    alignment: &quot;test&quot;,
+    challenge_rating: &quot;test&quot;
+};
+*/</span>
+
+    <span class="kw">for</span> <span class="ident">file</span> <span class="kw">in</span> <span class="ident">files</span> {
+        <span class="kw">let</span> <span class="ident">include_filename</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">name</span>) <span class="op">=</span> <span class="ident">path_relative_from</span>(<span class="kw-2">&amp;</span><span class="ident">file</span>, <span class="kw-2">&amp;</span><span class="ident">search_directory</span>) {
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">name</span>) <span class="op">=</span> <span class="ident">name</span>.<span class="ident">to_str</span>() {
+                <span class="ident">name</span>.<span class="ident">to_owned</span>()
+            } <span class="kw">else</span> {
+                <span class="ident">file</span>.<span class="ident">display</span>().<span class="ident">to_string</span>()
+            }
+        } <span class="kw">else</span> {
+            <span class="ident">file</span>.<span class="ident">display</span>().<span class="ident">to_string</span>()
+        };
+        <span class="macro">println!</span>(<span class="string">&quot;Processing creature {}&quot;</span>,<span class="ident">include_filename</span>);
+        <span class="comment">// get the data from the file</span>
+        <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="ident">read_source</span>(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">file</span>))<span class="question-mark">?</span>;
+        <span class="comment">// the final working directory should be the directory in which the source file is located.</span>
+        <span class="kw">let</span> <span class="ident">working_dir</span> <span class="op">=</span> <span class="ident">get_working_dir_relative_to_source_or_default</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">file</span>), <span class="kw-2">&amp;</span><span class="ident">working_dir</span>);
+        <span class="comment">// deserialize the commands</span>
+        <span class="kw">let</span> <span class="ident">creator</span> <span class="op">=</span> <span class="ident">CreatureCreator::load_from_str</span>(<span class="kw-2">&amp;</span><span class="ident">source</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Error loading creature commands: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">creature</span> <span class="op">=</span> <span class="ident">creator</span>.<span class="ident">create_creature</span>(<span class="kw-2">&amp;</span><span class="ident">working_dir</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">slug</span> <span class="op">=</span> <span class="ident">to_kebab_case</span>(<span class="kw-2">&amp;</span><span class="ident">creature</span>.<span class="ident">name</span>);
+        <span class="comment">// wrap in a struct so the compiler can warn me if I&#39;m missing something I&#39;ll need in list_creatures</span>
+        <span class="kw">let</span> <span class="ident">summary</span> <span class="op">=</span> <span class="ident">CreatureSummary</span> {
+            <span class="ident">name</span>: <span class="ident">creature</span>.<span class="ident">name</span>,
+            <span class="ident">slug</span>,
+            <span class="ident">type_</span>: <span class="ident">creature</span>.<span class="ident">type_</span>.<span class="ident">to_string</span>(),
+            <span class="ident">subtype</span>: <span class="ident">creature</span>.<span class="ident">subtype</span>,
+            <span class="ident">size</span>: <span class="ident">creature</span>.<span class="ident">size</span>.<span class="ident">to_string</span>(),
+            <span class="ident">alignment</span>: <span class="ident">creature</span>.<span class="ident">alignment</span>.<span class="ident">to_string</span>(),
+            <span class="ident">challenge_rating</span>: <span class="ident">creature</span>.<span class="ident">challenge_rating</span>.<span class="ident">to_string</span>()
+        };
+
+        <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="string">&quot;\n        (&quot;</span>);
+        <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="string">&quot;\n            CreatureSummary {&quot;</span>);
+        <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;\n                name: {:?},&quot;</span>,<span class="ident">summary</span>.<span class="ident">name</span>));
+        <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;\n                slug: {:?},&quot;</span>,<span class="ident">summary</span>.<span class="ident">slug</span>));
+        <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;\n                type_: {:?},&quot;</span>,<span class="ident">summary</span>.<span class="ident">type_</span>));
+        <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;\n                subtype: {:?},&quot;</span>,<span class="ident">summary</span>.<span class="ident">subtype</span>));
+        <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;\n                size: {:?},&quot;</span>,<span class="ident">summary</span>.<span class="ident">size</span>));
+        <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;\n                alignment: {:?},&quot;</span>,<span class="ident">summary</span>.<span class="ident">alignment</span>));
+        <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;\n                challenge_rating: {:?},&quot;</span>,<span class="ident">summary</span>.<span class="ident">challenge_rating</span>));
+        <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="string">&quot;\n             },&quot;</span>);
+        <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;\n             include_str!({:?})&quot;</span>,<span class="ident">include_filename</span>));
+        <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="string">&quot;\n        ),&quot;</span>);
+    }
+
+    <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="string">&quot;\n    ];&quot;</span>);
+
+
+    <span class="ident">write_target</span>(<span class="prelude-val">Some</span>(<span class="ident">target_file</span>), <span class="kw-2">&amp;</span><span class="ident">output</span>)
+
+}</code></pre></div>
 </section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="monstorr_lib" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
     <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script>
 </body></html>

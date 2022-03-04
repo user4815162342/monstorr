@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["path_relative_from",""]],"macro":[["impl_ceiling_div",""],["impl_floor_div",""]],"trait":[["AndJoin",""],["Capitalize",""],["CeilingDiv",""],["DisplayWithThousands",""],["FloorDiv",""],["NextOk",""]]});
+initSidebarItems({"fn":[["path_relative_from",""],["to_kebab_case",""]],"macro":[["impl_ceiling_div",""],["impl_floor_div",""]],"trait":[["AndJoin",""],["Capitalize",""],["CeilingDiv",""],["DisplayWithThousands",""],["FloorDiv",""],["NextOk",""]]});

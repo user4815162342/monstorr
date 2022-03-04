@@ -119,7 +119,7 @@ impl TryFrom<Open5eMonster> for CreatureStatBlock {
             name: creature.name,
             size: creature.size,
             type_: creature.type_,
-            subtype: str_to_option(creature.subtype),
+            subtype: creature.subtype,
             group: creature.group,
             alignment: creature.alignment,
             armor: armor_to_stat_block(creature.armor_class,creature.armor_desc),

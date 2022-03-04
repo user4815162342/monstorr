@@ -1,1 +1,1 @@
-initSidebarItems({"constant":[["BUGBEAR",""],["DRAGON_GOLD_ADULT",""],["EFREETI",""],["GOBLIN",""]]});
+initSidebarItems({"constant":[["STORED_CREATURES",""]],"struct":[["CreatureSummary",""]]});

@@ -16,6 +16,7 @@
 <span id="16">16</span>
 <span id="17">17</span>
 <span id="18">18</span>
+<span id="19">19</span>
 </pre><pre class="rust"><code><span class="comment">/*
  * Copyright © 2022 Neil M. Sheldon
  * 
@@ -24,16 +25,17 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */</span>
 
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">DRAGON_GOLD_ADULT</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="macro">include_str!</span>(<span class="string">&quot;../data/adult_gold_dragon.creature&quot;</span>);
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">GOBLIN</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="macro">include_str!</span>(<span class="string">&quot;../data/goblin.creature&quot;</span>);
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">BUGBEAR</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="macro">include_str!</span>(<span class="string">&quot;../data/bugbear.creature&quot;</span>);
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">EFREETI</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="macro">include_str!</span>(<span class="string">&quot;../data/efreeti.creature&quot;</span>);
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CreatureSummary</span><span class="op">&lt;</span><span class="ident">PropertyType</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">PropertyType</span>,
+    <span class="kw">pub</span> <span class="ident">slug</span>: <span class="ident">PropertyType</span>,
+    <span class="kw">pub</span> <span class="ident">type_</span>: <span class="ident">PropertyType</span>,
+    <span class="kw">pub</span> <span class="ident">subtype</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PropertyType</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">size</span>: <span class="ident">PropertyType</span>,
+    <span class="kw">pub</span> <span class="ident">alignment</span>: <span class="ident">PropertyType</span>,
+    <span class="kw">pub</span> <span class="ident">challenge_rating</span>: <span class="ident">PropertyType</span>
+}
 
-<span class="comment">/* FUTURE: How could we have a built-in list? 
-The list has to have summary data (name, type, size, alignment, cr, other stuff, see monstorr-lib list_creatures) and I don&#39;t want to create all of the creatures (assuming all SRD creatures eventually get imported).None
-Alternatively, I could run the tool on all of them and store them as JSON instead, then I have the data I actually need, as sort of a &quot;written in itself&quot;
-thing.
-*/</span></code></pre></div>
+<span class="macro">include!</span>(<span class="string">&quot;../data/creatures/creature_database.rs.inc&quot;</span>);</code></pre></div>
 </section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="monstorr_data" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
     <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script>
 </body></html>

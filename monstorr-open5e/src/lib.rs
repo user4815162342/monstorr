@@ -185,6 +185,36 @@ where
     deserializer.deserialize_any(DeserializeVectorOrEmptyString(std::marker::PhantomData))
 }
 
+// For some other types, Open5e stores blank strings instead of null or missing property where I want an option.
+fn blank_string_is_none<'de, D>(deserializer: D) -> Result<Option<String>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    struct DeserializeEmptyStringAsOption(std::marker::PhantomData<String>);
+
+    impl<'de> Visitor<'de> for DeserializeEmptyStringAsOption {
+        type Value = Option<String>;
+    
+        fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
+            formatter.write_str("a string")
+        }
+    
+        fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
+        where
+            E: SerdeError,
+        {
+            if v == "" {
+                Ok(None)
+            } else {
+                Ok(Some(v.to_owned()))
+            }
+        }
+    }
+    
+
+    deserializer.deserialize_any(DeserializeEmptyStringAsOption(std::marker::PhantomData))
+}
+
 #[derive(Serialize,Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Open5eMonster {
@@ -193,7 +223,8 @@ pub struct Open5eMonster {
     pub size: String,
     #[serde(rename="type")]
     pub type_: String,
-    pub subtype: String,
+    #[serde(deserialize_with = "blank_string_is_none")]
+    pub subtype: Option<String>,
     pub group: Option<String>,
     pub alignment: String,
     pub armor_class: u8,

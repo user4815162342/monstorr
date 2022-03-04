@@ -228,3 +228,10 @@ pub fn path_relative_from(path: &Path, base: &Path) -> Option<PathBuf> {
         Some(comps.iter().map(|c| c.as_os_str()).collect())
     }
 }
+
+
+pub fn to_kebab_case(source: &str) -> String {
+
+    source.split(' ').map(|a| a.to_lowercase()).collect::<Vec<String>>().join("-")
+
+}

@@ -643,46 +643,46 @@ impl CreatureArmor {
 }
 
 
-    // putting this documentation here because I can't link to the implementation for ImplementationObject.
-    /**
-    The following properties can be retrieved during interpolation. Their value types are listed in parentheses after.
+// putting this documentation here because I can't link to the implementation for ImplementationObject.
+/**
+The following properties can be retrieved during interpolation. Their value types are listed in parentheses after.
 
-    * `name (string)`: The name of the creature
-    * `subj (string)`: The name of the creature as used for the subject of an action.
-    * `Subj (string)`: The subject of the creature capitalized.
-    * `poss (string)`: The name of the creature in possessive form.
-    * `Poss (string)`: The capitalized possessive.
-    * `size (string)`: The size of the creature
-    * `type (string)`: The type of the creature
-    * `subtype (string)`: The subtype of the creature, or an empty string
-    * `group (string)`: The creature's group, or an empty string.
-    * `alignment (string)`: The alignment of the creature
-    * `hit_dice (dice)`: The calculated hit dice for the creature.
-    * `hit_points (number)`: The calculate hit points for the creature.
-    * `armor_class (number)`: The calculated armor class for the creature.
-    * `strength (number)`: The strength score for the creature.
-    * `dexterity (number)`: The dexterity score for the creature.
-    * `constitution (number)`: The constitution score for the creature.
-    * `intelligence (number)`: The intelligence score for the creature.
-    * `wisdom (number)`: The wisdom score for the creature.
-    * `charisma (number)`: The charisma score for the creature.
-    * `atk (number)`: The best of the dexterity and strength modifiers.
-    * `spell_atk (number)`: The calculated spell attack bonus. If the creature has both innate and regular spellcasting, this will return the innate bonus. If the creature has neither, this property will not be available, and an error will occur.
-    * `str (number)`: The calculated strength modifier.
-    * `dex (number)`: The calculated dexterity modifier.
-    * `con (number)`: The calculated constitution modifier.
-    * `int (number)`: The calculated intelligence modifier.
-    * `wis (number)`: The calculated wisdom modifier.
-    * `cha (number)`: The calculated charisma modifier.
-    * `str_save (number)`: The calculated save bonus for strength.
-    * `dex_save (number)`: The calculated save bonus for dexterity.
-    * `con_save (number)`: The calculated save bonus for constitution.
-    * `int_save (number)`: The calculated save bonus for intelligence.
-    * `wis_save (number)`: The calculated save bonus for wisdom.
-    * `cha_save (number)`: The calculated save bonus for charisma.
-    * `prof (number)`: The proficiency bonus, taken from the creatures challenge rating.
+* `name (string)`: The name of the creature
+* `subj (string)`: The name of the creature as used for the subject of an action.
+* `Subj (string)`: The subject of the creature capitalized.
+* `poss (string)`: The name of the creature in possessive form.
+* `Poss (string)`: The capitalized possessive.
+* `size (string)`: The size of the creature
+* `type (string)`: The type of the creature
+* `subtype (string)`: The subtype of the creature, or an empty string
+* `group (string)`: The creature's group, or an empty string.
+* `alignment (string)`: The alignment of the creature
+* `hit_dice (dice)`: The calculated hit dice for the creature.
+* `hit_points (number)`: The calculate hit points for the creature.
+* `armor_class (number)`: The calculated armor class for the creature.
+* `strength (number)`: The strength score for the creature.
+* `dexterity (number)`: The dexterity score for the creature.
+* `constitution (number)`: The constitution score for the creature.
+* `intelligence (number)`: The intelligence score for the creature.
+* `wisdom (number)`: The wisdom score for the creature.
+* `charisma (number)`: The charisma score for the creature.
+* `atk (number)`: The best of the dexterity and strength modifiers.
+* `spell_atk (number)`: The calculated spell attack bonus. If the creature has both innate and regular spellcasting, this will return the innate bonus. If the creature has neither, this property will not be available, and an error will occur.
+* `str (number)`: The calculated strength modifier.
+* `dex (number)`: The calculated dexterity modifier.
+* `con (number)`: The calculated constitution modifier.
+* `int (number)`: The calculated intelligence modifier.
+* `wis (number)`: The calculated wisdom modifier.
+* `cha (number)`: The calculated charisma modifier.
+* `str_save (number)`: The calculated save bonus for strength.
+* `dex_save (number)`: The calculated save bonus for dexterity.
+* `con_save (number)`: The calculated save bonus for constitution.
+* `int_save (number)`: The calculated save bonus for intelligence.
+* `wis_save (number)`: The calculated save bonus for wisdom.
+* `cha_save (number)`: The calculated save bonus for charisma.
+* `prof (number)`: The proficiency bonus, taken from the creatures challenge rating.
 
-    */
+*/
 pub struct Creature {
     pub name: String,
     pub subject: Option<String>,

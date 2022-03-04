@@ -26,6 +26,7 @@ use monstorr_lib::list_html_template_names;
 use monstorr_lib::print_template;
 use monstorr_lib::list_creatures;
 use monstorr_lib::validate_creature;
+use monstorr_lib::generate_creatures_as_rust_array;
 use monstorr_lib::MONSTORR_VERSION;
 use monstorr_lib::InputFormat as MonstorrInputFormat;
 use monstorr_lib::OutputFormat as MonstorrOutputFormat;
@@ -51,7 +52,9 @@ enum InputFormat {
 /// Represents a list input format argument for commands that require only list input files
 enum ListInputFormat {
     /// A JSON list in the format used by Open5e
-    Open5eList
+    Open5eList,
+    /// The list of creatures stored in this program
+    Stored
 }
 
 // this is different from the one in monstorr-lib because its redefined to work as an ArgEnum
@@ -136,7 +139,7 @@ Monstorr recognizes a few formats for the input data for generating stat blocks.
 
 * `open5e`: This is simply a single creature block extracted from an `open5e-list` file, as a stand-alone JSON file.
 
-* `stored`: Monstorr contains a few pre-built creatures converted from D&D Fifth Edition System Reference Document* content. Currently, only four creatures are contained in the executable, as conversion of the creatures is a busy work task that would take some time. It is a dream that the entire SRD list of monsters be available in Monstorr, but it is likely that this will not happen before a hypothetical sixth edition happens.
+* `stored`: Monstorr contains a few pre-built creatures converted from D&D Fifth Edition System Reference Document* content. Currently, only four creatures are contained in the executable, as conversion of the creatures is a busy work task that would take more time than I want to spend. It is a dream that the entire SRD list of monsters be available in Monstorr, but it is likely that this will not happen before a hypothetical sixth edition happens.
 
 (I apologize for the unusual formatting of this text, the tools used to generate it do not yet support structured and formatted text in this part, so it is written in raw Markdown format.)
 
@@ -237,12 +240,12 @@ enum Command {
     /**
     List monsters in a file, filtering for specific data.
 
-    This is a simple filtering tool to help you find creatures in a list. It currently only supports `open5e-list` files. See the information on input files in the main help for more information on this format.
+    This is a simple filtering tool to help you find creatures in a list. It supports any list source (formats which would require a creature argument). See the information on input files in the main help for more information on this format.
     */
     ListCreatures {
 
         #[clap(short,long,arg_enum)]
-        /// format of the input file (stored creatures can not be listed yet)
+        /// format of the input file
         format: ListInputFormat,
 
         #[clap(value_name="FILENAME")]
@@ -280,7 +283,18 @@ enum Command {
 
     This version is used in the `Monstorr` command in creature files to make sure you're processing your creature in the right version of Monstorr.
     */
-    MonstorrVersion
+    MonstorrVersion,
+
+    #[clap(hide=true)]
+    /**
+    Internal command
+
+    This is used to generate the code for including creatures in the monstorr-data crate.
+    */
+    GenCreaturesRustArray{
+        /// Directory to search and place 'creature_database.rs.inc' file
+        dir: String 
+    }
 }
 
 
@@ -323,13 +337,14 @@ fn run(args: Command) -> Result<(),String> {
         },
         Command::ListCreatures{format,input,type_,subtype,size,alignment,max_cr,min_cr} => {
             let format = match format {
-                ListInputFormat::Open5eList => MonstorrListInputFormat::Open5eList
+                ListInputFormat::Open5eList => MonstorrListInputFormat::Open5eList,
+                ListInputFormat::Stored => MonstorrListInputFormat::Stored
             };
             for creature in list_creatures(input.as_deref(),format,type_,subtype,size,alignment,max_cr,min_cr)? {
                 println!("{} [{}] Challenge {}: {} {}{}, {} ",
                           creature.name,
                           creature.slug,
-                          creature.alignment,
+                          creature.challenge_rating,
                           creature.size,
                           creature.type_,
                           if let Some(subtype) = creature.subtype {
@@ -337,14 +352,18 @@ fn run(args: Command) -> Result<(),String> {
                           } else {
                               String::new()
                           },
-                          creature.challenge_rating);
+                          creature.alignment);
             }
             Ok(())
-        }
+        },
 
         Command::GetTemplate{name} => {
             print_template(&name)
-        }
+        },
+
+        Command::GenCreaturesRustArray{dir} => {
+            generate_creatures_as_rust_array(&dir)
+        },
     }
 
 

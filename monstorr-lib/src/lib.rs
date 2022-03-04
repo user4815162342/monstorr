@@ -51,6 +51,7 @@ use std::io::Write;
 use monstorr_open5e::Open5eMonster;
 use monstorr_open5e::Open5eMonsterList;
 use monstorr_data;
+use monstorr_data::creatures::CreatureSummary;
 
 mod utils;
 mod parse_position;
@@ -79,6 +80,7 @@ use crate::stat_block::TryIntoStatBlock;
 use crate::stats::ChallengeRating;
 use crate::template::process_template;
 use crate::utils::path_relative_from;
+use crate::utils::to_kebab_case;
 
 pub use creature_commands::MONSTORR_VERSION;
 
@@ -90,7 +92,8 @@ pub enum InputFormat {
 }
 
 pub enum ListInputFormat {
-    Open5eList
+    Open5eList,
+    Stored
 }
 
 impl Default for InputFormat {
@@ -125,6 +128,15 @@ fn resolve_existing_file(working_dir: &PathBuf, file: &str) -> Result<PathBuf,St
     let result = resolve_file(working_dir, file);
     if !result.is_file() {
         Err(format!("Path {} does not exist or is not a file",file))
+    } else {
+        Ok(result)
+    }
+}
+
+fn resolve_existing_dir(working_dir: &PathBuf, file: &str) -> Result<PathBuf,String> {
+    let result = resolve_file(working_dir, file);
+    if !result.is_dir() {
+        Err(format!("Path {} does not exist or is not a directory",file))
     } else {
         Ok(result)
     }
@@ -192,13 +204,11 @@ pub fn validate_creature(input_file: Option<&str>, input_format: InputFormat,
             read_source(source_file.as_ref())?
         },
         InputFormat::Stored(creature_name) => {
-            match creature_name.as_str() {
-                "dragon" | "adult gold dragon" => monstorr_data::creatures::DRAGON_GOLD_ADULT,
-                "goblin" => monstorr_data::creatures::GOBLIN,
-                "bugbear" => monstorr_data::creatures::BUGBEAR,
-                "efreeti" => monstorr_data::creatures::EFREETI,
-                _ => Err("Couldn't find creature in list.".to_owned())?
-            }.to_owned()
+            if let Some(entry) = monstorr_data::creatures::STORED_CREATURES.iter().find(|(creature,_)| (creature.slug == creature_name) || (creature.name == creature_name)) {
+                entry.1.to_owned()
+            } else {
+                Err("Couldn't find creature in list.".to_owned())?
+            }
         },
         _ => Err("Input must be a creature file.".to_owned())?
     };
@@ -258,12 +268,10 @@ pub fn create_stat_block(input_file: Option<&str>, input_format: InputFormat,
             }
         },
         InputFormat::Stored(creature_name) => {
-            let source = match creature_name.as_str() {
-                "dragon" | "adult gold dragon" => monstorr_data::creatures::DRAGON_GOLD_ADULT,
-                "goblin" => monstorr_data::creatures::GOBLIN,
-                "bugbear" => monstorr_data::creatures::BUGBEAR,
-                "efreeti" => monstorr_data::creatures::EFREETI,
-                _ => Err("Couldn't find creature in list.".to_owned())?
+            let source = if let Some(entry) = monstorr_data::creatures::STORED_CREATURES.iter().find(|(creature,_)| (creature.slug == creature_name) || (creature.name == creature_name)) {
+                entry.1
+            } else {
+                Err("Couldn't find creature in list.".to_owned())?
             };
             // deserialize the commands
             let creator = CreatureCreator::load_from_str(source).map_err(|e| format!("Error loading creature commands: {}",e))?;
@@ -363,28 +371,8 @@ pub fn print_template(name: &str) -> Result<(),String> {
 }
 
 
-pub struct CreatureSummary {
-    pub name: String,
-    pub slug: String,
-    pub type_: String,
-    pub subtype: Option<String>,
-    pub size: String,
-    pub alignment: String,
-    pub challenge_rating: String
-}
+pub fn list_creatures(input_file: Option<&str>, input_format: ListInputFormat, type_: Option<String>, subtype: Option<String>, size: Option<String>,alignment: Option<String>,max_cr: Option<String>,min_cr: Option<String>) -> Result<Vec<CreatureSummary<String>>,String> {
 
-pub fn list_creatures(input_file: Option<&str>, input_format: ListInputFormat, type_: Option<String>, subtype: Option<String>, size: Option<String>,alignment: Option<String>,max_cr: Option<String>,min_cr: Option<String>) -> Result<Vec<CreatureSummary>,String> {
-
-    let working_dir = get_default_working_dir()?;
-
-    let source_file = if let Some(input_file) = input_file {
-        Some(resolve_existing_file(&working_dir, input_file)?)
-    } else {
-        None
-    };
-
-    // get the data from the file
-    let source = read_source(source_file.as_ref())?;
 
     let type_ = type_.map(|a| a.trim().to_lowercase());
     let size = size.map(|a| a.trim().to_lowercase());
@@ -392,67 +380,195 @@ pub fn list_creatures(input_file: Option<&str>, input_format: ListInputFormat, t
     let max_cr = max_cr.map(|a| a.parse::<ChallengeRating>()).transpose().map_err(|e| format!("Could not parse max_cr: {}",e))?;
     let min_cr = min_cr.map(|a| a.parse::<ChallengeRating>()).transpose().map_err(|e| format!("Could not parse min_cr: {}",e))?;
 
+    macro_rules! match_filter {
+        ($creature: ident) => {{
+            if let Some(type_) = &type_ {
+                if &$creature.type_.to_lowercase() != type_ {
+                    continue;
+                }
+            }
+        
+            if let Some(subtype) = &subtype {
+                if let Some(creature_subtype) = &$creature.subtype {
+                    if &creature_subtype.to_lowercase() != subtype {
+                        continue;
+                    }
+                } else {
+                    continue;
+                }
+                
+            }
+            if let Some(size) = &size {
+                if &$creature.size.to_lowercase() != size {
+                    continue;
+                }
+            }
+            if let Some(alignment) = &alignment {
+                if &$creature.alignment.to_lowercase() != alignment {
+                    continue;
+                }
+            }
+            
+            if let Some(max_cr) = &max_cr {
+                if &$creature.challenge_rating.parse::<ChallengeRating>().
+                map_err(|e| format!("Could not parse cr on creature '{}': {}",$creature.name,e))? > 
+                max_cr {
+                    continue;
+                }
+            }
+            if let Some(min_cr) = &min_cr {
+                if &$creature.challenge_rating.parse::<ChallengeRating>().
+                        map_err(|e| format!("Could not parse cr on creature '{}': {}",$creature.name,e))? < 
+                        min_cr {
+                    continue;
+                }
+            }
+        }};
+    }
+
     match input_format {
         ListInputFormat::Open5eList => {
+            let working_dir = get_default_working_dir()?;
+
+            let source_file = if let Some(input_file) = input_file {
+                Some(resolve_existing_file(&working_dir, input_file)?)
+            } else {
+                None
+            };
+        
+            // get the data from the file
+            let source = read_source(source_file.as_ref())?;
+
             // deserialize the stat block
             let list = Open5eMonsterList::load_from_str(&source).map_err(|e| format!("Error loading open5e monster: {}",e))?;
             let mut result = Vec::new();
             for creature in list.results {
-                if let Some(type_) = &type_ {
-                    if &creature.type_.to_lowercase() != type_ {
-                        continue;
-                    }
-                }
-                if let Some(subtype) = &subtype {
-                    if &creature.subtype.to_lowercase() != subtype {
-                        continue;
-                    }
-                }
-                if let Some(size) = &size {
-                    if &creature.size.to_lowercase() != size {
-                        continue;
-                    }
-                }
-                if let Some(alignment) = &alignment {
-                    if &creature.alignment.to_lowercase() != alignment {
-                        continue;
-                    }
-                }
-                
-                if let Some(max_cr) = &max_cr {
-                    if &creature.challenge_rating.parse::<ChallengeRating>().
-                    map_err(|e| format!("Could not parse cr on creature '{}': {}",creature.name,e))? > 
-                    max_cr {
-                        continue;
-                    }
-                }
-                if let Some(min_cr) = &min_cr {
-                    if &creature.challenge_rating.parse::<ChallengeRating>().
-                            map_err(|e| format!("Could not parse cr on creature '{}': {}",creature.name,e))? < 
-                            min_cr {
-                        continue;
-                    }
-                }
 
-                let subtype = if creature.subtype == "" {
-                    None
-                } else {
-                    Some(creature.subtype.clone())
-                };
+                match_filter!(creature);
 
                 result.push(CreatureSummary {
                     name: creature.name.clone(),
                     slug: creature.slug.clone(),
                     type_: creature.type_.clone(),
-                    subtype,
+                    subtype: creature.subtype.clone(),
                     size: creature.size.clone(),
                     alignment: creature.alignment.clone(),
                     challenge_rating: creature.challenge_rating.clone()
                 });
             };
             Ok(result)
-        }
+        },
+        ListInputFormat::Stored => {
+            // we have summary data already.
+            let mut result = Vec::new();
+            for (creature,_) in monstorr_data::creatures::STORED_CREATURES {
+                
+                match_filter!(creature);
+
+                result.push(CreatureSummary {
+                    name: creature.name.to_owned(),
+                    slug: creature.slug.to_owned(),
+                    type_: creature.type_.to_owned(),
+                    subtype: creature.subtype.map(|a| a.to_owned()),
+                    size: creature.size.to_owned(),
+                    alignment: creature.alignment.to_owned(),
+                    challenge_rating: creature.challenge_rating.to_owned()
+                });
+            };
+            Ok(result)
+        }        
     }
     
 }
 
+
+pub fn generate_creatures_as_rust_array(search_directory: &str) -> Result<(),String> {
+    let working_dir = get_default_working_dir()?;
+
+    let search_directory = resolve_existing_dir(&working_dir, search_directory)?;
+
+    let mut target_file = search_directory.clone();
+    target_file.push("creature_database.rs.inc");
+    let target_file = target_file;
+
+    let mut files = Vec::new();
+
+    // I'm looping twice because I want to collect the files *now* before someone adds a new one or something...
+    for file in fs::read_dir(&search_directory).map_err(|e| format!("{}",e))? {
+        let file = file.map_err(|e| format!("{}",e))?;
+        let path: PathBuf = file.path();
+        if let Some(extension) = path.extension() {
+            if let Some("creature") = extension.to_str() {
+                files.push(path);
+            }
+        }
+    }
+
+    let mut output = String::new();
+
+    output.push_str(&format!("// This file was automatically generated, do not edit. Use `build-data.sh` to regenerate\n"));
+
+    // wrap in a struct so the compiler can warn me if I'm missing something I'll need in list_creatures
+    output.push_str(&format!("pub const STORED_CREATURES: [(CreatureSummary<&'static str>, &'static str); {}] = [",files.len()));
+/*
+const TEST: CreatureSummary<&str> = CreatureSummary {
+    name: "test",
+    slug: "test",
+    type_: "type",
+    subtype: Some("test"),
+    size: "test",
+    alignment: "test",
+    challenge_rating: "test"
+};
+*/
+
+    for file in files {
+        let include_filename = if let Some(name) = path_relative_from(&file, &search_directory) {
+            if let Some(name) = name.to_str() {
+                name.to_owned()
+            } else {
+                file.display().to_string()
+            }
+        } else {
+            file.display().to_string()
+        };
+        println!("Processing creature {}",include_filename);
+        // get the data from the file
+        let source = read_source(Some(&file))?;
+        // the final working directory should be the directory in which the source file is located.
+        let working_dir = get_working_dir_relative_to_source_or_default(&Some(file), &working_dir);
+        // deserialize the commands
+        let creator = CreatureCreator::load_from_str(&source).map_err(|e| format!("Error loading creature commands: {}",e))?;
+        let creature = creator.create_creature(&working_dir).map_err(|e| format!("{}",e))?;
+        let slug = to_kebab_case(&creature.name);
+        // wrap in a struct so the compiler can warn me if I'm missing something I'll need in list_creatures
+        let summary = CreatureSummary {
+            name: creature.name,
+            slug,
+            type_: creature.type_.to_string(),
+            subtype: creature.subtype,
+            size: creature.size.to_string(),
+            alignment: creature.alignment.to_string(),
+            challenge_rating: creature.challenge_rating.to_string()
+        };
+
+        output.push_str("\n        (");
+        output.push_str("\n            CreatureSummary {");
+        output.push_str(&format!("\n                name: {:?},",summary.name));
+        output.push_str(&format!("\n                slug: {:?},",summary.slug));
+        output.push_str(&format!("\n                type_: {:?},",summary.type_));
+        output.push_str(&format!("\n                subtype: {:?},",summary.subtype));
+        output.push_str(&format!("\n                size: {:?},",summary.size));
+        output.push_str(&format!("\n                alignment: {:?},",summary.alignment));
+        output.push_str(&format!("\n                challenge_rating: {:?},",summary.challenge_rating));
+        output.push_str("\n             },");
+        output.push_str(&format!("\n             include_str!({:?})",include_filename));
+        output.push_str("\n        ),");
+    }
+
+    output.push_str("\n    ];");
+
+
+    write_target(Some(target_file), &output)
+
+}
