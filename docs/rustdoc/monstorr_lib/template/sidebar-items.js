@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["process_template",""]],"struct":[["TemplateData",""]]});
+initSidebarItems({"fn":[["process_template",""],["resolve_templates",""]],"trait":[["TemplateSourceResolver",""]]});

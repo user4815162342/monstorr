@@ -372,15 +372,6 @@
 <span id="372">372</span>
 <span id="373">373</span>
 <span id="374">374</span>
-<span id="375">375</span>
-<span id="376">376</span>
-<span id="377">377</span>
-<span id="378">378</span>
-<span id="379">379</span>
-<span id="380">380</span>
-<span id="381">381</span>
-<span id="382">382</span>
-<span id="383">383</span>
 </pre><pre class="rust"><code><span class="comment">/*
  * Copyright © 2022 Neil M. Sheldon
  * 
@@ -405,7 +396,7 @@ For more detailed documentation, including information on how to build a creatur
 <span class="kw">use</span> <span class="ident">clap::Args</span>;
 
 <span class="kw">use</span> <span class="ident">monstorr_lib::create_stat_block</span>;
-<span class="kw">use</span> <span class="ident">monstorr_lib::list_html_template_names</span>;
+<span class="kw">use</span> <span class="ident">monstorr_lib::list_template_names</span>;
 <span class="kw">use</span> <span class="ident">monstorr_lib::print_template</span>;
 <span class="kw">use</span> <span class="ident">monstorr_lib::list_creatures</span>;
 <span class="kw">use</span> <span class="ident">monstorr_lib::validate_creature</span>;
@@ -550,7 +541,7 @@ Monstorr recognizes a few formats for the input data for generating stat blocks.
 
     Mini-Jinja is a template format related to another template format called Jinja. For more information on the syntax, see [MiniJinja](https://docs.rs/minijinja/0.13.0/minijinja/syntax/index.html).
 
-    Currently, the code used to render these templates does not support auto-discovery of included template files. If your template needs these, you will need to include these using the &#39;include&#39; option, below. Every attempt has been made to make sure that you can reference these files using relative paths in the include statement and still get your include to work correctly.
+    Included files inside the template are automatically discovered if a string literal is used for their name. If your template needs additional includes which can&#39;t be resolved easily, you can use the &#39;include&#39; option, below. Every attempt has been made to make sure that you can reference these files using relative paths in the include statement and still get your include to work correctly.
     */</span>
     <span class="ident">MiniJinja</span> {
     
@@ -605,12 +596,7 @@ Monstorr recognizes a few formats for the input data for generating stat blocks.
 
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">author</span><span class="op">=</span><span class="string">&quot;N. M. Sheldon&quot;</span>, <span class="ident">version</span>, <span class="ident">about</span>, <span class="ident">long_about</span> <span class="op">=</span> <span class="prelude-val">None</span>)]</span>
     <span class="doccomment">/// List built-in template files by template class, so you can modify or reference them.</span>
-    <span class="ident">ListTemplates</span> {
-    
-        <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">arg_enum</span>)]</span>
-        <span class="doccomment">/// The class of templates you want to list</span>
-        <span class="ident">template_class</span>: <span class="ident">TemplateClass</span>
-    },
+    <span class="ident">ListTemplates</span>,
 
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">author</span><span class="op">=</span><span class="string">&quot;N. M. Sheldon&quot;</span>, <span class="ident">version</span>, <span class="ident">about</span>, <span class="ident">long_about</span> <span class="op">=</span> <span class="prelude-val">None</span>)]</span>
     <span class="doccomment">/// Retrieve the source for a template so you can save and customize it</span>
@@ -710,13 +696,9 @@ Runs the tool with the given arguments.
             <span class="kw">let</span> <span class="ident">input_format</span> <span class="op">=</span> <span class="ident">input_output</span>.<span class="ident">get_monstorr_input</span>()<span class="question-mark">?</span>;
             <span class="ident">validate_creature</span>(<span class="ident">input_output</span>.<span class="ident">input</span>.<span class="ident">as_deref</span>(), <span class="ident">input_format</span>, <span class="ident">input_output</span>.<span class="ident">output</span>.<span class="ident">as_deref</span>())
         },
-        <span class="ident">Command::ListTemplates</span>{<span class="ident">template_class</span>} <span class="op">=</span><span class="op">&gt;</span> {
-            <span class="kw">match</span> <span class="ident">template_class</span> {
-                <span class="ident">TemplateClass::HTML</span> <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>,<span class="ident">list_html_template_names</span>().<span class="ident">join</span>(<span class="string">&quot;\n&quot;</span>));
-                    <span class="prelude-val">Ok</span>(())
-                }
-            }
+        <span class="ident">Command::ListTemplates</span>{..} <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>,<span class="ident">list_template_names</span>().<span class="ident">join</span>(<span class="string">&quot;\n&quot;</span>));
+            <span class="prelude-val">Ok</span>(())
         },
         <span class="ident">Command::ListCreatures</span>{<span class="ident">format</span>,<span class="ident">input</span>,<span class="ident">type_</span>,<span class="ident">subtype</span>,<span class="ident">size</span>,<span class="ident">alignment</span>,<span class="ident">max_cr</span>,<span class="ident">min_cr</span>} <span class="op">=</span><span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="ident">format</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">format</span> {
