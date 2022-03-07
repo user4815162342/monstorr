@@ -10,7 +10,7 @@ use std::collections::HashMap;
 
 use minijinja::Environment;
 use minijinja::meta::find_referenced_templates;
-use monstorr_data::templates::TemplateSourceResolver;
+use monstorr_data::templates::StoredTemplates;
 
 use crate::stat_block::CreatureStatBlock;
 
@@ -92,81 +92,62 @@ list = '[' arguments? ']'
 
 */
 
-pub struct TemplateData {
-    name: String,
-    content: String,
+pub trait TemplateSourceResolver {
+
+    fn get_template(&self, name: &str) -> Result<Option<String>,String>;
+    
 }
 
-impl From<&(String,String)> for TemplateData {
+impl TemplateSourceResolver for () {
 
-    fn from(data: &(String,String)) -> Self {
-        TemplateData {
-            name: data.0.clone(),
-            content: data.1.clone()
-        }
+    fn get_template(&self, _name: &str) -> Result<Option<String>,String> {
+        Ok(None)
     }
 }
 
-impl From<(String,String)> for TemplateData {
+impl TemplateSourceResolver for StoredTemplates {
 
-    fn from(data: (String,String)) -> Self {
-        TemplateData {
-            name: data.0,
-            content: data.1
-        }
+    fn get_template(&self, name: &str) -> Result<Option<String>,String> {
+        Ok(self.get(name))
     }
-}
 
-impl From<&(&str,&str)> for TemplateData {
-
-    fn from(data: &(&str,&str)) -> Self {
-        TemplateData {
-            name: data.0.to_owned(),
-            content: data.1.to_owned()
-        }
-    }
 
 }
 
-impl From<(&str,&str)> for TemplateData {
 
-    fn from(data: (&str,&str)) -> Self {
-        TemplateData {
-            name: data.0.to_owned(),
-            content: data.1.to_owned()
-        }
-    }
 
-}
 
-fn resolve_templates<Resolver: TemplateSourceResolver>(resolver: &Resolver, resolved: &mut HashMap<String,String>, name: &str, source: &str) -> Result<(),String> {
+
+fn resolve_templates<Resolver: TemplateSourceResolver>(resolver: &Resolver, resolved: &mut HashMap<String,String>, name: &str) -> Result<(),String> {
     // if this one is already resolved, I don't need to do anything
     if let Some(_) = resolved.get(name) {
         Ok(())
-    } else {
+    } else if let Some(source) = resolver.get_template(name)? {
         // add it to resolved now, even though it's not quite resolved yet, to avoid infinite recursion
         resolved.insert(name.to_owned(),source.to_owned());
 
-        let other_templates = find_referenced_templates(source).map_err(|e| format!("Error resolving included templates: '{}'",e))?;
+        let other_templates = find_referenced_templates(&source).map_err(|e| format!("Error resolving included templates: '{}'",e))?;
 
         for template in other_templates {
-            if let Some(content) = resolver.get_template(&template) {
-                // recurse to resolve these templates
-                resolve_templates(resolver, resolved, &template, &content)?
-            } else {
-                Err(format!("Could not resolve template '{}'",template))?
-            }    
+            resolve_templates(resolver, resolved, &template)?
         }
         Ok(())  
+    } else {
+        Err(format!("Could not resolve template '{}'",name))?
     }
 
 }
 
 
-pub fn process_template<Resolver: TemplateSourceResolver>(resolver: &Resolver, template: TemplateData, includes: Vec<TemplateData>, stat_block: &CreatureStatBlock) -> Result<String,String> {
+pub fn process_template<Resolver: TemplateSourceResolver>(resolver: &Resolver, template: &str, includes: &Vec<String>, stat_block: &CreatureStatBlock) -> Result<String,String> {
 
     let mut resolved_templates = HashMap::new();
-    resolve_templates(resolver, &mut resolved_templates, &template.name, &template.content)?;
+    resolve_templates(resolver, &mut resolved_templates, &template)?;
+
+    // resolve additional included templates
+    for include in includes {
+        resolve_templates(resolver, &mut resolved_templates, include)?;
+    }
 
     let mut env = Environment::new();
         
@@ -178,13 +159,7 @@ pub fn process_template<Resolver: TemplateSourceResolver>(resolver: &Resolver, t
         env.add_template(&name, &source).map_err(|e| format!("Error parsing template '{}': {}",name,e))?
     }
 
-
-//    env.add_template(&template.name, &template.content).map_err(|e| format!("Error parsing template '{}': {}",template.name,e))?;
-    for i in 0..includes.len() {
-        env.add_template(&includes[i].name, &includes[i].content).map_err(|e| format!("Error parsing template '{}': {}",includes[i].name,e))?
-    }
-
-    let template = env.get_template(&template.name).map_err(|e| format!("Error parsing template '{}': {}",template.name,e))?;
+    let template = env.get_template(&template).map_err(|e| format!("Error parsing template '{}': {}",template,e))?;
     template.render(stat_block).map_err(|e| format!("Template error: {}",e))
 
 }

@@ -22,7 +22,7 @@ use clap::ArgEnum;
 use clap::Args;
 
 use monstorr_lib::create_stat_block;
-use monstorr_lib::list_html_template_names;
+use monstorr_lib::list_template_names;
 use monstorr_lib::print_template;
 use monstorr_lib::list_creatures;
 use monstorr_lib::validate_creature;
@@ -167,7 +167,7 @@ enum Command {
 
     Mini-Jinja is a template format related to another template format called Jinja. For more information on the syntax, see [MiniJinja](https://docs.rs/minijinja/0.13.0/minijinja/syntax/index.html).
 
-    Currently, the code used to render these templates does not support auto-discovery of included template files. If your template needs these, you will need to include these using the 'include' option, below. Every attempt has been made to make sure that you can reference these files using relative paths in the include statement and still get your include to work correctly.
+    Included files inside the template are automatically discovered if a string literal is used for their name. If your template needs additional includes which can't be resolved easily, you can use the 'include' option, below. Every attempt has been made to make sure that you can reference these files using relative paths in the include statement and still get your include to work correctly.
     */
     MiniJinja {
     
@@ -222,12 +222,7 @@ enum Command {
 
     #[clap(author="N. M. Sheldon", version, about, long_about = None)]
     /// List built-in template files by template class, so you can modify or reference them.
-    ListTemplates {
-    
-        #[clap(arg_enum)]
-        /// The class of templates you want to list
-        template_class: TemplateClass
-    },
+    ListTemplates,
 
     #[clap(author="N. M. Sheldon", version, about, long_about = None)]
     /// Retrieve the source for a template so you can save and customize it
@@ -327,13 +322,9 @@ fn run(args: Command) -> Result<(),String> {
             let input_format = input_output.get_monstorr_input()?;
             validate_creature(input_output.input.as_deref(), input_format, input_output.output.as_deref())
         },
-        Command::ListTemplates{template_class} => {
-            match template_class {
-                TemplateClass::HTML => {
-                    println!("{}",list_html_template_names().join("\n"));
-                    Ok(())
-                }
-            }
+        Command::ListTemplates{..} => {
+            println!("{}",list_template_names().join("\n"));
+            Ok(())
         },
         Command::ListCreatures{format,input,type_,subtype,size,alignment,max_cr,min_cr} => {
             let format = match format {

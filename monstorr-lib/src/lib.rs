@@ -53,7 +53,6 @@ use monstorr_open5e::Open5eMonsterList;
 use monstorr_data;
 use monstorr_data::creatures::CreatureSummary;
 use monstorr_data::templates::StoredTemplates;
-use monstorr_data::templates::TemplateSourceResolver;
 use monstorr_data::templates::TemplateOptions;
 
 mod utils;
@@ -84,6 +83,7 @@ use crate::stats::ChallengeRating;
 use crate::template::process_template;
 use crate::utils::path_relative_from;
 use crate::utils::to_kebab_case;
+use crate::template::TemplateSourceResolver;
 
 pub use creature_commands::MONSTORR_VERSION;
 
@@ -226,6 +226,22 @@ pub fn validate_creature(input_file: Option<&str>, input_format: InputFormat,
     
 }
 
+impl TemplateSourceResolver for PathBuf {
+
+    fn get_template(&self, name: &str) -> Result<Option<String>,String> {
+        let mut result = self.clone();
+        result.push(name);
+        if result.is_file() {
+            Ok(Some(read_source(Some(&result))?))
+        } else {
+            Ok(None)
+        }        
+    }
+
+}
+
+
+
 pub fn create_stat_block(input_file: Option<&str>, input_format: InputFormat, 
                          output_file: Option<&str>, output_format: OutputFormat) -> Result<(),String> {
     let working_dir = get_default_working_dir()?;
@@ -288,12 +304,22 @@ pub fn create_stat_block(input_file: Option<&str>, input_format: InputFormat,
         OutputFormat::MiniJinjaTemplate(template,include_files) => {
             // use the default working dir instead of making it relative to the source.
             let template_file = resolve_existing_file(&working_dir, &template)?;
-            let main_template = (template,read_source(Some(&template_file))?).into();
+            let template_name = if let Some(file_name) = template_file.file_name() {
+                if let Some(file_name) = file_name.to_str() {
+                    file_name.to_owned()
+                } else {
+                    template
+                }
+            } else {
+                template
+            };
             
             let mut includes = Vec::new();
             let mut template_dir = template_file.clone();
             template_dir.pop();
 
+            // resolve any include files as relative to main directory
+            // (command line processing might have already resolved them to longer paths)
             for include in include_files {
                 let file = resolve_existing_file(&working_dir, &include)?;
                 let name = if let Some(name) = path_relative_from(&file, &template_dir) {
@@ -305,19 +331,18 @@ pub fn create_stat_block(input_file: Option<&str>, input_format: InputFormat,
                 } else {
                     include
                 };
-                includes.push((name,read_source(Some(&file))?).into());
+                includes.push(name);
             }
             
-            process_template(&(),main_template,includes,&stat_block).map_err(|e| format!("Error processing template: {}",e))?
+            process_template(&template_dir,&template_name,&includes,&stat_block).map_err(|e| format!("Error processing template: {}",e))?
         },
         OutputFormat::HTML(two_column_height,fragment) => {
             let main_template = if fragment {
-                monstorr_data::templates::STAT_BLOCK_HTML_TEMPLATE.into()
-
+                monstorr_data::templates::STAT_BLOCK_HTML_TEMPLATE
             } else {
-                monstorr_data::templates::FULL_HTML_TEMPLATE.into()
+                monstorr_data::templates::FULL_HTML_TEMPLATE
             };
-            process_template(&StoredTemplates::instance(TemplateOptions::html(two_column_height)), main_template, Vec::new(), &stat_block).map_err(|e| format!("Error producing HTML: {}",e))?
+            process_template(&StoredTemplates::instance(TemplateOptions::html(two_column_height)), main_template, &Vec::new(), &stat_block).map_err(|e| format!("Error producing HTML: {}",e))?
         }
     };
 
@@ -326,22 +351,13 @@ pub fn create_stat_block(input_file: Option<&str>, input_format: InputFormat,
     
 }
 
-pub fn list_html_template_names() -> Vec<String> {
-    let mut result = Vec::new();
-    result.push(monstorr_data::templates::FULL_HTML_TEMPLATE.0.to_owned());
-    for template in monstorr_data::templates::STANDARD_HTML_TEMPLATE_INCLUDES {
-        result.push(template.to_owned())
-    }
-    for template in monstorr_data::templates::ADDITIONAL_FULL_HTML_TEMPLATE_INCLUDES {
-        result.push(template.to_owned())
-    }
-    result
-
+pub fn list_template_names() -> Vec<String> {
+    StoredTemplates::instance(None).list()
 }
 
 pub fn print_template(name: &str) -> Result<(),String> {
     let resolver = StoredTemplates::instance(None);
-    if let Some(template) = resolver.get_template(name) {
+    if let Some(template) = resolver.get_template(name)? {
         println!("{}",template);
         Ok(())
     } else {
