@@ -52,6 +52,8 @@ use monstorr_open5e::Open5eMonster;
 use monstorr_open5e::Open5eMonsterList;
 use monstorr_data;
 use monstorr_data::creatures::CreatureSummary;
+use monstorr_data::templates::StoredTemplates;
+use monstorr_data::templates::TemplateSourceResolver;
 
 mod utils;
 mod parse_position;
@@ -332,42 +334,23 @@ pub fn list_html_template_names() -> Vec<String> {
     let mut result = Vec::new();
     result.push(monstorr_data::templates::FULL_HTML_TEMPLATE.0.to_owned());
     for template in monstorr_data::templates::STANDARD_HTML_TEMPLATE_INCLUDES {
-        result.push(template.0.to_owned())
+        result.push(template.to_owned())
     }
     for template in monstorr_data::templates::ADDITIONAL_FULL_HTML_TEMPLATE_INCLUDES {
-        result.push(template.0.to_owned())
+        result.push(template.to_owned())
     }
     result
 
 }
 
-fn print_template_if_name_matches(name: &str,template: (&str,&str)) -> bool {
-    if name == template.0 {
-        println!("{}",template.1);
-        true
-    } else {
-        false
-    }
-
-}
-
 pub fn print_template(name: &str) -> Result<(),String> {
-    if !print_template_if_name_matches(name, monstorr_data::templates::FULL_HTML_TEMPLATE) {
-        for template in monstorr_data::templates::STANDARD_HTML_TEMPLATE_INCLUDES {
-            if print_template_if_name_matches(name, template) {
-                return Ok(());
-            }
-        }
-        for template in monstorr_data::templates::ADDITIONAL_FULL_HTML_TEMPLATE_INCLUDES {
-            if print_template_if_name_matches(name, template) {
-                return Ok(());
-            }
-        }
+    let resolver = StoredTemplates::instance(None);
+    if let Some(template) = resolver.get_template(name) {
+        println!("{}",template);
+        Ok(())
     } else {
-        return Ok(());
+        Err(format!("This program does not contain a template named '{}'",name))
     }
-    Err(format!("This program does not contain a template named '{}'",name))
-    
 }
 
 
