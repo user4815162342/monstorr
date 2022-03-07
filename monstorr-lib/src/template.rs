@@ -6,7 +6,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+use std::collections::HashMap;
+
 use minijinja::Environment;
+use minijinja::meta::find_referenced_templates;
+use monstorr_data::templates::TemplateSourceResolver;
 
 use crate::stat_block::CreatureStatBlock;
 
@@ -135,10 +139,47 @@ impl From<(&str,&str)> for TemplateData {
 
 }
 
-pub fn process_template(template: TemplateData, includes: Vec<TemplateData>, stat_block: &CreatureStatBlock) -> Result<String,String> {
+fn resolve_templates<Resolver: TemplateSourceResolver>(resolver: &Resolver, resolved: &mut HashMap<String,String>, name: &str, source: &str) -> Result<(),String> {
+    // if this one is already resolved, I don't need to do anything
+    if let Some(_) = resolved.get(name) {
+        Ok(())
+    } else {
+        // add it to resolved now, even though it's not quite resolved yet, to avoid infinite recursion
+        resolved.insert(name.to_owned(),source.to_owned());
+
+        let other_templates = find_referenced_templates(source).map_err(|e| format!("Error resolving included templates: '{}'",e))?;
+
+        for template in other_templates {
+            if let Some(content) = resolver.get_template(&template) {
+                // recurse to resolve these templates
+                resolve_templates(resolver, resolved, &template, &content)?
+            } else {
+                Err(format!("Could not resolve template '{}'",template))?
+            }    
+        }
+        Ok(())  
+    }
+
+}
+
+
+pub fn process_template<Resolver: TemplateSourceResolver>(resolver: &Resolver, template: TemplateData, includes: Vec<TemplateData>, stat_block: &CreatureStatBlock) -> Result<String,String> {
+
+    let mut resolved_templates = HashMap::new();
+    resolve_templates(resolver, &mut resolved_templates, &template.name, &template.content)?;
 
     let mut env = Environment::new();
-    env.add_template(&template.name, &template.content).map_err(|e| format!("Error parsing template '{}': {}",template.name,e))?;
+        
+    //let resolved_templates = resolved_templates.into_iter().collect::<Vec<(String,String)>>();
+
+    // I need to keep the iterator in scope, or I get lifetime errors when adding the template...
+    let resolved_templates = resolved_templates.iter();
+    for (name,source) in resolved_templates {
+        env.add_template(&name, &source).map_err(|e| format!("Error parsing template '{}': {}",name,e))?
+    }
+
+
+//    env.add_template(&template.name, &template.content).map_err(|e| format!("Error parsing template '{}': {}",template.name,e))?;
     for i in 0..includes.len() {
         env.add_template(&includes[i].name, &includes[i].content).map_err(|e| format!("Error parsing template '{}': {}",includes[i].name,e))?
     }

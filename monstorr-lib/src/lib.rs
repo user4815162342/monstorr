@@ -54,6 +54,7 @@ use monstorr_data;
 use monstorr_data::creatures::CreatureSummary;
 use monstorr_data::templates::StoredTemplates;
 use monstorr_data::templates::TemplateSourceResolver;
+use monstorr_data::templates::TemplateOptions;
 
 mod utils;
 mod parse_position;
@@ -307,21 +308,16 @@ pub fn create_stat_block(input_file: Option<&str>, input_format: InputFormat,
                 includes.push((name,read_source(Some(&file))?).into());
             }
             
-            process_template(main_template,includes,&stat_block).map_err(|e| format!("Error processing template: {}",e))?
+            process_template(&(),main_template,includes,&stat_block).map_err(|e| format!("Error processing template: {}",e))?
         },
         OutputFormat::HTML(two_column_height,fragment) => {
-            let (main_template,includes) = if fragment {
-                let main_template = monstorr_data::templates::STAT_BLOCK_HTML_TEMPLATE.into();
-                let includes = monstorr_data::templates::stat_block_html_template_includes(two_column_height).iter().map(|a| a.into()).collect();
-                (main_template,includes)
+            let main_template = if fragment {
+                monstorr_data::templates::STAT_BLOCK_HTML_TEMPLATE.into()
 
             } else {
-                let main_template = monstorr_data::templates::FULL_HTML_TEMPLATE.into();
-                let includes = monstorr_data::templates::full_html_template_includes(two_column_height).iter().map(|a| a.into()).collect();
-                (main_template,includes)
-    
+                monstorr_data::templates::FULL_HTML_TEMPLATE.into()
             };
-            process_template(main_template, includes, &stat_block).map_err(|e| format!("Error producing HTML: {}",e))?
+            process_template(&StoredTemplates::instance(TemplateOptions::html(two_column_height)), main_template, Vec::new(), &stat_block).map_err(|e| format!("Error producing HTML: {}",e))?
         }
     };
 

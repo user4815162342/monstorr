@@ -10,6 +10,14 @@ use std::collections::HashMap;
 pub trait TemplateSourceResolver {
 
     fn get_template(&self, name: &str) -> Option<String>;
+    
+}
+
+impl TemplateSourceResolver for () {
+
+    fn get_template(&self, _name: &str) -> Option<String> {
+        None
+    }
 }
 
 macro_rules! template {
@@ -31,6 +39,15 @@ pub const STORED_TEMPLATES: [(&'static str, &'static str); 8] = [
 
 pub struct TemplateOptions {
     html: Option<usize> // if set, the html template is supposed to be two-columns, and the value is the height of the div in pixels
+}
+
+impl TemplateOptions {
+
+    pub fn html(html: Option<usize>) -> Option<Self> {
+        Some(Self {
+            html
+        })
+    }
 }
 
 pub struct StoredTemplates {
@@ -87,9 +104,7 @@ pub const STANDARD_HTML_TEMPLATE_INCLUDES: [&'static str;5] =
       "html-two-column"];
  
 fn html_template_includes(two_column: Option<usize>,addl_includes: &[&'static str]) -> Vec<(String,String)> {
-    let resolver = StoredTemplates::instance(Some(TemplateOptions {
-        html: two_column
-    }));
+    let resolver = StoredTemplates::instance(TemplateOptions::html(two_column));
     let mut result = Vec::new();
     for name in STANDARD_HTML_TEMPLATE_INCLUDES.iter().chain(addl_includes) {
         if let Some(template) = resolver.get_template(name) {
