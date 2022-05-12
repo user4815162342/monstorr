@@ -110,7 +110,8 @@ impl Default for InputFormat {
 pub enum OutputFormat {
     JSON(bool), // whether to print ugly
     MiniJinjaTemplate(String,Vec<String>), // path to template, paths to templates to be included
-    HTML(Option<usize>,bool) // an optional usize indicating that they want a two-column stat-block instead of one-column, a bool indicating that only a fragment should be output
+    HTML(Option<usize>,bool), // an optional usize indicating that they want a two-column stat-block instead of one-column, a bool indicating that only a fragment should be output
+    LaTeX()
 }
 
 impl Default for OutputFormat {
@@ -343,6 +344,10 @@ pub fn create_stat_block(input_file: Option<&str>, input_format: InputFormat,
                 monstorr_data::templates::FULL_HTML_TEMPLATE
             };
             process_template(&StoredTemplates::instance(TemplateOptions::html(two_column_height)), main_template, &Vec::new(), &stat_block).map_err(|e| format!("Error producing HTML: {}",e))?
+        },
+        OutputFormat::LaTeX() => {
+            let main_template = monstorr_data::templates::LATEX_TEMPLATE;
+            process_template(&StoredTemplates::instance(TemplateOptions::latex()), main_template, &Vec::new(), &stat_block).map_err(|e| format!("Error producing LaTeX: {}",e))?
         }
     };
 
@@ -351,8 +356,8 @@ pub fn create_stat_block(input_file: Option<&str>, input_format: InputFormat,
     
 }
 
-pub fn list_template_names() -> Vec<String> {
-    StoredTemplates::instance(None).list()
+pub fn list_template_names(class: Option<&str>) -> Vec<String> {
+    StoredTemplates::instance(None).list(class)
 }
 
 pub fn print_template(name: &str) -> Result<(),String> {

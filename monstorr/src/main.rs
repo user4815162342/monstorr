@@ -115,7 +115,19 @@ impl InputOutputData {
 /// Represents an argument requiring a class of templates for the ListTemplates command.
 enum TemplateClass {
     /// Templates (in MiniJinja syntax) used in producing HTML
-    HTML
+    HTML,
+    /// Templates (in MiniJinja syntax) used in producing LaTeX
+    LATEX
+}
+
+impl TemplateClass {
+
+    fn to_string(&self) -> &'static str {
+        match self {
+            TemplateClass::HTML => "html",
+            TemplateClass::LATEX => "latex"
+        }
+    }
 }
 
 #[derive(Parser)]
@@ -208,6 +220,21 @@ enum Command {
         fragment: bool
     },
 
+    #[clap(author="N. M. Sheldon", version, about, long_about = None)]
+    /**
+    Generate a stat block in LaTeX.
+
+    This command utilizes built-in MiniJinja templates (see the `mini-jinja` command) to generate the LaTeX. It makes use of commands supplied by another LaTeX package which has not yet been published. It should be possible to create these commands yourself to customize the style.
+
+    If you wish to modify the output, retrieve the command names, or just reference them for how to write a template, use the `list-templates latex` command to retrieve them.
+    */
+    LATEX {
+ 
+        #[clap(flatten)]
+        input_output: InputOutputData
+ 
+    },
+
     /**
     Produce creature files unprocessed.
 
@@ -222,7 +249,11 @@ enum Command {
 
     #[clap(author="N. M. Sheldon", version, about, long_about = None)]
     /// List built-in template files by template class, so you can modify or reference them.
-    ListTemplates,
+    ListTemplates {
+        /// The class of template to list, or none to list all.
+        #[clap(short,long,arg_enum)]
+        class: Option<TemplateClass>
+    },
 
     #[clap(author="N. M. Sheldon", version, about, long_about = None)]
     /// Retrieve the source for a template so you can save and customize it
@@ -313,6 +344,11 @@ fn run(args: Command) -> Result<(),String> {
             let input_format = input_output.get_monstorr_input()?;
             create_stat_block(input_output.input.as_deref(), input_format, input_output.output.as_deref(), output_format)
         },
+        Command::LATEX{input_output} => {
+            let output_format = MonstorrOutputFormat::LaTeX();
+            let input_format = input_output.get_monstorr_input()?;
+            create_stat_block(input_output.input.as_deref(), input_format, input_output.output.as_deref(), output_format)
+        }
         Command::MiniJinja{template,include,input_output} => {
             let output_format = MonstorrOutputFormat::MiniJinjaTemplate(template,include);
             let input_format = input_output.get_monstorr_input()?;
@@ -322,8 +358,8 @@ fn run(args: Command) -> Result<(),String> {
             let input_format = input_output.get_monstorr_input()?;
             validate_creature(input_output.input.as_deref(), input_format, input_output.output.as_deref())
         },
-        Command::ListTemplates{..} => {
-            println!("{}",list_template_names().join("\n"));
+        Command::ListTemplates{ class } => {
+            println!("{}",list_template_names(class.map(|c| c.to_string())).join("\n"));
             Ok(())
         },
         Command::ListCreatures{format,input,type_,subtype,size,alignment,max_cr,min_cr} => {

@@ -1,0 +1,79 @@
+{#
+    Copyright © 2022 Neil M. Sheldon
+    
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, You can obtain one at https://mozilla.org/MPL/2.0/.
+#}{% autoescape false %}
+\begin{dnd5eStatBlock}
+\rpgCreatureHeading{ {{ name}} }{ {{size}} }{ {{type}} }
+
+\dnd5eTaperedRule{}
+
+\rpgCreatureStat{Armor Class}{ {{armor}} }
+    
+\rpgCreatureStat{Hit Points}{ {{hit_points}} }
+    
+\rpgCreatureStat{Speed}{ {{speed}} }
+
+\dnd5eTaperedRule{}
+
+\begin{dnd5eAbilitiesTable}
+    {{ strength }} & {{dexterity}} & {{constitution}} & {{intelligence}} & {{wisdom}} & {{charisma}}
+\end{dnd5eAbilitiesBlock}
+
+\dnd5eTaperedRule{}
+
+{% if saving_throws %}\rpgCreatureStat{Saving Throws}{ {{ saving_throws }} }
+
+{% endif %}{% if skills %}\rpgCreatureStat{Skills}{ {{ skills }} }
+
+{% endif %}{% if damage_vulnerabilities %}\rpgCreatureStat{Damage Vulnerabilities}{ {{ damage_vulnerabilities }} }
+
+{% endif %}{% if damage_resistances %}\rpgCreatureStat{Damage Resistances}{ {{ damage_resistances }} }
+
+{% endif %}{% if damage_immunities %}\rpgCreatureStat{Damage Immunities}{ {{ damage_immunities }} }
+
+{% endif %}{% if condition_immunities %}\rpgCreatureStat{Condition Immunities}{ {{ condition_immunities }} }
+
+{% endif %}{% if senses %}\rpgCreatureStat{Senses}{ {{ senses }} }
+
+{% endif %}\rpgCreatureStat{Languages}{ {% if languages %}{{ languages }}{% else %}—{% endif %} }
+
+\rpgCreatureStat{Challenge}{ {{ challenge_rating }} }
+    
+\dnd5eTaperedRule{}
+{% for feature in special_abilities %}{% 
+include 'feature-template.tex' %}{% 
+endfor %}{% 
+if actions %}
+\rpgCreatureSubheading{Actions}
+{% for feature in actions %}{% 
+    include 'feature-template.tex' %}{% 
+endfor %}{% 
+endif %}{%
+if reactions %}
+\rpgCreatureSubheading{Reactions}
+{% for feature in reactions %}{% 
+    include 'feature-template.tex' %}{% 
+endfor %}{% 
+endif %}{%
+if legendary_actions %}
+\rpgCreatureSubheading{Legendary Actions}
+{%  
+    with blocks = legendary_actions.description 
+            %}{% 
+            include 'blocks-template.tex' %}{% 
+        endwith %}{%   
+for feature in legendary_actions.actions %}{% 
+    with blocks=feature.text %}{% 
+        include 'blocks-template.tex'%}{% 
+    endwith %}{% 
+endfor %}{% endif %}{%
+if source %}
+\dnd5eTaperedRule{}
+
+\textit{\rpgCreatureStat{Source}{ {{source}} }}
+{%endif%}
+\end{dnd5eStatBlock}
+{% endautoescape %}
