@@ -141,6 +141,11 @@ fn resolve_templates<Resolver: TemplateSourceResolver>(resolver: &Resolver, reso
 
 pub fn process_template<Resolver: TemplateSourceResolver>(resolver: &Resolver, template: &str, includes: &Vec<String>, stat_block: &CreatureStatBlock) -> Result<String,String> {
 
+    // NOTE: Even though minijinja finally provided a hook for resolving the templates at run-time, I had already gone through and done
+    // this. The new mechanism requires Send and Sync and 'static, and a preliminary attempt to do that showed me that I would need
+    // to do a lot more work than just editing the code in this function. (Another reason for my own template language)
+
+
     let mut resolved_templates = HashMap::new();
     resolve_templates(resolver, &mut resolved_templates, &template)?;
 
@@ -163,3 +168,4 @@ pub fn process_template<Resolver: TemplateSourceResolver>(resolver: &Resolver, t
     template.render(stat_block).map_err(|e| format!("Template error: {}",e))
 
 }
+
