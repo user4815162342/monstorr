@@ -1,0 +1,15 @@
+([
+    Monstorr(1),
+    Source("D&D 5E System Reference Document"),
+    Name("Commoner"),
+    Medium,
+    Humanoid,
+    Subtype("any race"),
+    AnyAlignment,
+    Walk(30),
+    Languages([
+        Language("any one language (usually Common)")
+    ]),
+    OverrideChallenge(0),
+    Weapon(Club(0))
+])
