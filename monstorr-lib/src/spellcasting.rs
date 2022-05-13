@@ -386,6 +386,10 @@ impl InnateSpellcasting {
             format!("${{+prof + {}}}",self.ability.to_short_str())
         };
 
+        // FUTURE: If anyone ever complains, there's a slightly different format if there's only one spell:
+        // "Innate Spellcasting (1/Day). The ${{subj}} can innately cast sleep, requiring no material components. Its innate spellcasting ability is Charisma."
+        // -- one problem here is that form doesn't provide the spell save and attacks, in theory because sleep doesn't require them. I currently have no way of knowing whether I need those anyway.
+        // -- The main reason I don't want to do this is because I hate the inconsistency, and I would like their save DC listed somewhere in the stats.
         
         let mut result = format!("${{Poss}} innate spellcasting ability is {} (spell save DC {}, {} to hit with spell attacks). It can innately cast the following spells, requiring no material components:",self.ability,save_dc,attack_bonus);
 

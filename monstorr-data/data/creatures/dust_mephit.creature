@@ -1,0 +1,33 @@
+([
+    Monstorr(1),
+    Source("D&D 5E System Reference Document"),
+    Name("Dust Mephit"),
+    Small,
+    Elemental,
+    NeutralEvil,
+    HitDiceCount(5),
+    Walk(30),
+    Fly(30),
+    Str(5),
+    Dex(14),
+    Int(9),
+    Wis(11),
+    Skills([Perception,Stealth]),
+    Vulnerability(Fire),
+    Immunity(Poison),
+    ConditionImmunity(Poisoned),
+    Darkvision(60),
+    Languages([Auran,Terran]),
+    OverrideHalfChallenge,
+    Feature(Feature("Death Burst","When the mephit dies, it explodes in a burst of dust. Each creature within 5 feet of it must then succeed on a DC 10 Constitution saving throw or be blinded for 1 minute. A blinded creature can repeat the saving throw on each of its turns, ending the effect on itself on a success.")),
+    InnateSpellcasting([
+        Ability(Charisma),
+        PerDay(1,["sleep"])
+    ]),
+    Action(Attack("Claws",(
+        type: Some(Weapon),
+        reach: Some(5),
+        target: "one creature"
+    ),Damage("1d4",Default,Slashing))),
+    Action(Action("Blinding Breath","The mephit exhales a 15-­foot cone of blinding dust. Each creature in that area must succeed on a DC 10 Dexterity saving throw or be blinded for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.",None,None),Some(Recharge(6)))
+])

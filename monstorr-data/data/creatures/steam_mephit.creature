@@ -1,0 +1,33 @@
+([
+    Monstorr(1),
+    Source("D&D 5E System Reference Document"),
+    Name("Steam Mephit"),
+    Small,
+    Elemental,
+    NeutralEvil,
+    HitDiceCount(6),
+    Walk(30),
+    Fly(30),
+    Str(5),
+    Dex(11),
+    Int(11),
+    Cha(12),
+    Immunity(Fire),
+    Immunity(Poison),
+    ConditionImmunity(Poisoned),
+    Darkvision(60),
+    Languages([Aquan,Ignan]),
+    OverrideQuarterChallenge,
+    Feature(Feature("Death Burst","When the mephit dies, it explodes in a cloud of steam. Each creature within 5 feet of the mephit must succeed on a DC 10 Dexterity saving throw or take ${1d8} fire damage.")),
+    InnateSpellcasting([
+        Ability(Charisma),
+        PerDay(1,["blur"])
+    ]),
+    Action(Attack("Claws",(
+        type: Some(Weapon),
+        reach: Some(5),
+        target: "one creature"
+    ),Damage("1d4",Default,Slashing),
+    Some(Plus(Damage("1d4",Zero,Fire))))),
+    Action(Action("Steam Breath","The mephit exhales a 15-foot cone of scalding steam. Each creature in that area must succeed on a DC 10 Dexterity saving throw, taking 4 (1d8) fire damage on a failed save, or half as much damage on a successful one.",Some(AreaSaveHalf(10,Dexterity,"1d8",Zero,Fire)),None),Some(Recharge(6)))
+])

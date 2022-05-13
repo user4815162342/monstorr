@@ -24,6 +24,8 @@ FUTURE: My own template parser, which uses the same tokenizer as everything else
   - the syntax is more expressive because I don't think of it as tags, but more like interpolation like JavaScript template strings
   - this also allows me better control over whitespace. If I think of text as expressions starting with '}' and ending with '${' then it's easier
     to lay out the statements in line below
+  - I have more control over template resolution
+  - MINIJINJA currently won't let me escape the '{', except by adding a space after the brace, which passes on through to the end.
 
 template = statement*
 

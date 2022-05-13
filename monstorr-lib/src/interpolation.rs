@@ -18,7 +18,7 @@ The result of an interpolation differs between the two modes. For inclusion, the
 
 When embedding interpolation in the included file, delimit expressions with '$<...>'. When embedding interpolation in features, delimit the expressions with '${...}'. 
 
-All text outside these delimiters are treated as normal text. While you can use the backslash ('\') to escape the dollar sign character ('$'), and other backslashes, this is not necessary unless, for some reason, you need to include the '${' character combination in regular text, or worse, the '\${' character combination. In the former case you can produce that with '\${'. In the latter, you can produce it with '\\\${'. Outside of those instances, a dollar sign and a backslash are treated as normal characters. In interpolating for inclusion, the same applies to '$<' and '\$<' character combinations.
+All text outside these delimiters are treated as normal text. While you can use the backslash ('\') to escape the dollar sign character ('$'), and other backslashes, this is not necessary unless, for some reason, you need to include the '${' character combination in regular text, or worse, the '\\${' character combination. In the former case you can produce that with '\\\\${'. In the latter, you can produce it with '\\\\\\${'. Outside of those instances, a dollar sign and a backslash are treated as normal characters. In interpolating for inclusion, the same applies to '$<' and '\$<' character combinations.
 
 # Expression Syntax
 
