@@ -1,7 +1,7 @@
 ([
     Monstorr(1),
     Source("D&D 5E System Reference Document"),
-    Name("Awakened Tree"),
+    Name("Imp"),
     Tiny,
     Fiend,
     Subtype("devil, shapechanger"),
