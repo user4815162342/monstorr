@@ -1628,7 +1628,7 @@ impl CreatureCreator {
                                         Err(CreatureError::InvalidStateForFeature(format!("Brute can not be applied to the '{}' action, which is not a melee attack.",name)))?
                                     }
                                 };
-                                action.description = attack.get_description(&new_effect, &action.compound);
+                                action.description = attack.get_description(Some(&new_effect), &action.compound);
                                 action.effect = Some(new_effect);
 
 

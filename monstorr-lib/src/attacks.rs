@@ -584,7 +584,7 @@ pub struct Attack {
 
 impl Attack {
 
-    pub fn get_description(&self, effect: &AttackEffect, compound_effect: &Option<CompoundAttackEffect>) -> String {
+    pub fn get_description(&self, effect: Option<&AttackEffect>, compound_effect: &Option<CompoundAttackEffect>) -> String {
     
         let (target,melee,ranged) = match (self.reach,self.range,self.long_range) {
             (Some(reach),Some(short_range),Some(long_range)) => 
@@ -615,8 +615,12 @@ impl Attack {
             (bonus,Some(magic),false,false) => (format!("${{italic(}}{}Attack:${{)}} ${{+{} + {}}} to hit, {}.",attack_type,bonus.get_expr("atk",true),magic,target),"atk"),
             (bonus,None,false,false) => (format!("${{italic(}}{}Attack:${{)}} ${{+{}}} to hit, {}.",attack_type,bonus.get_expr("atk",true),target),"atk"),
         };
-        let effect = format!("${{italic(}}Hit:${{)}} {}",effect.get_description(default_bonus,compound_effect));
-        format!("{} {}",attack,effect)
+        if let Some(effect) = effect {
+            let effect = format!("${{italic(}}Hit:${{)}} {}",effect.get_description(default_bonus,compound_effect));
+            format!("{} {}",attack,effect)
+        } else {
+            attack
+        }
     }    
 }
 

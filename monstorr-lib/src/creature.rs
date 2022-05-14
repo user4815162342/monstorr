@@ -1713,7 +1713,7 @@ impl Creature {
         let name = weapon.to_string();
         let attack = weapon.get_attack();
         let effect = weapon.get_effect(&self.size);
-        let description = attack.get_description(&effect, compound);
+        let description = attack.get_description(Some(&effect), compound);
         self.actions.push(CreatureAction {
             name,
             description,
@@ -1752,6 +1752,8 @@ impl Creature {
 
     pub fn override_weapon_attack(&mut self, weapon: &Weapon, attack: Attack) -> Result<(),CreatureError> {
         if let Some(action) = self.find_weapon_mut(weapon) {
+            // override the description as well. Note that this will overwrite any override_weapon_description stuff, but the user can easily fix that.
+            action.description = attack.get_description(action.effect.as_ref(), &action.compound);
             action.attack = Some(attack);
             Ok(())
         } else {
@@ -1761,6 +1763,12 @@ impl Creature {
 
     pub fn override_weapon_effect(&mut self, weapon: &Weapon, effect: AttackEffect) -> Result<(),CreatureError> {
         if let Some(action) = self.find_weapon_mut(weapon) {
+            // override the description as well. Note that this will overwrite any override_weapon_description stuff, but the user can easily fix that.
+            if let Some(attack) = &action.attack {
+                action.description = attack.get_description(Some(&effect), &action.compound);
+            } else {
+                action.description = effect.get_description("0", &action.compound)
+            }
             action.effect = Some(effect);
             Ok(())
         } else {

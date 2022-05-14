@@ -263,7 +263,7 @@ impl Action {
                      format!(" Before or after teleporting, ${{subj}} can make one {} attack.",attack)
                  } else { "".to_owned() }),
             Action::Attack(_,attack,effect,compound_effect) => 
-                attack.get_description(effect,compound_effect),
+                attack.get_description(Some(effect),compound_effect),
             // This is for custom actions that aren't attacks. Although some might still cause damage, these actions don't require an attack roll.
             Action::Action(_,description,..) => description.clone(),
             Action::BreathWeapon(_,description,..) => description.clone()
