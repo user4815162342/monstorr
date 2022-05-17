@@ -511,7 +511,12 @@ pub fn generate_creatures_as_rust_array(search_directory: &str) -> Result<(),Str
 
     let mut output = String::new();
 
-    output.push_str(&format!("// This file was automatically generated, do not edit. Use `build-data.sh` to regenerate\n"));
+    output.push_str("// **************************************************************************************************\n");
+    output.push_str("// *                                                                                                *\n");
+    output.push_str("// *  NOTE: This file was automatically generated, do not edit. Use `build-data.sh` to regenerate.  *\n");
+    output.push_str("// *                                                                                                *\n");
+    output.push_str("// **************************************************************************************************\n");
+    output.push_str("\n\n\n\n");
 
     // wrap in a struct so the compiler can warn me if I'm missing something I'll need in list_creatures
     output.push_str(&format!("pub const STORED_CREATURES: [(CreatureSummary<&'static str>, &'static str); {}] = [",files.len()));
