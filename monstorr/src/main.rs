@@ -57,18 +57,6 @@ enum ListInputFormat {
     Stored
 }
 
-// this is different from the one in monstorr-lib because its redefined to work as an ArgEnum
-// which can't support data inside the variants and can't be derived from another crate
-#[derive(ArgEnum,Clone)]
-/// Represents a file output format argument for commands which produce statblocks
-enum OutputFormat {
-    JSON,
-    /// Run the output through a minijinja template (specified with the template option)
-    MiniJinja,
-    /// Run the output through a default HTML templates
-    HTML,
-}
-
 #[derive(Args)]
 /// A central structure for input data, since the same by so many commands. Note that output format is not specified, as that's part of the command.
 struct InputOutputData {
@@ -117,7 +105,9 @@ enum TemplateClass {
     /// Templates (in MiniJinja syntax) used in producing HTML
     HTML,
     /// Templates (in MiniJinja syntax) used in producing LaTeX
-    LATEX
+    LATEX,
+    /// Templates (in MiniJinja syntax) used in producing plain-text
+    Plain
 }
 
 impl TemplateClass {
@@ -125,7 +115,8 @@ impl TemplateClass {
     fn to_string(&self) -> &'static str {
         match self {
             TemplateClass::HTML => "html",
-            TemplateClass::LATEX => "latex"
+            TemplateClass::LATEX => "latex",
+            TemplateClass::Plain => "plain"
         }
     }
 }
@@ -202,7 +193,7 @@ enum Command {
 
     This command utilizes built-in MiniJinja templates (see the `mini-jinja` command) to generate the HTML. It supports one or two-column formats, although the two-column format requires a height for the output box in `px` units. It can also generate just the `div` tag and its contents instead of the full HTML document.
 
-    If you wish to modify the output, retrieve the styles for embedding multiple `div` fragments in a page, or just reference them for how to write a template, use the `list-templates html` command to retrieve them. One simple template, for specifying the two-column mode, is generated at run-time, but a comment in the template explains how to add this yourself.
+    If you wish to modify the output, retrieve the styles for embedding multiple `div` fragments in a page, or just reference them for how to write a template, use the `list-templates` command to retrieve them. One simple template, for specifying the two-column mode, is generated at run-time, but a comment in the template explains how to add this yourself.
 
     The HTML templates were based on styles used in [statblock5e](https://valloric.github.io/statblock5e/). That code was converted from "web components" into plain HTML, so it can support older browsers and not require JavaScript.
     */
@@ -226,9 +217,24 @@ enum Command {
 
     This command utilizes built-in MiniJinja templates (see the `mini-jinja` command) to generate the LaTeX. It makes use of commands supplied by another LaTeX package which has not yet been published. It should be possible to create these commands yourself to customize the style.
 
-    If you wish to modify the output, retrieve the command names, or just reference them for how to write a template, use the `list-templates latex` command to retrieve them.
+    If you wish to modify the output, retrieve the command names, or just reference them for how to write a template, use the `list-templates` command to retrieve them.
     */
     LATEX {
+ 
+        #[clap(flatten)]
+        input_output: InputOutputData
+ 
+    },
+
+    #[clap(author="N. M. Sheldon", version, about, long_about = None)]
+    /**
+    Generate a stat block in plain-text format.
+
+    This command utilizes built-in MiniJinja templates (see the `mini-jinja` command) to generate the text. This format is good for quickly comparing results to existing stat blocks without having to load up a browser. 
+
+    If you wish to modify the output, retrieve the command names, or just reference them for how to write a template, use the `list-templates` command to retrieve them.
+    */
+    Plain {
  
         #[clap(flatten)]
         input_output: InputOutputData
@@ -346,6 +352,11 @@ fn run(args: Command) -> Result<(),String> {
         },
         Command::LATEX{input_output} => {
             let output_format = MonstorrOutputFormat::LaTeX();
+            let input_format = input_output.get_monstorr_input()?;
+            create_stat_block(input_output.input.as_deref(), input_format, input_output.output.as_deref(), output_format)
+        },
+        Command::Plain{input_output} => {
+            let output_format = MonstorrOutputFormat::Plain();
             let input_format = input_output.get_monstorr_input()?;
             create_stat_block(input_output.input.as_deref(), input_format, input_output.output.as_deref(), output_format)
         }

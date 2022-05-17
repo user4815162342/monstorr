@@ -1,0 +1,39 @@
+{#
+    Copyright © 2022 Neil M. Sheldon
+    
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, You can obtain one at https://mozilla.org/MPL/2.0/.
+#}
+{%  for block in blocks %}{% 
+    if block.block=="paragraph" %}{% 
+        if block.heading 
+            %}{% 
+            with spans=block.heading %}{% 
+                include 'spans-template.txt' %}{% 
+            endwith 
+            %} {%
+        endif %}{% 
+        with spans=block.body %}{% 
+            include 'spans-template.txt' %}{% 
+        endwith 
+        %}
+  {% 
+    elif block.block=="subparagraph" %}{%
+        if block.heading 
+            %}{% 
+            with spans=block.heading %}{% 
+                include 'spans-template.txt' %}{% 
+            endwith 
+            %}{%
+        endif %} {% 
+        with spans=block.body %}{% 
+            include 'spans-template.txt' %}{% 
+        endwith 
+        %}
+        {% 
+    else
+        %}
+  !!!!! UNKNOWN BLOCK TYPE {{ block.block }}{% 
+    endif %}{% 
+endfor %}

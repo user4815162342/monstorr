@@ -1,0 +1,62 @@
+{#
+    Copyright © 2022 Neil M. Sheldon
+    
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, You can obtain one at https://mozilla.org/MPL/2.0/.
+#}{% autoescape false %}
+=============================================================================
+{{name}}
+{{size}} {{type}} {% if subtype %} ({{subtype}}){%endif%}, {{ alignment }}
+=============================================================================
+
+Armor Class: {{armor}}
+Hit Points: {{hit_points}}
+Speed: {{speed}}
+
+STR: {{ strength }} DEX: {{dexterity}} CON: {{constitution}} INT: {{intelligence}} WIS: {{wisdom}} CHA: {{charisma}}
+
+{% if saving_throws %}Saving Throws: {{ saving_throws }}
+{% endif %}{% if skills %}Skills: {{ skills }}
+{% endif %}{% if damage_vulnerabilities %}Damage Vulnerabilities: {{ damage_vulnerabilities }}
+{% endif %}{% if damage_resistances %}Damage Resistances: {{ damage_resistances }}
+{% endif %}{% if damage_immunities %}Damage Immunities: {{ damage_immunities }}
+{% endif %}{% if condition_immunities %}Condition Immunities: {{ condition_immunities }}
+{% endif %}{% if senses %}Senses: {{ senses }} 
+{% endif %}Languages:  {% if languages %}{{ languages }}{% else %}—{% endif %}
+Challenge: {{ challenge_rating }}
+{% for feature in special_abilities %}{% 
+include 'feature-template.txt' %}{% 
+endfor %}{% 
+if actions %}
+Actions
+-------
+{% for feature in actions %}{% 
+    include 'feature-template.txt' %}{% 
+endfor %}{% 
+endif %}{%
+if reactions %}
+Reactions
+---------
+{% for feature in reactions %}{% 
+    include 'feature-template.txt' %}{% 
+endfor %}{% 
+endif %}{%
+if legendary_actions %}
+Legendary Actions
+-----------------
+{%  
+    with blocks = legendary_actions.description 
+            %}{% 
+            include 'blocks-template.txt' %}{% 
+        endwith %}{%   
+for feature in legendary_actions.actions %}{% 
+    with blocks=feature.text %}{% 
+        include 'blocks-template.txt'%}{% 
+    endwith %}{% 
+endfor %}{% endif %}{%
+if source %}
+-------------------------------------------
+Source: {{source}}
+{%endif%}
+{% endautoescape %}

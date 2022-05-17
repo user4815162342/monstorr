@@ -1,0 +1,29 @@
+{#
+    Copyright © 2022 Neil M. Sheldon
+    
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, You can obtain one at https://mozilla.org/MPL/2.0/.
+#}{% for span in spans %}{%
+    if span.style == "normal" 
+        %}{{
+            span.content
+        }}{%
+    elif span.style == "bold" 
+        %}**{{
+            span.content
+        }}**{%
+    elif span.style == "italic" 
+        %}*{{
+            span.content
+        }}*{%
+    elif span.style == "bolditalic" 
+        %}***{{
+            span.content
+        }}***}{%
+    else 
+        %}!!!!!!!! UNKNOWN SPAN STYLE {{
+            span.style
+        }}{%
+    endif
+%}{%endfor%}

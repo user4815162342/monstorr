@@ -592,7 +592,7 @@ impl CreatureArmor {
             Some(Armor::Splint) => 17,
             Some(Armor::Plate) => 18,
             Some(Armor::Natural(a)) => (10 + a + dexterity_mod) as u8, // natural bonus
-            Some(Armor::Armor(a,_)) => a, // value, description
+            Some(Armor::Armor(a,_)) => (10 + a as i8 + dexterity_mod) as u8, // value, description
             _ => (10 + dexterity_mod) as u8
         }) + if self.shield {
             2

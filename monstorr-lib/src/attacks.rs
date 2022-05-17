@@ -129,7 +129,7 @@ impl AttackEffect {
             AttackEffect::Special(special) => 
                 special.clone(),
             AttackEffect::Or(dice,bonus,damage,alt_dice,alt_bonus,alt_damage,condition) => 
-                format!("${{{} + {}}} {} damage or ${{{} + {}}} {} damage {}",
+                format!("${{{} + {}}} {} damage, or ${{{} + {}}} {} damage {}",
                         dice.serialize_to_string(),
                         bonus.get_expr(default_bonus,false),
                         damage,

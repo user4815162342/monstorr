@@ -1,0 +1,25 @@
+([
+    Monstorr(1),
+    Source("D&D 5E System Reference Document"),
+    Name("Thug"),
+    Medium,
+    Humanoid,
+    Subtype("any race"),
+    AnyNonGood,
+    Armor(Leather),
+    HitDiceCount(5),
+    Walk(30),
+    Str(15),
+    Dex(11),
+    Con(14),
+    Cha(11),
+    Skills([Intimidation]),
+    Languages([
+        Language("any one language (usually Common)")
+    ]),
+    OverrideHalfChallenge,
+    Feature(Feature("Pack Tactics","The thug has advantage on an attack roll against a creature if at least one of the thug’s allies is within 5 feet of the creature and the ally isn’t incapacitated.")),
+    Multiattack("The thug makes two melee attacks.",Count(2,[Melee])),
+    Weapon(Mace(0)),
+    Weapon(HeavyCrossbow(0))
+])

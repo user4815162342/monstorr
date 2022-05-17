@@ -1,0 +1,23 @@
+([
+    Monstorr(1),
+    Source("D&D 5E System Reference Document"),
+    Name("Guard"),
+    Medium,
+    Humanoid,
+    Subtype("any race"),
+    AnyAlignment,
+    Armor(ChainShirt),
+    Shield,
+    HitDiceCount(2),
+    Walk(30),
+    Str(13),
+    Dex(12),
+    Con(12),
+    Wis(11),
+    Skills([Perception]),
+    Languages([
+        Language("any one language (usually Common)")
+    ]),
+    OverrideEighthChallenge,
+    Weapon(Spear(0))
+])

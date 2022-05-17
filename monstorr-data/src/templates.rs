@@ -32,12 +32,19 @@ macro_rules! latex_main_template {
     };
 }
 
+macro_rules! plain_main_template {
+    () => {
+        "plain-stat-block-template.txt"
+    };
+}
+
 pub const FULL_HTML_TEMPLATE: &'static str = html_full_page_template!();
 pub const STAT_BLOCK_HTML_TEMPLATE: &'static str = html_stat_block_template!();
 pub const HTML_TWO_COLUMN_TEMPLATE: &'static str = "html-two-column";
 pub const LATEX_TEMPLATE: &'static str = latex_main_template!();
+pub const PLAIN_TEMPLATE: &'static str = plain_main_template!();
 
-pub const STORED_TEMPLATES: [(&'static str, (&'static str, &'static str)); 12] = [
+pub const STORED_TEMPLATES: [(&'static str, (&'static str, &'static str)); 16] = [
     template!("html",html_full_page_template!()),
     template!("html",html_stat_block_template!()),
     template!("html","html-styles-fragment.html"),
@@ -49,7 +56,11 @@ pub const STORED_TEMPLATES: [(&'static str, (&'static str, &'static str)); 12] =
     template!("latex",latex_main_template!()),
     template!("latex","feature-template.tex"),
     template!("latex","blocks-template.tex"),
-    template!("latex","spans-template.tex")
+    template!("latex","spans-template.tex"),
+    template!("plain",plain_main_template!()),
+    template!("plain","feature-template.txt"),
+    template!("plain","blocks-template.txt"),
+    template!("plain","spans-template.txt")
 ];
 
 // TODO: I'm repeating these next to string constants

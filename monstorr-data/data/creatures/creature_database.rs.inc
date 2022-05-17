@@ -1,5 +1,5 @@
 // This file was automatically generated, do not edit. Use `build-data.sh` to regenerate
-pub const STORED_CREATURES: [(CreatureSummary<&'static str>, &'static str); 13] = [
+pub const STORED_CREATURES: [(CreatureSummary<&'static str>, &'static str); 17] = [
         (
             CreatureSummary {
                 name: "Awakened Tree",
@@ -48,6 +48,18 @@ pub const STORED_CREATURES: [(CreatureSummary<&'static str>, &'static str); 13] 
         ),
         (
             CreatureSummary {
+                name: "Dryad",
+                slug: "dryad",
+                type_: "fey",
+                subtype: None,
+                size: "Medium",
+                alignment: "neutral",
+                challenge_rating: "1",
+            },
+            include_str!("dryad.creature")
+        ),
+        (
+            CreatureSummary {
                 name: "Efreeti",
                 slug: "efreeti",
                 type_: "elemental",
@@ -81,6 +93,18 @@ pub const STORED_CREATURES: [(CreatureSummary<&'static str>, &'static str); 13] 
                 challenge_rating: "1/4",
              },
              include_str!("goblin.creature")
+        ),
+        (
+            CreatureSummary {
+                name: "Guard",
+                slug: "guard",
+                type_: "humanoid",
+                subtype: Some("any race"),
+                size: "Medium",
+                alignment: "any alignment",
+                challenge_rating: "1/8",
+            },
+            include_str!("guard.creature")
         ),
         (
             CreatureSummary {
@@ -153,6 +177,30 @@ pub const STORED_CREATURES: [(CreatureSummary<&'static str>, &'static str); 13] 
                 challenge_rating: "1/4",
             },
             include_str!("sprite.creature")
+        ),
+        (
+            CreatureSummary {
+                name: "Spy",
+                slug: "spy",
+                type_: "humanoid",
+                subtype: Some("any race"),
+                size: "Medium",
+                alignment: "any alignment",
+                challenge_rating: "1",
+            },
+            include_str!("spy.creature")
+        ),
+        (
+            CreatureSummary {
+                name: "Thug",
+                slug: "thug",
+                type_: "humanoid",
+                subtype: Some("any race"),
+                size: "Medium",
+                alignment: "any non-good alignment",
+                challenge_rating: "1/2",
+            },
+            include_str!("thug.creature")
         )
     ];
 

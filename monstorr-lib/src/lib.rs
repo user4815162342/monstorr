@@ -111,7 +111,8 @@ pub enum OutputFormat {
     JSON(bool), // whether to print ugly
     MiniJinjaTemplate(String,Vec<String>), // path to template, paths to templates to be included
     HTML(Option<usize>,bool), // an optional usize indicating that they want a two-column stat-block instead of one-column, a bool indicating that only a fragment should be output
-    LaTeX()
+    LaTeX(),
+    Plain(),
 }
 
 impl Default for OutputFormat {
@@ -348,6 +349,10 @@ pub fn create_stat_block(input_file: Option<&str>, input_format: InputFormat,
         OutputFormat::LaTeX() => {
             let main_template = monstorr_data::templates::LATEX_TEMPLATE;
             process_template(&StoredTemplates::instance(TemplateOptions::latex()), main_template, &Vec::new(), &stat_block).map_err(|e| format!("Error producing LaTeX: {}",e))?
+        },
+        OutputFormat::Plain() => {
+            let main_template = monstorr_data::templates::PLAIN_TEMPLATE;
+            process_template(&StoredTemplates::instance(TemplateOptions::latex()), main_template, &Vec::new(), &stat_block).map_err(|e| format!("Error producing plain text: {}",e))?
         }
     };
 

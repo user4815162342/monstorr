@@ -35,6 +35,12 @@ pub enum UsageLimit {
     */
     PerDay(u8), // the number of times per day that the monster can use the feature
     /**
+    `PerTurn(<integer>)`
+
+    The action can be used a limited number of times per turn. This is phrased in the name as "<number>/Turn"
+    */
+    PerTurn(u8), // the number of times per turn that the monster can use the feature
+    /**
     `RechargeAfterRest`
     
     The action can be used once and recharges only after a short or long rest.
@@ -55,6 +61,7 @@ impl std::fmt::Display for UsageLimit {
             UsageLimit::Recharge(6) => write!(f,"Recharge 6"),
             UsageLimit::Recharge(roll) => write!(f,"Recharge {}-6",roll),
             UsageLimit::PerDay(count) => write!(f,"{}/Day",count),
+            UsageLimit::PerTurn(count) => write!(f,"{}/Turn",count),
             UsageLimit::RechargeAfterRest => f.write_str("Recharges after a Short or Long Rest"),
             UsageLimit::AlternateFormOnly(form) => write!(f,"{} Form Only",form)
         }
