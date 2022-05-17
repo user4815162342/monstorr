@@ -378,6 +378,14 @@ pub enum CreatureCommand {
     */
     Include(String,HashMap<String,String>), 
 
+    /**
+    `IncludeStored(<string>)`
+     
+    This allows you to include commands to build one of the SRD creatures stored in the application itself. This command allows you to take that existing creature and modify it with additional commands.
+
+    */
+    IncludeStored(String),
+
 
     /**
     `Source(<string>)`
@@ -1358,6 +1366,26 @@ impl CreatureCommand {
                 let commands = CreatureCreator::load_from_str(&interpolated).map_err(|a| CreatureError::include_error(file,a))?;
                 source_file.pop();
                 commands.apply_commands(&source_file,creature,hooks).map_err(|a| CreatureError::include_error(file,a))?
+            },
+            CreatureCommand::IncludeStored(creature_name) => {
+                let source = if let Some(entry) = monstorr_data::creatures::STORED_CREATURES.iter().find(|(creature,_)| (creature.slug == creature_name) || (creature.name == creature_name)) {
+                    entry.1
+                } else {
+                    Err(CreatureError::StoredCreatureNotFound(creature_name.clone()))?
+                };
+                // deserialize the commands
+                let commands = CreatureCreator::load_from_str(&source).map_err(|a| CreatureError::include_error(creature_name,a))?;
+                commands.apply_commands(&PathBuf::default(),creature,hooks).map_err(|a| CreatureError::include_error(creature_name,a))?
+
+/*
+        InputFormat::Stored(creature_name) => {
+            // deserialize the commands
+            let creator = CreatureCreator::load_from_str(source).map_err(|e| format!("Error loading creature commands: {}",e))?;
+            let creature = creator.create_creature(&working_dir).map_err(|e| format!("{}",e))?;
+            creature.try_into_stat_block().map_err(|e| format!("{}",e))?
+        }
+
+*/
             },
             CreatureCommand::Source(name) => creature.set_source(name),
             CreatureCommand::Name(name) => creature.set_name(name),

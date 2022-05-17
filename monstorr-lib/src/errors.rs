@@ -238,6 +238,7 @@ pub enum CreatureError {
    MonstorrVersionNotSupported(f32), 
    CreatureHasNoName,
    IncludeError(String,IncludeError),
+   StoredCreatureNotFound(String),
    WeaponAttackDoesNotMatchExpectation(String),
    WeaponEffectDoesNotMatchExpectation(String),
    WeaponNotFound(String,String), // name, action
@@ -263,6 +264,7 @@ impl std::fmt::Display for CreatureError {
             Self::MonstorrVersionNotSupported(version) => write!(f,"The creature file can not be loaded with this version of Monstorr ({})",version),
             Self::CreatureHasNoName => write!(f,"Creature was not given a name"),
             Self::IncludeError(file,err) => write!(f,"In included file {}: {}",file,err),
+            Self::StoredCreatureNotFound(name) => write!(f,"Stored creature '{}' could not be found",name),
             Self::WeaponAttackDoesNotMatchExpectation(name) => write!(f,"Weapon {} attack does not match expected.",name),
             Self::WeaponEffectDoesNotMatchExpectation(name) => write!(f,"Weapon {} effect does not match expected.",name),
             Self::WeaponNotFound(name,action) => write!(f,"Could not find weapon named {} {}.",name,action),
