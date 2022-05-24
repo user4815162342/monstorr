@@ -314,6 +314,13 @@ pub enum InnateSpellcastingCommand {
     */
     SpellRestriction(String,String), // spell, restriction -- some spells are restricted, such as "conjure elemental" on Efreetie
 
+    /**
+    `Components(<string>)`
+
+    Replaces the phrase "requiring no material components" with a custom description for components. For example, the pixie uses pixie dust for its components.
+     */
+    Components(String),
+
 }
 
 impl InnateSpellcastingCommand {
@@ -326,7 +333,8 @@ impl InnateSpellcastingCommand {
             Self::AtWill(spells) => data.add_spells(None, spells),
             Self::PerDay(count,spells) => data.add_spells(Some(*count), spells),
             Self::RemoveSpells(spells) => data.remove_spells(spells),
-            Self::SpellRestriction(spell,restriction) => data.set_spell_restriction(spell.clone(), restriction.clone())
+            Self::SpellRestriction(spell,restriction) => data.set_spell_restriction(spell.clone(), restriction.clone()),
+            Self::Components(components) => data.set_alternate_components(components.clone())
         }
         Ok(())
     }

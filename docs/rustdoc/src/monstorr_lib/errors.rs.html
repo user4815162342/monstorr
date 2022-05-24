@@ -285,6 +285,8 @@
 <span id="285">285</span>
 <span id="286">286</span>
 <span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
 </pre><pre class="rust"><code><span class="comment">/*
  * Copyright © 2022 Neil M. Sheldon
  * 
@@ -525,6 +527,7 @@
    <span class="ident">MonstorrVersionNotSupported</span>(<span class="ident">f32</span>), 
    <span class="ident">CreatureHasNoName</span>,
    <span class="ident">IncludeError</span>(<span class="ident">String</span>,<span class="ident">IncludeError</span>),
+   <span class="ident">StoredCreatureNotFound</span>(<span class="ident">String</span>),
    <span class="ident">WeaponAttackDoesNotMatchExpectation</span>(<span class="ident">String</span>),
    <span class="ident">WeaponEffectDoesNotMatchExpectation</span>(<span class="ident">String</span>),
    <span class="ident">WeaponNotFound</span>(<span class="ident">String</span>,<span class="ident">String</span>), <span class="comment">// name, action</span>
@@ -550,6 +553,7 @@
             <span class="ident"><span class="self">Self</span>::MonstorrVersionNotSupported</span>(<span class="ident">version</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;The creature file can not be loaded with this version of Monstorr ({})&quot;</span>,<span class="ident">version</span>),
             <span class="ident"><span class="self">Self</span>::CreatureHasNoName</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Creature was not given a name&quot;</span>),
             <span class="ident"><span class="self">Self</span>::IncludeError</span>(<span class="ident">file</span>,<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;In included file {}: {}&quot;</span>,<span class="ident">file</span>,<span class="ident">err</span>),
+            <span class="ident"><span class="self">Self</span>::StoredCreatureNotFound</span>(<span class="ident">name</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Stored creature &#39;{}&#39; could not be found&quot;</span>,<span class="ident">name</span>),
             <span class="ident"><span class="self">Self</span>::WeaponAttackDoesNotMatchExpectation</span>(<span class="ident">name</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Weapon {} attack does not match expected.&quot;</span>,<span class="ident">name</span>),
             <span class="ident"><span class="self">Self</span>::WeaponEffectDoesNotMatchExpectation</span>(<span class="ident">name</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Weapon {} effect does not match expected.&quot;</span>,<span class="ident">name</span>),
             <span class="ident"><span class="self">Self</span>::WeaponNotFound</span>(<span class="ident">name</span>,<span class="ident">action</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Could not find weapon named {} {}.&quot;</span>,<span class="ident">name</span>,<span class="ident">action</span>),

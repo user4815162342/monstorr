@@ -413,6 +413,21 @@
 <span id="413">413</span>
 <span id="414">414</span>
 <span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
 </pre><pre class="rust"><code><span class="comment">/*
  * Copyright © 2022 Neil M. Sheldon
  * 
@@ -730,7 +745,8 @@
     <span class="kw">pub</span> <span class="ident">save_dc</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">attack_bonus</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i8</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">spells</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="comment">// count per day or at will, list of spells</span>
-    <span class="kw">pub</span> <span class="ident">restrictions</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>,<span class="ident">String</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="ident">restrictions</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>,<span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">alternate_components</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">InnateSpellcasting</span> {
@@ -741,10 +757,10 @@
             <span class="ident">save_dc</span>: <span class="prelude-val">None</span>,
             <span class="ident">attack_bonus</span>: <span class="prelude-val">None</span>,
             <span class="ident">spells</span>: <span class="ident">BTreeMap::new</span>(),
-            <span class="ident">restrictions</span>: <span class="ident">HashMap::new</span>()
+            <span class="ident">restrictions</span>: <span class="ident">HashMap::new</span>(),
+            <span class="ident">alternate_components</span>: <span class="prelude-val">None</span>
         }
     }
-
 
 }
 
@@ -786,6 +802,10 @@
 
     }
 
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_alternate_components</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">components</span>: <span class="ident">String</span>) {
+        <span class="self">self</span>.<span class="ident">alternate_components</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">components</span>)
+    }
+
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
 
@@ -801,8 +821,18 @@
             <span class="macro">format!</span>(<span class="string">&quot;${{+prof + {}}}&quot;</span>,<span class="self">self</span>.<span class="ident">ability</span>.<span class="ident">to_short_str</span>())
         };
 
+        <span class="kw">let</span> <span class="ident">components</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">components</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">alternate_components</span> {
+            <span class="ident">components</span>
+        } <span class="kw">else</span> {
+            <span class="string">&quot;requiring no material components&quot;</span>
+        };
+
+        <span class="comment">// FUTURE: If anyone ever complains, there&#39;s a slightly different format if there&#39;s only one spell:</span>
+        <span class="comment">// &quot;Innate Spellcasting (1/Day). The ${{subj}} can innately cast sleep, requiring no material components. Its innate spellcasting ability is Charisma.&quot;</span>
+        <span class="comment">// -- one problem here is that form doesn&#39;t provide the spell save and attacks, in theory because sleep doesn&#39;t require them. I currently have no way of knowing whether I need those anyway.</span>
+        <span class="comment">// -- The main reason I don&#39;t want to do this is because I hate the inconsistency, and I would like their save DC listed somewhere in the stats.</span>
         
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;${{Poss}} innate spellcasting ability is {} (spell save DC {}, {} to hit with spell attacks). It can innately cast the following spells, requiring no material components:&quot;</span>,<span class="self">self</span>.<span class="ident">ability</span>,<span class="ident">save_dc</span>,<span class="ident">attack_bonus</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;${{Poss}} innate spellcasting ability is {} (spell save DC {}, {} to hit with spell attacks). It can innately cast the following spells, {}:&quot;</span>,<span class="self">self</span>.<span class="ident">ability</span>,<span class="ident">save_dc</span>,<span class="ident">attack_bonus</span>,<span class="ident">components</span>);
 
 
         <span class="kw">for</span> (<span class="ident">count</span>,<span class="ident">list</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">spells</span> {

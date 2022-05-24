@@ -567,6 +567,21 @@
 <span id="567">567</span>
 <span id="568">568</span>
 <span id="569">569</span>
+<span id="570">570</span>
+<span id="571">571</span>
+<span id="572">572</span>
+<span id="573">573</span>
+<span id="574">574</span>
+<span id="575">575</span>
+<span id="576">576</span>
+<span id="577">577</span>
+<span id="578">578</span>
+<span id="579">579</span>
+<span id="580">580</span>
+<span id="581">581</span>
+<span id="582">582</span>
+<span id="583">583</span>
+<span id="584">584</span>
 </pre><pre class="rust"><code><span class="comment">/*
  * Copyright © 2022 Neil M. Sheldon
  * 
@@ -679,7 +694,9 @@ There are a few things that you may need to know in order to simply use Monstorr
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">OutputFormat</span> {
     <span class="ident">JSON</span>(<span class="ident">bool</span>), <span class="comment">// whether to print ugly</span>
     <span class="ident">MiniJinjaTemplate</span>(<span class="ident">String</span>,<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>), <span class="comment">// path to template, paths to templates to be included</span>
-    <span class="ident">HTML</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,<span class="ident">bool</span>) <span class="comment">// an optional usize indicating that they want a two-column stat-block instead of one-column, a bool indicating that only a fragment should be output</span>
+    <span class="ident">HTML</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,<span class="ident">bool</span>), <span class="comment">// an optional usize indicating that they want a two-column stat-block instead of one-column, a bool indicating that only a fragment should be output</span>
+    <span class="ident">LaTeX</span>(),
+    <span class="ident">Plain</span>(),
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">OutputFormat</span> {
@@ -912,6 +929,14 @@ There are a few things that you may need to know in order to simply use Monstorr
                 <span class="ident">monstorr_data::templates::FULL_HTML_TEMPLATE</span>
             };
             <span class="ident">process_template</span>(<span class="kw-2">&amp;</span><span class="ident">StoredTemplates::instance</span>(<span class="ident">TemplateOptions::html</span>(<span class="ident">two_column_height</span>)), <span class="ident">main_template</span>, <span class="kw-2">&amp;</span><span class="ident">Vec::new</span>(), <span class="kw-2">&amp;</span><span class="ident">stat_block</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Error producing HTML: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>
+        },
+        <span class="ident">OutputFormat::LaTeX</span>() <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">main_template</span> <span class="op">=</span> <span class="ident">monstorr_data::templates::LATEX_TEMPLATE</span>;
+            <span class="ident">process_template</span>(<span class="kw-2">&amp;</span><span class="ident">StoredTemplates::instance</span>(<span class="ident">TemplateOptions::latex</span>()), <span class="ident">main_template</span>, <span class="kw-2">&amp;</span><span class="ident">Vec::new</span>(), <span class="kw-2">&amp;</span><span class="ident">stat_block</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Error producing LaTeX: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>
+        },
+        <span class="ident">OutputFormat::Plain</span>() <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">main_template</span> <span class="op">=</span> <span class="ident">monstorr_data::templates::PLAIN_TEMPLATE</span>;
+            <span class="ident">process_template</span>(<span class="kw-2">&amp;</span><span class="ident">StoredTemplates::instance</span>(<span class="ident">TemplateOptions::latex</span>()), <span class="ident">main_template</span>, <span class="kw-2">&amp;</span><span class="ident">Vec::new</span>(), <span class="kw-2">&amp;</span><span class="ident">stat_block</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;Error producing plain text: {}&quot;</span>,<span class="ident">e</span>))<span class="question-mark">?</span>
         }
     };
 
@@ -920,8 +945,8 @@ There are a few things that you may need to know in order to simply use Monstorr
     
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list_template_names</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-    <span class="ident">StoredTemplates::instance</span>(<span class="prelude-val">None</span>).<span class="ident">list</span>()
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list_template_names</span>(<span class="ident">class</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="ident">StoredTemplates::instance</span>(<span class="prelude-val">None</span>).<span class="ident">list</span>(<span class="ident">class</span>)
 }
 
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">print_template</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">String</span><span class="op">&gt;</span> {
@@ -1070,7 +1095,12 @@ There are a few things that you may need to know in order to simply use Monstorr
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">output</span> <span class="op">=</span> <span class="ident">String::new</span>();
 
-    <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;// This file was automatically generated, do not edit. Use `build-data.sh` to regenerate\n&quot;</span>));
+    <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="string">&quot;// **************************************************************************************************\n&quot;</span>);
+    <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="string">&quot;// *                                                                                                *\n&quot;</span>);
+    <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="string">&quot;// *  NOTE: This file was automatically generated, do not edit. Use `build-data.sh` to regenerate.  *\n&quot;</span>);
+    <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="string">&quot;// *                                                                                                *\n&quot;</span>);
+    <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="string">&quot;// **************************************************************************************************\n&quot;</span>);
+    <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="string">&quot;\n\n\n\n&quot;</span>);
 
     <span class="comment">// wrap in a struct so the compiler can warn me if I&#39;m missing something I&#39;ll need in list_creatures</span>
     <span class="ident">output</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;pub const STORED_CREATURES: [(CreatureSummary&lt;&amp;&#39;static str&gt;, &amp;&#39;static str); {}] = [&quot;</span>,<span class="ident">files</span>.<span class="ident">len</span>()));

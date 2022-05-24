@@ -1,0 +1,27 @@
+([
+    Monstorr(1),
+    Source("D&D 5E System Reference Document"),
+    Name("Awakened Shrub"),
+    Small,
+    Plant,
+    Unaligned,
+    HitDiceCount(3),
+    Walk(20),
+    Str(3),
+    Dex(8),
+    Con(11),
+    Cha(6),
+    Vulnerability(Fire),
+    Resistance(Piercing),
+    Languages([
+        Language("one language known by its creator")
+    ]),
+    OverrideChallenge(0),
+    Feature(Feature("False Appearance","While the shrub remains motionless, it is indistinguishable from a normal shrub.")),
+    Action(Attack("Rake", (
+        type: Some(Weapon),
+        reach: Some(5),
+        bonus: Fixed(1),
+        target: "one target",
+    ), Damage("1d4", Fixed(-1), Slashing))),
+])

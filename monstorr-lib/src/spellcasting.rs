@@ -315,7 +315,8 @@ pub struct InnateSpellcasting {
     pub save_dc: Option<u8>,
     pub attack_bonus: Option<i8>,
     pub spells: BTreeMap<Option<u8>,Vec<String>>, // count per day or at will, list of spells
-    pub restrictions: HashMap<String,String>
+    pub restrictions: HashMap<String,String>,
+    pub alternate_components: Option<String>,
 }
 
 impl Default for InnateSpellcasting {
@@ -326,10 +327,10 @@ impl Default for InnateSpellcasting {
             save_dc: None,
             attack_bonus: None,
             spells: BTreeMap::new(),
-            restrictions: HashMap::new()
+            restrictions: HashMap::new(),
+            alternate_components: None
         }
     }
-
 
 }
 
@@ -371,6 +372,10 @@ impl InnateSpellcasting {
 
     }
 
+    pub fn set_alternate_components(&mut self, components: String) {
+        self.alternate_components = Some(components)
+    }
+
 
     pub fn get_description(&self) -> String {
 
@@ -386,12 +391,18 @@ impl InnateSpellcasting {
             format!("${{+prof + {}}}",self.ability.to_short_str())
         };
 
+        let components = if let Some(components) = &self.alternate_components {
+            components
+        } else {
+            "requiring no material components"
+        };
+
         // FUTURE: If anyone ever complains, there's a slightly different format if there's only one spell:
         // "Innate Spellcasting (1/Day). The ${{subj}} can innately cast sleep, requiring no material components. Its innate spellcasting ability is Charisma."
         // -- one problem here is that form doesn't provide the spell save and attacks, in theory because sleep doesn't require them. I currently have no way of knowing whether I need those anyway.
         // -- The main reason I don't want to do this is because I hate the inconsistency, and I would like their save DC listed somewhere in the stats.
         
-        let mut result = format!("${{Poss}} innate spellcasting ability is {} (spell save DC {}, {} to hit with spell attacks). It can innately cast the following spells, requiring no material components:",self.ability,save_dc,attack_bonus);
+        let mut result = format!("${{Poss}} innate spellcasting ability is {} (spell save DC {}, {} to hit with spell attacks). It can innately cast the following spells, {}:",self.ability,save_dc,attack_bonus,components);
 
 
         for (count,list) in &self.spells {

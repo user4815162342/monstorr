@@ -372,6 +372,53 @@
 <span id="372">372</span>
 <span id="373">373</span>
 <span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
 </pre><pre class="rust"><code><span class="comment">/*
  * Copyright © 2022 Neil M. Sheldon
  * 
@@ -431,18 +478,6 @@ For more detailed documentation, including information on how to build a creatur
     <span class="ident">Stored</span>
 }
 
-<span class="comment">// this is different from the one in monstorr-lib because its redefined to work as an ArgEnum</span>
-<span class="comment">// which can&#39;t support data inside the variants and can&#39;t be derived from another crate</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">ArgEnum</span>,<span class="ident">Clone</span>)]</span>
-<span class="doccomment">/// Represents a file output format argument for commands which produce statblocks</span>
-<span class="kw">enum</span> <span class="ident">OutputFormat</span> {
-    <span class="ident">JSON</span>,
-    <span class="doccomment">/// Run the output through a minijinja template (specified with the template option)</span>
-    <span class="ident">MiniJinja</span>,
-    <span class="doccomment">/// Run the output through a default HTML templates</span>
-    <span class="ident">HTML</span>,
-}
-
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Args</span>)]</span>
 <span class="doccomment">/// A central structure for input data, since the same by so many commands. Note that output format is not specified, as that&#39;s part of the command.</span>
 <span class="kw">struct</span> <span class="ident">InputOutputData</span> {
@@ -489,7 +524,22 @@ For more detailed documentation, including information on how to build a creatur
 <span class="doccomment">/// Represents an argument requiring a class of templates for the ListTemplates command.</span>
 <span class="kw">enum</span> <span class="ident">TemplateClass</span> {
     <span class="doccomment">/// Templates (in MiniJinja syntax) used in producing HTML</span>
-    <span class="ident">HTML</span>
+    <span class="ident">HTML</span>,
+    <span class="doccomment">/// Templates (in MiniJinja syntax) used in producing LaTeX</span>
+    <span class="ident">LATEX</span>,
+    <span class="doccomment">/// Templates (in MiniJinja syntax) used in producing plain-text</span>
+    <span class="ident">Plain</span>
+}
+
+<span class="kw">impl</span> <span class="ident">TemplateClass</span> {
+
+    <span class="kw">fn</span> <span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident">TemplateClass::HTML</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;html&quot;</span>,
+            <span class="ident">TemplateClass::LATEX</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;latex&quot;</span>,
+            <span class="ident">TemplateClass::Plain</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;plain&quot;</span>
+        }
+    }
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Parser</span>)]</span>
@@ -564,7 +614,7 @@ Monstorr recognizes a few formats for the input data for generating stat blocks.
 
     This command utilizes built-in MiniJinja templates (see the `mini-jinja` command) to generate the HTML. It supports one or two-column formats, although the two-column format requires a height for the output box in `px` units. It can also generate just the `div` tag and its contents instead of the full HTML document.
 
-    If you wish to modify the output, retrieve the styles for embedding multiple `div` fragments in a page, or just reference them for how to write a template, use the `list-templates html` command to retrieve them. One simple template, for specifying the two-column mode, is generated at run-time, but a comment in the template explains how to add this yourself.
+    If you wish to modify the output, retrieve the styles for embedding multiple `div` fragments in a page, or just reference them for how to write a template, use the `list-templates` command to retrieve them. One simple template, for specifying the two-column mode, is generated at run-time, but a comment in the template explains how to add this yourself.
 
     The HTML templates were based on styles used in [statblock5e](https://valloric.github.io/statblock5e/). That code was converted from &quot;web components&quot; into plain HTML, so it can support older browsers and not require JavaScript.
     */</span>
@@ -582,6 +632,36 @@ Monstorr recognizes a few formats for the input data for generating stat blocks.
         <span class="ident">fragment</span>: <span class="ident">bool</span>
     },
 
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">author</span><span class="op">=</span><span class="string">&quot;N. M. Sheldon&quot;</span>, <span class="ident">version</span>, <span class="ident">about</span>, <span class="ident">long_about</span> <span class="op">=</span> <span class="prelude-val">None</span>)]</span>
+    <span class="doccomment">/**
+    Generate a stat block in LaTeX.
+
+    This command utilizes built-in MiniJinja templates (see the `mini-jinja` command) to generate the LaTeX. It makes use of commands supplied by another LaTeX package which has not yet been published. It should be possible to create these commands yourself to customize the style.
+
+    If you wish to modify the output, retrieve the command names, or just reference them for how to write a template, use the `list-templates` command to retrieve them.
+    */</span>
+    <span class="ident">LATEX</span> {
+ 
+        <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">flatten</span>)]</span>
+        <span class="ident">input_output</span>: <span class="ident">InputOutputData</span>
+ 
+    },
+
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">author</span><span class="op">=</span><span class="string">&quot;N. M. Sheldon&quot;</span>, <span class="ident">version</span>, <span class="ident">about</span>, <span class="ident">long_about</span> <span class="op">=</span> <span class="prelude-val">None</span>)]</span>
+    <span class="doccomment">/**
+    Generate a stat block in plain-text format.
+
+    This command utilizes built-in MiniJinja templates (see the `mini-jinja` command) to generate the text. This format is good for quickly comparing results to existing stat blocks without having to load up a browser. 
+
+    If you wish to modify the output, retrieve the command names, or just reference them for how to write a template, use the `list-templates` command to retrieve them.
+    */</span>
+    <span class="ident">Plain</span> {
+ 
+        <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">flatten</span>)]</span>
+        <span class="ident">input_output</span>: <span class="ident">InputOutputData</span>
+ 
+    },
+
     <span class="doccomment">/**
     Produce creature files unprocessed.
 
@@ -596,7 +676,11 @@ Monstorr recognizes a few formats for the input data for generating stat blocks.
 
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">author</span><span class="op">=</span><span class="string">&quot;N. M. Sheldon&quot;</span>, <span class="ident">version</span>, <span class="ident">about</span>, <span class="ident">long_about</span> <span class="op">=</span> <span class="prelude-val">None</span>)]</span>
     <span class="doccomment">/// List built-in template files by template class, so you can modify or reference them.</span>
-    <span class="ident">ListTemplates</span>,
+    <span class="ident">ListTemplates</span> {
+        <span class="doccomment">/// The class of template to list, or none to list all.</span>
+        <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">short</span>,<span class="ident">long</span>,<span class="ident">arg_enum</span>)]</span>
+        <span class="ident">class</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TemplateClass</span><span class="op">&gt;</span>
+    },
 
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">author</span><span class="op">=</span><span class="string">&quot;N. M. Sheldon&quot;</span>, <span class="ident">version</span>, <span class="ident">about</span>, <span class="ident">long_about</span> <span class="op">=</span> <span class="prelude-val">None</span>)]</span>
     <span class="doccomment">/// Retrieve the source for a template so you can save and customize it</span>
@@ -687,6 +771,16 @@ Runs the tool with the given arguments.
             <span class="kw">let</span> <span class="ident">input_format</span> <span class="op">=</span> <span class="ident">input_output</span>.<span class="ident">get_monstorr_input</span>()<span class="question-mark">?</span>;
             <span class="ident">create_stat_block</span>(<span class="ident">input_output</span>.<span class="ident">input</span>.<span class="ident">as_deref</span>(), <span class="ident">input_format</span>, <span class="ident">input_output</span>.<span class="ident">output</span>.<span class="ident">as_deref</span>(), <span class="ident">output_format</span>)
         },
+        <span class="ident">Command::LATEX</span>{<span class="ident">input_output</span>} <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">output_format</span> <span class="op">=</span> <span class="ident">MonstorrOutputFormat::LaTeX</span>();
+            <span class="kw">let</span> <span class="ident">input_format</span> <span class="op">=</span> <span class="ident">input_output</span>.<span class="ident">get_monstorr_input</span>()<span class="question-mark">?</span>;
+            <span class="ident">create_stat_block</span>(<span class="ident">input_output</span>.<span class="ident">input</span>.<span class="ident">as_deref</span>(), <span class="ident">input_format</span>, <span class="ident">input_output</span>.<span class="ident">output</span>.<span class="ident">as_deref</span>(), <span class="ident">output_format</span>)
+        },
+        <span class="ident">Command::Plain</span>{<span class="ident">input_output</span>} <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">output_format</span> <span class="op">=</span> <span class="ident">MonstorrOutputFormat::Plain</span>();
+            <span class="kw">let</span> <span class="ident">input_format</span> <span class="op">=</span> <span class="ident">input_output</span>.<span class="ident">get_monstorr_input</span>()<span class="question-mark">?</span>;
+            <span class="ident">create_stat_block</span>(<span class="ident">input_output</span>.<span class="ident">input</span>.<span class="ident">as_deref</span>(), <span class="ident">input_format</span>, <span class="ident">input_output</span>.<span class="ident">output</span>.<span class="ident">as_deref</span>(), <span class="ident">output_format</span>)
+        }
         <span class="ident">Command::MiniJinja</span>{<span class="ident">template</span>,<span class="ident">include</span>,<span class="ident">input_output</span>} <span class="op">=</span><span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="ident">output_format</span> <span class="op">=</span> <span class="ident">MonstorrOutputFormat::MiniJinjaTemplate</span>(<span class="ident">template</span>,<span class="ident">include</span>);
             <span class="kw">let</span> <span class="ident">input_format</span> <span class="op">=</span> <span class="ident">input_output</span>.<span class="ident">get_monstorr_input</span>()<span class="question-mark">?</span>;
@@ -696,8 +790,8 @@ Runs the tool with the given arguments.
             <span class="kw">let</span> <span class="ident">input_format</span> <span class="op">=</span> <span class="ident">input_output</span>.<span class="ident">get_monstorr_input</span>()<span class="question-mark">?</span>;
             <span class="ident">validate_creature</span>(<span class="ident">input_output</span>.<span class="ident">input</span>.<span class="ident">as_deref</span>(), <span class="ident">input_format</span>, <span class="ident">input_output</span>.<span class="ident">output</span>.<span class="ident">as_deref</span>())
         },
-        <span class="ident">Command::ListTemplates</span>{..} <span class="op">=</span><span class="op">&gt;</span> {
-            <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>,<span class="ident">list_template_names</span>().<span class="ident">join</span>(<span class="string">&quot;\n&quot;</span>));
+        <span class="ident">Command::ListTemplates</span>{ <span class="ident">class</span> } <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>,<span class="ident">list_template_names</span>(<span class="ident">class</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="ident">c</span>.<span class="ident">to_string</span>())).<span class="ident">join</span>(<span class="string">&quot;\n&quot;</span>));
             <span class="prelude-val">Ok</span>(())
         },
         <span class="ident">Command::ListCreatures</span>{<span class="ident">format</span>,<span class="ident">input</span>,<span class="ident">type_</span>,<span class="ident">subtype</span>,<span class="ident">size</span>,<span class="ident">alignment</span>,<span class="ident">max_cr</span>,<span class="ident">min_cr</span>} <span class="op">=</span><span class="op">&gt;</span> {

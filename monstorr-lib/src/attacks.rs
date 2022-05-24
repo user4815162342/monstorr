@@ -444,7 +444,7 @@ pub enum AttackBonus {
 
     The attack bonus is fixed to the specific value, and not based on ability.
     */
-    Fixed(u8),
+    Fixed(i8),
     /**
     `Zero`
     
@@ -488,11 +488,11 @@ impl Default for AttackBonus {
     }
 }
 
-impl std::convert::TryFrom<u8> for AttackBonus {
+impl std::convert::TryFrom<i8> for AttackBonus {
 
     type Error = String; // I just need something that implements display, since I won't ever be returning an error.
 
-    fn try_from(input: u8) -> Result<Self,Self::Error> {
+    fn try_from(input: i8) -> Result<Self,Self::Error> {
         Ok(AttackBonus::Fixed(input))
     }
 

@@ -7,7 +7,7 @@
 
 
 
-pub const STORED_CREATURES: [(CreatureSummary<&'static str>, &'static str); 17] = [
+pub const STORED_CREATURES: [(CreatureSummary<&'static str>, &'static str); 18] = [
         (
             CreatureSummary {
                 name: "Dryad",
@@ -31,6 +31,18 @@ pub const STORED_CREATURES: [(CreatureSummary<&'static str>, &'static str); 17] 
                 challenge_rating: "1/2",
              },
              include_str!("magma_mephit.creature")
+        ),
+        (
+            CreatureSummary {
+                name: "Awakened Shrub",
+                slug: "awakened-shrub",
+                type_: "plant",
+                subtype: None,
+                size: "Small",
+                alignment: "unaligned",
+                challenge_rating: "0",
+             },
+             include_str!("awakened_shrub.creature")
         ),
         (
             CreatureSummary {
