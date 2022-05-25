@@ -18,8 +18,8 @@
         Language("any one language (usually Common)")
     ]),
     OverrideHalfChallenge,
-    Feature(Feature("Pack Tactics","The thug has advantage on an attack roll against a creature if at least one of the thug’s allies is within 5 feet of the creature and the ally isn’t incapacitated.")),
-    Multiattack("The thug makes two melee attacks.",Count(2,[Melee])),
+    Feature(Feature("Pack Tactics","${Subj} has advantage on an attack roll against a creature if at least one of ${poss} allies is within 5 feet of the creature and the ally isn’t incapacitated.")),
+    Multiattack("${Subj} makes two melee attacks.",Count(2,[Melee])),
     Weapon(Mace(0)),
     Weapon(HeavyCrossbow(0))
 ])

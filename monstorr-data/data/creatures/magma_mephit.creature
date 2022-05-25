@@ -2,6 +2,7 @@
     Monstorr(1),
     Source("D&D 5E System Reference Document"),
     Name("Magma Mephit"),
+    SubjectName("the mephit"),
     Small,
     Elemental,
     NeutralEvil,
@@ -20,8 +21,8 @@
     Darkvision(60),
     Languages([Ignan,Terran]),
     OverrideHalfChallenge,
-    Feature(Feature("Death Burst","When the mephit dies, it explodes in a burst of lava. Each creature within 5 feet of it must make a DC 11 Dexterity saving throw, taking ${2d6} fire damage on a failed save, or half as much damage on a successful one.")),
-    Feature(Feature("False Appearance","While the mephit remains motionless, it is indistinguishable from an ordinary mound of magma.")),
+    Feature(Feature("Death Burst","When ${subj} dies, it explodes in a burst of lava. Each creature within 5 feet of it must make a DC 11 Dexterity saving throw, taking ${2d6} fire damage on a failed save, or half as much damage on a successful one.")),
+    Feature(Feature("False Appearance","While ${subj} remains motionless, it is indistinguishable from an ordinary mound of magma.")),
     InnateSpellcasting([
         Ability(Charisma),
         PerDay(1,["heat metal"])
@@ -32,5 +33,5 @@
         target: "one creature"
     ),Damage("1d4",Default,Slashing),
     Some(Plus(Damage("1d4",Zero,Fire))))),
-    Action(Action("Fire Breath","The mephit exhales a 15-foot cone of fire. Each creature in that area must make a DC 11 Dexterity saving throw, taking ${2d6} fire damage on a failed save, or half as much damage on a successful one.",Some(AreaSaveHalf(11,Dexterity,"2d6",Zero,Fire)),None),Some(Recharge(6)))
+    Action(Action("Fire Breath","${Subj} exhales a 15-foot cone of fire. Each creature in that area must make a DC 11 Dexterity saving throw, taking ${2d6} fire damage on a failed save, or half as much damage on a successful one.",Some(AreaSaveHalf(11,Dexterity,"2d6",Zero,Fire)),None),Some(Recharge(6)))
 ])

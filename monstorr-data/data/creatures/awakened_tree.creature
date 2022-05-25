@@ -2,6 +2,7 @@
     Monstorr(1),
     Source("D&D 5E System Reference Document"),
     Name("Awakened Tree"),
+    SubjectName("the tree"),
     Huge,
     Plant,
     Unaligned,
@@ -19,7 +20,7 @@
         Language("one language known by its creator")
     ]),
     OverrideChallenge(2),
-    Feature(Feature("False Appearance","While the tree remains motionless, it is indistinguishable from a normal tree.")),
+    Feature(Feature("False Appearance","While ${subj} remains motionless, it is indistinguishable from a normal tree.")),
     Action(Attack("Slam", (
         type: Some(Weapon),
         reach: Some(10),

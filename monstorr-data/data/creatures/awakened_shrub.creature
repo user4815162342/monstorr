@@ -2,6 +2,7 @@
     Monstorr(1),
     Source("D&D 5E System Reference Document"),
     Name("Awakened Shrub"),
+    SubjectName("the shrub"),
     Small,
     Plant,
     Unaligned,
@@ -17,7 +18,7 @@
         Language("one language known by its creator")
     ]),
     OverrideChallenge(0),
-    Feature(Feature("False Appearance","While the shrub remains motionless, it is indistinguishable from a normal shrub.")),
+    Feature(Feature("False Appearance","While ${subj} remains motionless, it is indistinguishable from a normal shrub.")),
     Action(Attack("Rake", (
         type: Some(Weapon),
         reach: Some(5),

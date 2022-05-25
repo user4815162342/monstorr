@@ -2,6 +2,7 @@
     Monstorr(1),
     Source("D&D 5E System Reference Document"),
     Name("Ice Mephit"),
+    SubjectName("the mephit"),
     Small,
     Elemental,
     NeutralEvil,
@@ -22,8 +23,8 @@
     Darkvision(60),
     Languages([Aquan,Auran]),
     OverrideHalfChallenge,
-    Feature(Feature("Death Burst","When the mephit dies, it explodes in a burst of jagged ice. Each creature within 5 feet of it must make a DC 10 Dexterity saving throw, taking ${1d8} slashing damage on a failed save, or half as much damage on a successful one.")),
-    Feature(Feature("False Appearance","While the mephit remains motionless, it is indistinguishable from an ordinary shard of ice.")),
+    Feature(Feature("Death Burst","When ${subj} dies, it explodes in a burst of jagged ice. Each creature within 5 feet of it must make a DC 10 Dexterity saving throw, taking ${1d8} slashing damage on a failed save, or half as much damage on a successful one.")),
+    Feature(Feature("False Appearance","While ${subj} remains motionless, it is indistinguishable from an ordinary shard of ice.")),
     InnateSpellcasting([
         Ability(Charisma),
         PerDay(1,["fog cloud"])
@@ -33,5 +34,5 @@
         reach: Some(5),
         target: "one creature"
     ),Damage("1d4",Default,Slashing),Some(Plus(Damage("1d4",Zero,Cold))))),
-    Action(Action("Frost Breath","The mephit exhales a 15-­foot cone of cold air. Each creature in that area must succeed on a DC 10 Dexterity saving throw, taking ${2d4} cold damage on a failed save, or half as much damage on a successful one.",Some(AreaSaveHalf(10,Dexterity,"2d4",Zero,Cold)),None),Some(Recharge(6)))
+    Action(Action("Frost Breath","${Subj} exhales a 15-­foot cone of cold air. Each creature in that area must succeed on a DC 10 Dexterity saving throw, taking ${2d4} cold damage on a failed save, or half as much damage on a successful one.",Some(AreaSaveHalf(10,Dexterity,"2d4",Zero,Cold)),None),Some(Recharge(6)))
 ])
