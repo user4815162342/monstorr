@@ -1554,7 +1554,8 @@ impl Creature {
         self.immunities.non_adamantine_attacks = true;
     }    
 
-    pub fn add_languages(&mut self, languages: &[Language]) {
+    pub fn set_languages(&mut self, languages: &[Language]) {
+        self.languages.clear();
         for language in languages {
             self.languages.push((language.clone(), true));
         }
@@ -1803,6 +1804,11 @@ impl Creature {
         self.remove_action(&name)
     }
 
+    pub fn move_weapon(&mut self, weapon: &Weapon, delta: &i8) -> Result<(),CreatureError> {
+        let name = weapon.to_string();
+        self.move_action(&name,delta)
+    }
+
     pub fn remove_action(&mut self, name: &str) {
         let mut found = false;
         self.actions.retain(|a| 
@@ -1813,6 +1819,22 @@ impl Creature {
                 true
             }
         )
+    }
+
+    pub fn move_action(&mut self, name: &str, delta: &i8) -> Result<(),CreatureError> {
+        if let Some(index) = self.actions.iter().position(|a| a.name == name) {
+            let item = self.actions.remove(index);
+            let delta = *delta;
+            let new_index = if delta > 0 {
+                index + delta as usize
+            } else {
+                index - delta.abs() as usize
+            };
+            self.actions.insert(new_index, item);
+            Ok(())
+        } else {
+            Err(CreatureError::ActionNotFound(name.to_owned(),"while moving action".to_owned()))
+        }
     }
 
     pub fn add_reaction(&mut self, reaction: Reaction, usage_limit: Option<UsageLimit>) {

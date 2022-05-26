@@ -1039,7 +1039,7 @@ pub enum CreatureCommand {
     /**
     `Languages([<Language>])`
 
-    Adds the specified languages to the creature. See [`crate::stats::Language`] for possible values.
+    Sets the specified languages to the creature. See [`crate::stats::Language`] for possible values.
 
     */
     Languages(Vec<Language>),
@@ -1268,11 +1268,25 @@ pub enum CreatureCommand {
     RemoveWeapon(Weapon),
 
     /**
+    `MoveWeapon(<Weapon>,<integer>)
+
+    Moves a weapon down or up on the list. This is useful when you are overriding an existing creature and want to ensure that actions appear in the correct order.
+     */
+    MoveWeapon(Weapon,i8),
+
+    /**
     `RemoveAction(<string>)`
 
     Removes the first action with the specified name from the list of actions.
     */
     RemoveAction(String),
+
+    /**
+    `MoveAction(<string>,<integer>)
+
+    Moves an action down or up on the list. This is useful when you are overriding an existing creature and want to ensure that actions appear in the correct order.
+     */
+    MoveAction(String,i8),
 
     /**
     `Reaction(<Reaction>)`
@@ -1485,7 +1499,7 @@ impl CreatureCommand {
             CreatureCommand::NonSilveredImmunity => creature.add_nonsilvered_immunity(),
             CreatureCommand::NonAdamantineImmunity => creature.add_nonadamantine_immunity(),
             CreatureCommand::CustomImmunity(custom) => creature.add_custom_immunity(custom),
-            CreatureCommand::Languages(languages) => creature.add_languages(languages),
+            CreatureCommand::Languages(languages) => creature.set_languages(languages),
             CreatureCommand::UnspokenLanguages(languages) => creature.add_unspoken_languages(languages),
             CreatureCommand::Darkvision(distance) => creature.add_darkvision(distance),
             CreatureCommand::Blindsight(distance) => creature.add_blindsight(distance),
@@ -1516,7 +1530,9 @@ impl CreatureCommand {
             CreatureCommand::Action(action,usage_limit) => creature.add_action(action, usage_limit),
             CreatureCommand::OverrideActionDescription(name,description) => creature.override_action_description(name, description.to_owned())?,
             CreatureCommand::RemoveWeapon(weapon) => creature.remove_weapon(weapon),
+            CreatureCommand::MoveWeapon(weapon,delta) => creature.move_weapon(weapon,delta)?,
             CreatureCommand::RemoveAction(name) => creature.remove_action(name),
+            CreatureCommand::MoveAction(name,delta) => creature.move_action(name,delta)?,
             CreatureCommand::Reaction(reaction,usage_limit) => creature.add_reaction(reaction.clone(), usage_limit.clone()),
             CreatureCommand::RemoveReaction(name) => creature.remove_reaction(name),
             CreatureCommand::Feature(feature,usage_limit) => {
