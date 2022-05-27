@@ -46,7 +46,7 @@ impl Reaction {
 
     pub fn get_description(&self) -> String {
         match self {
-            Reaction::Parry(ac) => format!("${{Subj}} adds {} to its AC against one melee attack that would hit it. To do so, ${{subj}} must see the attacker and be wielding a melee weapon.",ac),
+            Reaction::Parry(ac) => format!("${{Subj}} adds {} to ${{posspro}} AC against one melee attack that would hit ${{objpro}}. To do so, ${{subj}} must see the attacker and be wielding a melee weapon.",ac),
             Reaction::Reaction(_,description) => description.clone()
         }
     }

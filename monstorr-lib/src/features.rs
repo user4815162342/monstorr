@@ -443,34 +443,34 @@ impl Feature {
 
     pub fn get_description(&self) -> String {
         match self {
-            Feature::Aggressive =>format!("As a bonus action, ${{subj}} can move up to its speed toward a hostile creature that it can see."),
-            Feature::Ambusher => format!("${{Subj}} has advantage on attack rolls against any creature it has surprised."),
+            Feature::Aggressive =>format!("As a bonus action, ${{subj}} can move up to ${{posspro}} speed toward a hostile creature that ${{subjpro}} can see."),
+            Feature::Ambusher => format!("${{Subj}} has advantage on attack rolls against any creature ${{subjpro}} has surprised."),
             Feature::Amorphous => format!("${{Subj}} can move through a space as narrow as 1 inch wide without squeezing."),
             Feature::Amphibious => format!("${{Subj}} can breathe air and water."),
             Feature::AngelicWeapons(dice,..) => format!("${{Poss}} weapon attacks are magical. When ${{subj}} hits with any weapon, the weapon deals an extra {} radiant damage (included in the attack).",dice), 
             Feature::AntimagicSusceptibility => format!("${{Subj}} is incapacitated while in the area of an antimagic field. If targeted by dispel magic, ${{subj}} must succeed on a Constitution saving throw against the caster's spell save DC or fall unconscious for 1 minute."),
-            Feature::BlindSenses => format!("${{Subj}} can't use its blindsight while deafened and unable to smell."),
+            Feature::BlindSenses => format!("${{Subj}} can't use ${{posspro}} blindsight while deafened and unable to smell."),
             Feature::BloodFrenzy => format!("${{Subj}} has advantage on melee attack rolls against any creature that doesn't have all its hit points."),
-            Feature::Brute(..) => format!("A melee weapon deals one extra die of its damage when ${{subj}} hits with it (included in the attack)."),
+            Feature::Brute(..) => format!("A melee weapon deals one extra die of ${{posspro}} damage when ${{subj}} hits with it (included in the attack)."),
             Feature::Charge(distance,attack,extra_dice,damage) => format!("If ${{subj}} moves at least {} ft. straight toward a target and then hits it with a {} attack on the same turn, the target takes an extra {} {} damage.",distance,attack,extra_dice,damage),
-            Feature::DamageTransfer => format!("While it is grappling a creature, ${{subj}} takes only half the damage dealt to it, and the creature grappled by ${{subj}} takes the other half."),
-            Feature::DeathBurst(description,attack,compound) => format!("When ${{subj}} dies, it explodes in a cloud of {}, 5 ft. in radius. {}",description,attack.get_description("0",compound)), // explode description, range,  effect of explosion
+            Feature::DamageTransfer => format!("While ${{subjpro}} is grappling a creature, ${{subj}} takes only half the damage dealt to ${{objpro}}, and the creature grappled by ${{subj}} takes the other half."),
+            Feature::DeathBurst(description,attack,compound) => format!("When ${{subj}} dies, ${{subjpro}} explodes in a cloud of {}, 5 ft. in radius. {}",description,attack.get_description("0",compound)), // explode description, range,  effect of explosion
             Feature::DevilSight => format!("Magical darkness doesn't impede ${{poss}} darkvision."),
-            Feature::Echolocation => format!("${{Subj}} can't use its blindsight while deafened."),
+            Feature::Echolocation => format!("${{Subj}} can't use ${{posspro}} blindsight while deafened."),
             Feature::FalseAppearance(description) => description.clone(),
             Feature::FeyAncestry => format!("${{Subj}} has advantage on saving throws against being charmed, and magic can't put ${{subj}} to sleep."),
-            Feature::Flyby => format!("${{Subj}} doesn't provoke opportunity attacks when it flies out of an enemy's reach."),
-            Feature::Grappler => format!("${{Subj}} has advantage on attack rolls against any creature grappled by it."),
+            Feature::Flyby => format!("${{Subj}} doesn't provoke opportunity attacks when ${{subjpro}} flies out of an enemy's reach."),
+            Feature::Grappler => format!("${{Subj}} has advantage on attack rolls against any creature grappled by ${{objpro}}."),
             Feature::HoldBreath(duration,reversed) => if *reversed {
-                format!("While out of water, ${{subj}} can hold its breath for {} minutes.",duration)
+                format!("While out of water, ${{subj}} can hold ${{posspro}} breath for {} minutes.",duration)
             } else {
-                format!("${{Subj}} can hold its breath for {} minutes.",duration)
+                format!("${{Subj}} can hold ${{posspro}} breath for {} minutes.",duration)
             }, // duration, reversed ("out of water")
             Feature::Illumination(radius) => format!("${{Subj}} sheds bright light in a {}-foot radius and dim light in an additional {} ft.",radius,radius), // radius
-            Feature::ImmutableForm => format!("${{Subj}} is immune to any spell or effect that would alter its form."),
-            Feature::IncorporealMovement(damage) => format!("${{Subj}} can move through other creatures and objects as if they were difficult terrain. It takes {} force damage if it ends its turn inside an object.",damage), // damage (force) if it ends its turn inside an object
-            Feature::Inscrutable => format!("${{Subj}} is immune to any effect that would sense its emotions or read its thoughts, as well as any divination spell that it refuses. Wisdom (Insight) checks made to ascertain ${{poss}} intentions or sincerity have disadvantage."),
-            Feature::Invisibility => format!("${{Subj}} magically turns invisible until it attacks, or until its concentration ends (as if concentrating on a spell). Any equipment ${{subj}} wears or carries is invisible with it."),
+            Feature::ImmutableForm => format!("${{Subj}} is immune to any spell or effect that would alter ${{posspro}} form."),
+            Feature::IncorporealMovement(damage) => format!("${{Subj}} can move through other creatures and objects as if they were difficult terrain. ${{Subjpro}} takes {} force damage if ${{subjpro}} ends ${{posspro}} turn inside an object.",damage), // damage (force) if it ends its turn inside an object
+            Feature::Inscrutable => format!("${{Subj}} is immune to any effect that would sense ${{posspro}} emotions or read ${{posspro}} thoughts, as well as any divination spell that ${{subjpro}} refuses. Wisdom (Insight) checks made to ascertain ${{poss}} intentions or sincerity have disadvantage."),
+            Feature::Invisibility => format!("${{Subj}} magically turns invisible until ${{subjpro}} attacks, or until ${{posspro}} concentration ends (as if concentrating on a spell). Any equipment ${{subj}} wears or carries is invisible with ${{objpro}}."),
             Feature::KeenSenses(sight,hearing,smell) => format!("${{Subj}} has advantage on Wisdom (Perception) checks that rely on {}.",match (hearing,sight,smell) {
                 (true,true,true) => "sight, hearing, or smell",
                 (true,true,false) => "sight or hearing",
@@ -481,40 +481,40 @@ impl Feature {
                 (false,false,true) => "smell",
                 (false,false,false) => "no senses"
             }), // hearing, sight, smell
-            Feature::LabyrinthineRecall => format!("${{Subj}} can perfectly recall any path it has traveled."),
-            Feature::LegendaryResistance => format!("If ${{subj}} fails a saving throw, it can choose to succeed instead."),
+            Feature::LabyrinthineRecall => format!("${{Subj}} can perfectly recall any path ${{subjpro}} has traveled."),
+            Feature::LegendaryResistance => format!("If ${{subj}} fails a saving throw, ${{subjpro}} can choose to succeed instead."),
             Feature::LightSensitivity => format!("While in bright light, ${{subj}} has disadvantage on attack rolls and Wisdom (Perception) checks that rely on sight."),
             Feature::MagicResistance => format!("${{Subj}} has advantage on saving throws against spells and other magical effects."),
             Feature::MagicWeapons => format!("${{Poss}} weapon attacks are magical."),
-            Feature::MartialAdvantage(dice) => format!("Once per turn, ${{subj}} can deal an extra {} damage to a creature it hits with a weapon attack if that creature is within 5 ft. of an ally of ${{subj}} that isn't incapacitated.",dice), // extra damage dice
+            Feature::MartialAdvantage(dice) => format!("Once per turn, ${{subj}} can deal an extra {} damage to a creature ${{subjpro}} hits with a weapon attack if that creature is within 5 ft. of an ally of ${{subj}} that isn't incapacitated.",dice), // extra damage dice
             Feature::Mimicry(sounds,check_dc) => format!("${{Subj}} can mimic {}. A creature that hears the sounds can tell they are imitations with a successful DC {} Wisdom (Insight) check.",sounds,check_dc), // description, Insight DC
-            Feature::NimbleEscape => format!("${{Subj}} can take the Disengage or Hide action as a bonus action on each of its turns."),
+            Feature::NimbleEscape => format!("${{Subj}} can take the Disengage or Hide action as a bonus action on each of ${{posspro}} turns."),
             Feature::PackTactics => format!("${{Subj}} has advantage on an attack roll against a creature if at least one of ${{poss}} allies is within 5 ft. of the creature and the ally isn't incapacitated."),
             Feature::Pounce(distance,save_dc) => format!("If ${{subj}} moves at least {} ft. straight toward a creature and then hits it with a claw attack on the same turn, that target must succeed on a DC {} Strength saving throw or be knocked prone. If the target is prone, ${{subj}} can make one bite attack against it as a bonus action.",distance,save_dc), // distance, save DC (Strength)
-            Feature::Rampage => format!("When ${{subj}} reduces a creature to 0 hit points with a melee attack on its turn, ${{subj}} can take a bonus action to move up to half its speed and make a bite attack."),
+            Feature::Rampage => format!("When ${{subj}} reduces a creature to 0 hit points with a melee attack on ${{posspro}} turn, ${{subj}} can take a bonus action to move up to half ${{posspro}} speed and make a bite attack."),
             Feature::Reactive => format!("${{Subj}} can take one reaction on every turn in combat."),
-            Feature::Reckless => format!("At the start of its turn, ${{subj}} can gain advantage on all melee weapon attack rolls during that turn, but attack rolls against it have advantage until the start of its next turn."),
-            Feature::Regeneration(regain_hp,vulnerabilities) => format!("${{Subj}} regains {} hit points at the start of its turn if it has at least 1 hit point. {}${{Subj}} dies only if it starts its turn with 0 hit points and doesn't regenerate.",regain_hp,vulnerabilities.and_join()), // number of hp, damage this doesn't apply to (might be based on vulnerabilities, in which case I don't need that)
+            Feature::Reckless => format!("At the start of ${{posspro}} turn, ${{subj}} can gain advantage on all melee weapon attack rolls during that turn, but attack rolls against ${{objpro}} have advantage until the start of ${{posspro}} next turn."),
+            Feature::Regeneration(regain_hp,vulnerabilities) => format!("${{Subj}} regains {} hit points at the start of ${{posspro}} turn if ${{subjpro}} has at least 1 hit point. {}${{Subj}} dies only if ${{subjpro}} starts ${{posspro}} turn with 0 hit points and doesn't regenerate.",regain_hp,vulnerabilities.and_join()), // number of hp, damage this doesn't apply to (might be based on vulnerabilities, in which case I don't need that)
             // "The vampire regains 20 hit points at the start of its turn if it has at least 1 hit point and isn't in sunlight or running water. If the vampire takes radiant damage or damage from holy water, this trait doesn't function at the start of the vampire's next turn."
             // "The oni regains 10 hit points at the start of its turn if it has at least 1 hit point."
             // "The troll regains 10 hit points at the start of its turn. If the troll takes acid or fire damage, this trait doesn't function at the start of the troll's next turn. The troll dies only if it starts its turn with 0 hit points and doesn't regenerate."
             Feature::Rejuvenation(description) => description.to_owned(), // needs a description, every rejuvenation is different
-            Feature::Relentless(limit) => format!("If ${{subj}} takes {} damage or less that would reduce it to 0 hit points, it is reduced to 1 hit point instead.",limit), // damage limit
+            Feature::Relentless(limit) => format!("If ${{subj}} takes {} damage or less that would reduce ${{objpro}} to 0 hit points, ${{subjpro}} is reduced to 1 hit point instead.",limit), // damage limit
             Feature::ShadowStealth => format!("While in dim light or darkness, ${{subj}} can take the Hide action as a bonus action."),
             Feature::Shapechanger(description) => description.to_owned(),
             Feature::SiegeMonster => format!("${{Subj}} deals double damage to objects and structures."),
             Feature::SpiderClimb => format!("${{Subj}} can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check."),
-            Feature::StandingLeap(long) => format!("${{Poss}} long jump is up to {} ft. and its high jump is up to {} ft., with or without a running start.",long,long / 2), // distance
-            Feature::Steadfast => format!("${{Subj}} can't be frightened while it can see an allied creature within 30 feet of it."),
+            Feature::StandingLeap(long) => format!("${{Poss}} long jump is up to {} ft. and ${{posspro}} high jump is up to {} ft., with or without a running start.",long,long / 2), // distance
+            Feature::Steadfast => format!("${{Subj}} can't be frightened while ${{subjpro}} can see an allied creature within 30 feet of ${{objpro}}."),
             Feature::Stench(range,save_dc) => format!("Any creature that starts its turn within {} ft. of ${{subj}} must succeed on a DC {} Constitution saving throw or be poisoned until the start of its next turn. On a successful saving throw, the creature is immune to ${{poss}} stench for 24 hours.",range,save_dc), // range, save DC (Constitution)
             Feature::SunlightSensitivity => format!("While in sunlight, ${{subj}} has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight."),
-            Feature::SureFooted => format!("${{Subj}} has advantage on Strength and Dexterity saving throws made against effects that would knock it prone."),
+            Feature::SureFooted => format!("${{Subj}} has advantage on Strength and Dexterity saving throws made against effects that would knock ${{objpro}} prone."),
             Feature::SurpriseAttack(damage) => format!("If ${{subj}} surprises a creature and hits it with an attack during the first round of combat, the target takes an extra {} damage from the attack.",damage), // extra damage
             Feature::Swarm => format!("The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny individual. The swarm can't regain hit points or gain temporary hit points."),
-            Feature::Tunneler(diameter) => format!("${{Subj}} can burrow through solid rock at half its burrow speed and leaves a {}-foot-diameter tunnel in its wake.",diameter), // width of tunnel
+            Feature::Tunneler(diameter) => format!("${{Subj}} can burrow through solid rock at half ${{posspro}} burrow speed and leaves a {}-foot-diameter tunnel in ${{posspro}} wake.",diameter), // width of tunnel
             Feature::TurnResistance => format!("${{Subj}} has advantage on saving throws against any effect that turns undead."),
             Feature::TwoHeads => format!("${{Subj}} has advantage on Wisdom (Perception) checks and on saving throws against being blinded, charmed, deafened, frightened, stunned, and knocked unconscious."),
-            Feature::UndeadFortitude => format!("If damage reduces ${{subj}} to 0 hit points, it must make a Constitution saving throw with a DC of 5+the damage taken, unless the damage is radiant or from a critical hit. On a success, ${{subj}} drops to 1 hit point instead."),
+            Feature::UndeadFortitude => format!("If damage reduces ${{subj}} to 0 hit points, ${{subjpro}} must make a Constitution saving throw with a DC of 5+the damage taken, unless the damage is radiant or from a critical hit. On a success, ${{subj}} drops to 1 hit point instead."),
             Feature::WebSense => format!("While in contact with a web, ${{subj}} knows the exact location of any other creature in contact with the same web."),
             Feature::WebWalker => format!("${{Subj}} ignores movement restrictions caused by webbing."),
             Feature::Feature(_,description) => description.clone(), // name, description

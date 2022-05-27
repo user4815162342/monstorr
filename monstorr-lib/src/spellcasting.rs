@@ -235,7 +235,7 @@ impl Spellcasting {
             "".to_owned()
         };
         
-        let mut result = format!("${{Subj}} is a {}-level spellcaster. Its spellcasting ability is {} (spell save DC {}, {} to hit with spell attacks). ${{Subj}} has the following {} spells prepared{}:",self.caster_level,self.ability,save_dc,attack_bonus,self.class,warlock_style);
+        let mut result = format!("${{Subj}} is a {}-level spellcaster. ${{Posspro}} spellcasting ability is {} (spell save DC {}, {} to hit with spell attacks). ${{Subj}} has the following {} spells prepared{}:",self.caster_level,self.ability,save_dc,attack_bonus,self.class,warlock_style);
 
         for (level,list) in &self.spells {
 
@@ -402,7 +402,7 @@ impl InnateSpellcasting {
         // -- one problem here is that form doesn't provide the spell save and attacks, in theory because sleep doesn't require them. I currently have no way of knowing whether I need those anyway.
         // -- The main reason I don't want to do this is because I hate the inconsistency, and I would like their save DC listed somewhere in the stats.
         
-        let mut result = format!("${{Poss}} innate spellcasting ability is {} (spell save DC {}, {} to hit with spell attacks). It can innately cast the following spells, {}:",self.ability,save_dc,attack_bonus,components);
+        let mut result = format!("${{Poss}} innate spellcasting ability is {} (spell save DC {}, {} to hit with spell attacks). ${{Subjpro}} can innately cast the following spells, {}:",self.ability,save_dc,attack_bonus,components);
 
 
         for (count,list) in &self.spells {

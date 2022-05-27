@@ -26,7 +26,7 @@
         Ignan,
     ]),
     OverrideChallenge(11),
-    Feature(Feature("Elemental Demise", "If ${subj} dies, its body disintegrates in a flash of fire and puff of smoke, leaving behind only equipment ${subj} was wearing or carrying.")),
+    Feature(Feature("Elemental Demise", "If ${subj} dies, ${posspro} body disintegrates in a flash of fire and puff of smoke, leaving behind only equipment ${subj} was wearing or carrying.")),
     InnateSpellcasting([
         Ability(Charisma),
         SaveDC(15),
@@ -48,7 +48,7 @@
         ]),
         SpellRestriction("conjure elemental", "fire elemental only"),
     ]),
-    Multiattack("${Subj} makes two scimitar attacks or uses its Hurl Flame twice.", Or([
+    Multiattack("${Subj} makes two scimitar attacks or uses ${posspro} Hurl Flame twice.", Or([
         Count(2, [
             Attack("Scimitar"),
         ]),

@@ -20,7 +20,7 @@
     Darkvision(60),
     Languages([Auran,Terran]),
     OverrideHalfChallenge,
-    Feature(Feature("Death Burst","When ${subj} dies, it explodes in a burst of dust. Each creature within 5 feet of it must then succeed on a DC 10 Constitution saving throw or be blinded for 1 minute. A blinded creature can repeat the saving throw on each of its turns, ending the effect on itself on a success.")),
+    Feature(Feature("Death Burst","When ${subj} dies, ${subjpro} explodes in a burst of dust. Each creature within 5 feet of ${objpro} must then succeed on a DC 10 Constitution saving throw or be blinded for 1 minute. A blinded creature can repeat the saving throw on each of its turns, ending the effect on itself on a success.")),
     InnateSpellcasting([
         Ability(Charisma),
         PerDay(1,["sleep"])

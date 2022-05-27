@@ -23,7 +23,7 @@
     Darkvision(60),
     Languages([Aquan,Auran]),
     OverrideHalfChallenge,
-    Feature(Feature("Death Burst","When ${subj} dies, it explodes in a burst of jagged ice. Each creature within 5 feet of it must make a DC 10 Dexterity saving throw, taking ${1d8} slashing damage on a failed save, or half as much damage on a successful one.")),
+    Feature(Feature("Death Burst","When ${subj} dies, ${subjpro} explodes in a burst of jagged ice. Each creature within 5 feet of it must make a DC 10 Dexterity saving throw, taking ${1d8} slashing damage on a failed save, or half as much damage on a successful one.")),
     Feature(Feature("False Appearance","While ${subj} remains motionless, it is indistinguishable from an ordinary shard of ice.")),
     InnateSpellcasting([
         Ability(Charisma),

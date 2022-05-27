@@ -24,7 +24,7 @@
     Darkvision(120),
     Languages([Infernal,Common]),
     OverrideChallenge(1),
-    Feature(Feature("Shapechanger","${Subj} can use its action to polymorph into a beast form that resembles a rat (speed 20 ft.), a raven (20 ft., fly 60 ft.), or a spider (20 ft., climb 20 ft.), or back into its true form. Its statistics are the same in each form, except for the speed changes noted. Any equipment it is wearing or carrying isn’t transformed. It reverts to its true form if it dies.")),
+    Feature(Feature("Shapechanger","${Subj} can use ${posspro} action to polymorph into a beast form that resembles a rat (speed 20 ft.), a raven (20 ft., fly 60 ft.), or a spider (20 ft., climb 20 ft.), or back into ${posspro} true form. ${Posspro} statistics are the same in each form, except for the speed changes noted. Any equipment ${subjpro} is wearing or carrying isn’t transformed. It reverts to ${posspro} true form if ${subjpro} dies.")),
     Feature(Feature("Devil's Sight","Magical darkness doesn’t impede ${poss} darkvision.")),
     Feature(Feature("Magic Resistance","${Subj} has advantage on saving throws against spells and other magical effects.")),
     Action(Attack("Sting (Bite in Beast Form)",(
@@ -34,5 +34,5 @@
         target: "one target",
     ), Damage("1d4", Dexterity, Piercing),
     Some(And(SaveHalf(11,Constitution,"3d6",Zero,Poison))))),
-    Action(Action("Invisibility","${Subj} magically turns invisible until it attacks or until its concentration ends (as if concentrating on a spell). Any equipment ${subj} wears or carries is invisible with it.",None,None))
+    Action(Action("Invisibility","${Subj} magically turns invisible until ${subjpro} attacks or until ${posspro} concentration ends (as if concentrating on a spell). Any equipment ${subj} wears or carries is invisible with ${objpro}.",None,None))
 ])

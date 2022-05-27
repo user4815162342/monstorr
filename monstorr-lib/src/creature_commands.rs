@@ -438,6 +438,56 @@ pub enum CreatureCommand {
     CapitalizePossessiveName(String),
 
     /**
+     `Pronoun(<string>)`
+
+    When interpolating descriptions, it is often necessary to use a pronoun for the creature. Various interpolation variables are used to determine these, and all of them can be overridden. You can use this command as a shortcut to overriding all of them based on a linguistic gender. You can pass the following words: "she", "her", "he", "him", "his", "they", "them", "their", "xe", "xem", "xir", "it" or "its". If those words are passed, appropriate values will be overridden for all of the pronoun cases. If any other words are passed to this command, that word will be used in all cases.
+     */
+    Pronoun(String),
+
+    /**
+    `SubjectPronoun(<string>)`
+
+    When interpolating descriptions, it is often necessary to use a pronoun for the creature. The interpolation variable `subjpro` is used when the creature is referred to as the subject of an action. By default, the value returned is 'it'. If you need to override this somehow, you can set a different value here.
+    */
+    SubjectPronoun(String),
+
+    /**
+    `CapitalizeSubjectPronoun(<string>)`
+
+    When interpolating descriptions, it is often necessary to use a pronoun for the creature. The interpolation variable `Subjpro` is used when the creature is referred to as the subject of an action. By default, the value returned is 'It'. If you need to override this somehow, you can set a different value here.
+    */
+    CapitalizeSubjectPronoun(String),
+
+    /**
+    `PossessivePronoun(<string>)`
+
+    When interpolating descriptions, it is often necessary to use a pronoun for the creature. The interpolation variable `posspro` is used when the creature is referred to as possessing something. By default, the value returned is 'its'. If you need to override this somehow, you can set a different value here.
+    */
+    PossessivePronoun(String),
+
+    /**
+    `CapitalizePossessivePronoun(<string>)`
+
+    When interpolating descriptions, it is often necessary to use a pronoun for the creature. The interpolation variable `Posspro` is used when the creature is referred to as possessing something. By default, the value returned is 'Its'. If you need to override this somehow, you can set a different value here.
+    */
+    CapitalizePossessivePronoun(String),
+
+    /**
+    `ObjectPronoun(<string>)`
+
+    When interpolating descriptions, it is often necessary to use a pronoun for the creature. The interpolation variable `objpro` is used when the creature is referred to as the object of an action. By default, the value returned is 'it'. If you need to override this somehow, you can set a different value here.
+    */
+    ObjectPronoun(String),
+
+    /**
+    `ReflexivePronoun(<string>)`
+
+    When interpolating descriptions, it is often necessary to use a pronoun for the creature. The interpolation variable `refpro` is used when the creature is referred to as the object of an action. By default, the value returned is 'itself'. If you need to override this somehow, you can set a different value here.
+    */
+    ReflexivePronoun(String),
+
+
+    /**
     `Tiny`
     
     Sets the size of the creature to tiny, overriding any previous size set. The default size for a creature is medium.
@@ -1415,6 +1465,27 @@ impl CreatureCommand {
             CreatureCommand::CapitalizeSubjectName(name) => creature.set_capitalized_subject(name),
             CreatureCommand::PossessiveName(name) => creature.set_possessive(name),
             CreatureCommand::CapitalizePossessiveName(name) => creature.set_capitalized_possessive(name),
+            CreatureCommand::Pronoun(pronoun) => {
+                let (s,o,p,r) = match pronoun.as_str() {
+                    "she" | "her" => ("she","her","her","herself"),
+                    "he" | "him" | "his" => ("he","him","his","himself"),
+                    "they" | "them" | "their" => ("they","them","their","themself"),
+                    "xe" | "xem" | "xir"  => ("xe","xem","xir","xirself"),
+                    "it" | "its"  =>  ("it","it","its","itself"),
+                    a => (a,a,a,a)
+    
+                };
+                creature.set_subject_pronoun(s);
+                creature.set_object_pronoun(o);
+                creature.set_possessive_pronoun(p);
+                creature.set_reflexive_pronoun(r);
+            },
+            CreatureCommand::SubjectPronoun(pronoun) => creature.set_subject_pronoun(pronoun),
+            CreatureCommand::CapitalizeSubjectPronoun(pronoun) => creature.set_subject_pronoun_cap(pronoun),
+            CreatureCommand::PossessivePronoun(pronoun) => creature.set_possessive_pronoun(pronoun),
+            CreatureCommand::CapitalizePossessivePronoun(pronoun) => creature.set_possessive_pronoun_cap(pronoun),
+            CreatureCommand::ObjectPronoun(pronoun) => creature.set_object_pronoun(pronoun),
+            CreatureCommand::ReflexivePronoun(pronoun) => creature.set_reflexive_pronoun(pronoun),
             CreatureCommand::Tiny => creature.set_tiny(),
             CreatureCommand::Small => creature.set_small(),
             CreatureCommand::Medium => creature.set_medium(),

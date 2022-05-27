@@ -17,10 +17,10 @@
     Resistance(Bludgeoning),
     Resistance(Piercing),
     Languages([
-        Language("one language known by its creator")
+        Language("one language known by ${posspro} creator")
     ]),
     OverrideChallenge(2),
-    Feature(Feature("False Appearance","While ${subj} remains motionless, it is indistinguishable from a normal tree.")),
+    Feature(Feature("False Appearance","While ${subj} remains motionless, ${subjpro} is indistinguishable from a normal tree.")),
     Action(Attack("Slam", (
         type: Some(Weapon),
         reach: Some(10),

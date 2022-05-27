@@ -15,10 +15,10 @@
     Vulnerability(Fire),
     Resistance(Piercing),
     Languages([
-        Language("one language known by its creator")
+        Language("one language known by ${posspro} creator")
     ]),
     OverrideChallenge(0),
-    Feature(Feature("False Appearance","While ${subj} remains motionless, it is indistinguishable from a normal shrub.")),
+    Feature(Feature("False Appearance","While ${subj} remains motionless, ${subjpro} is indistinguishable from a normal shrub.")),
     Action(Attack("Rake", (
         type: Some(Weapon),
         reach: Some(5),

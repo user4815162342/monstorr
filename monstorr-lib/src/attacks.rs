@@ -863,7 +863,7 @@ impl Weapon {
             Weapon::HandCrossbow(magic) =>  AttackEffect::Damage(die!(D6,magic), AttackBonus::Default, Damage::Piercing),
             Weapon::HeavyCrossbow(magic) => AttackEffect::Damage(die!(D10,magic), AttackBonus::Default, Damage::Piercing),
             Weapon::Longbow(magic) =>       AttackEffect::Damage(die!(D8,magic), AttackBonus::Default, Damage::Piercing),
-            Weapon::Net(magic) =>           AttackEffect::Special(format!("Creature is restrained until it is freed. The creature can use its action to make a DC ${{10 + {}}} Strength check, freeing itself or another creature within its reach on a success. Dealing ${{5 + {}}} slashing damage to the net (AC ${{10 + {}}}) also frees the creature without harmint it, ending the effect and destroying the net.",magic,magic,magic)),
+            Weapon::Net(magic) =>           AttackEffect::Special(format!("Creature is restrained until it is freed. The creature can use its action to make a DC ${{10 + {}}} Strength check, freeing itself or another creature within its reach on a success. Dealing ${{5 + {}}} slashing damage to the net (AC ${{10 + {}}}) also frees the creature without harming it, ending the effect and destroying the net.",magic,magic,magic)),
         }
 
     }

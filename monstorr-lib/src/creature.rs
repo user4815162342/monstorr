@@ -652,6 +652,12 @@ The following properties can be retrieved during interpolation. Their value type
 * `Subj (string)`: The subject of the creature capitalized.
 * `poss (string)`: The name of the creature in possessive form.
 * `Poss (string)`: The capitalized possessive.
+* `subjpro (string)`: The subject pronoun for the creature  (default 'it')
+* `Subjpro (string)`: The subject pronoun for the creature capitalized (default 'It')
+* `objpro (string)`: the object pronoun for the creature (default 'it')
+* `refpro (string)`: the reflexive pronoun for the creature (default 'itself')
+* `posspro (string)`: the possessive pronoun for the creature (default 'its`)
+* `Posspro (string)`: the possessive pronoun for the creature capitalized (default `Its`)
 * `size (string)`: The size of the creature
 * `type (string)`: The type of the creature
 * `subtype (string)`: The subtype of the creature, or an empty string
@@ -689,6 +695,12 @@ pub struct Creature {
     pub subject_cap: Option<String>,
     pub possessive: Option<String>,
     pub possessive_cap: Option<String>,
+    pub subject_pronoun: Option<String>,
+    pub subject_pronoun_cap: Option<String>,
+    pub possessive_pronoun: Option<String>,
+    pub possessive_pronoun_cap: Option<String>,
+    pub object_pronoun: Option<String>,
+    pub reflexive_pronoun: Option<String>,
     pub size: CreatureSize,
     pub type_: CreatureType,
     pub subtype: Option<String>,
@@ -738,6 +750,12 @@ impl InterpolationObject for Creature {
             "Subj" => Some(InterpolationValue::String(Rc::from(self.get_subject(true).as_str()))),
             "poss" => Some(InterpolationValue::String(Rc::from(self.get_possessive(false).as_str()))),
             "Poss" => Some(InterpolationValue::String(Rc::from(self.get_possessive(true).as_str()))),
+            "subjpro" => Some(InterpolationValue::String(Rc::from(self.get_subject_pronoun(false).as_str()))),
+            "Subjpro" => Some(InterpolationValue::String(Rc::from(self.get_subject_pronoun(true).as_str()))),
+            "posspro" => Some(InterpolationValue::String(Rc::from(self.get_possessive_pronoun(false).as_str()))),
+            "Posspro" => Some(InterpolationValue::String(Rc::from(self.get_possessive_pronoun(true).as_str()))),
+            "objpro" => Some(InterpolationValue::String(Rc::from(self.get_object_pronoun(false).as_str()))),
+            "refpro" => Some(InterpolationValue::String(Rc::from(self.get_reflexive_pronoun(false).as_str()))),
             "size" => Some(InterpolationValue::String(Rc::from(self.size.to_string()))),
             "type" => Some(InterpolationValue::String(Rc::from(self.type_.to_string()))),
             "subtype" => Some(InterpolationValue::String(Rc::from(self.subtype.as_deref().unwrap_or("")))),
@@ -790,6 +808,12 @@ impl Default for Creature {
             subject_cap: None,
             possessive: None,
             possessive_cap: None,
+            subject_pronoun: None,
+            subject_pronoun_cap: None,
+            possessive_pronoun: None,
+            possessive_pronoun_cap: None,
+            object_pronoun: None,
+            reflexive_pronoun: None,
             size: CreatureSize::Medium, //CreatureSize,
             type_: CreatureType::Humanoid, //CreatureType,
             subtype: None,//Option<String>,
@@ -867,6 +891,78 @@ impl Creature {
                 posessive.clone()
             } else {
                 format!("{}'s",self.get_subject(false))
+            }
+        }
+
+    }
+
+    fn get_subject_pronoun(&self, capitalize: bool) -> String {
+        if capitalize {
+            if let Some(pronoun) = &self.subject_pronoun_cap {
+                pronoun.clone()
+            } else if let Some(pronoun) = &self.subject_pronoun {
+                pronoun.capitalize_first_letter()
+            } else {
+                format!("It")
+            }
+        } else {
+            if let Some(pronoun) = &self.subject_pronoun {
+                pronoun.clone()
+            } else {
+                format!("it")
+            }
+        }
+
+    }
+
+    fn get_possessive_pronoun(&self, capitalize: bool) -> String {
+        if capitalize {
+            if let Some(pronoun) = &self.possessive_pronoun_cap {
+                pronoun.clone()
+            } else if let Some(pronoun) = &self.possessive_pronoun {
+                pronoun.capitalize_first_letter()
+            } else {
+                format!("Its")
+            }
+        } else {
+            if let Some(pronoun) = &self.possessive_pronoun {
+                pronoun.clone()
+            } else {
+                format!("its")
+            }
+        }
+
+    }
+
+    fn get_object_pronoun(&self, capitalize: bool) -> String {
+        if capitalize {
+            if let Some(pronoun) = &self.object_pronoun {
+                pronoun.capitalize_first_letter()
+            } else {
+                format!("It")
+            }
+        } else {
+            if let Some(pronoun) = &self.object_pronoun {
+                pronoun.clone()
+            } else {
+                format!("it")
+            }
+        }
+
+    }
+
+    fn get_reflexive_pronoun(&self, capitalize: bool) -> String {
+        if capitalize {
+            if let Some(pronoun) = &self.reflexive_pronoun {
+                pronoun.capitalize_first_letter()
+            } else {
+                format!("It")
+            }
+        } else {
+            if let Some(pronoun) = &self.reflexive_pronoun {
+                pronoun.clone()
+            } else {
+                format!("it")
             }
         }
 
@@ -1045,6 +1141,30 @@ impl Creature {
         self.possessive_cap = Some(name.to_owned())
     }
 
+    pub fn set_subject_pronoun(&mut self, pronoun: &str) {
+        self.subject_pronoun = Some(pronoun.to_owned())
+    }
+    
+    pub fn set_subject_pronoun_cap(&mut self, pronoun: &str) {
+        self.subject_pronoun_cap = Some(pronoun.to_owned())
+    }
+    
+    pub fn set_possessive_pronoun(&mut self, pronoun: &str) {
+        self.possessive_pronoun = Some(pronoun.to_owned())
+    }
+    
+    pub fn set_possessive_pronoun_cap(&mut self, pronoun: &str) {
+        self.possessive_pronoun_cap = Some(pronoun.to_owned())
+    }
+    
+    pub fn set_object_pronoun(&mut self, pronoun: &str) {
+        self.object_pronoun = Some(pronoun.to_owned())
+    }
+
+    pub fn set_reflexive_pronoun(&mut self, pronoun: &str) {
+        self.reflexive_pronoun = Some(pronoun.to_owned())
+    }
+    
     pub fn set_tiny(&mut self) {
         self.size = CreatureSize::Tiny;
         self.hit_die = Die::D4;

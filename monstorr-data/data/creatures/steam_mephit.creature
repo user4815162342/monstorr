@@ -19,7 +19,7 @@
     Darkvision(60),
     Languages([Aquan,Ignan]),
     OverrideQuarterChallenge,
-    Feature(Feature("Death Burst","When ${subj} dies, it explodes in a cloud of steam. Each creature within 5 feet of ${subj} must succeed on a DC 10 Dexterity saving throw or take ${1d8} fire damage.")),
+    Feature(Feature("Death Burst","When ${subj} dies, ${subjpro} explodes in a cloud of steam. Each creature within 5 feet of ${subj} must succeed on a DC 10 Dexterity saving throw or take ${1d8} fire damage.")),
     InnateSpellcasting([
         Ability(Charisma),
         PerDay(1,["blur"])
