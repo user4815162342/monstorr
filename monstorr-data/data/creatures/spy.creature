@@ -17,7 +17,7 @@
         Language("any two languages")
     ]),
     OverrideChallenge(1),
-    Feature(Feature("Cunning Action","On each of its turns, ${subj} can use a bonus action to take the Dash, Disengage, or Hide action.")),
+    Feature(Feature("Cunning Action","On each of ${posspro} turns, ${subj} can use a bonus action to take the Dash, Disengage, or Hide action.")),
     Feature(Feature("Sneak Attack","${Subj} deals an extra ${2d6} damage when ${subjpro} hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of ${subj} that isn’t incapacitated and ${subj} doesn’t have disadvantage on the attack roll."),Some(PerTurn(1))),
     Multiattack("${Subj} makes two melee attacks.",Count(2,[Melee])),
     Weapon(Shortsword(0)),

@@ -956,13 +956,13 @@ impl Creature {
             if let Some(pronoun) = &self.reflexive_pronoun {
                 pronoun.capitalize_first_letter()
             } else {
-                format!("It")
+                format!("Itself")
             }
         } else {
             if let Some(pronoun) = &self.reflexive_pronoun {
                 pronoun.clone()
             } else {
-                format!("it")
+                format!("itself")
             }
         }
 
