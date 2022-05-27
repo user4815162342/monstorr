@@ -116,6 +116,14 @@ const WARLOCK_CAST_SLOTS: [(u8,u8); 21] = [
     (5,4)
 ];
 
+fn ordinal(level: u8) -> String {
+    match level {
+        1 => "1st".to_owned(),
+        2 => "2nd".to_owned(),
+        3 => "3rd".to_owned(),
+        a => format!("{}th",a)
+    }
+}
 
 pub struct Spellcasting {
     pub caster_level: u8,
@@ -235,7 +243,7 @@ impl Spellcasting {
             "".to_owned()
         };
         
-        let mut result = format!("${{Subj}} is a {}-level spellcaster. ${{Posspro}} spellcasting ability is {} (spell save DC {}, {} to hit with spell attacks). ${{Subj}} has the following {} spells prepared{}:",self.caster_level,self.ability,save_dc,attack_bonus,self.class,warlock_style);
+        let mut result = format!("${{Subj}} is a {}-level spellcaster. ${{Posspro}} spellcasting ability is {} (spell save DC {}, {} to hit with spell attacks). ${{Subj}} has the following {} spells prepared{}:",ordinal(self.caster_level),self.ability,save_dc,attack_bonus,self.class,warlock_style);
 
         for (level,list) in &self.spells {
 
@@ -286,19 +294,19 @@ impl Spellcasting {
             SpellcastingStyle::Full => {
                 let slot_array = FULL_CAST_SLOTS[self.caster_level as usize];
                 for i in 0..slot_array.len() as u8 {
-                    self.slots.insert(i+1,slot_array[i as usize]);
+                    self.slots.insert(i,slot_array[i as usize]);
                 }
             },
             SpellcastingStyle::Half => {
                 let slot_array = HALF_CAST_SLOTS[self.caster_level as usize];
                 for i in 0..slot_array.len() as u8 {
-                    self.slots.insert(i+1,slot_array[i as usize]);
+                    self.slots.insert(i,slot_array[i as usize]);
                 }
             },
             SpellcastingStyle::Third => {
                 let slot_array = THIRD_CAST_SLOTS[self.caster_level as usize];
                 for i in 0..slot_array.len() as u8 {
-                    self.slots.insert(i+1,slot_array[i as usize]);
+                    self.slots.insert(i,slot_array[i as usize]);
                 }
             },
             SpellcastingStyle::Warlock => {
