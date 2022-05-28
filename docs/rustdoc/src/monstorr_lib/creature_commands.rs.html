@@ -1725,6 +1725,93 @@
 <span id="1725">1725</span>
 <span id="1726">1726</span>
 <span id="1727">1727</span>
+<span id="1728">1728</span>
+<span id="1729">1729</span>
+<span id="1730">1730</span>
+<span id="1731">1731</span>
+<span id="1732">1732</span>
+<span id="1733">1733</span>
+<span id="1734">1734</span>
+<span id="1735">1735</span>
+<span id="1736">1736</span>
+<span id="1737">1737</span>
+<span id="1738">1738</span>
+<span id="1739">1739</span>
+<span id="1740">1740</span>
+<span id="1741">1741</span>
+<span id="1742">1742</span>
+<span id="1743">1743</span>
+<span id="1744">1744</span>
+<span id="1745">1745</span>
+<span id="1746">1746</span>
+<span id="1747">1747</span>
+<span id="1748">1748</span>
+<span id="1749">1749</span>
+<span id="1750">1750</span>
+<span id="1751">1751</span>
+<span id="1752">1752</span>
+<span id="1753">1753</span>
+<span id="1754">1754</span>
+<span id="1755">1755</span>
+<span id="1756">1756</span>
+<span id="1757">1757</span>
+<span id="1758">1758</span>
+<span id="1759">1759</span>
+<span id="1760">1760</span>
+<span id="1761">1761</span>
+<span id="1762">1762</span>
+<span id="1763">1763</span>
+<span id="1764">1764</span>
+<span id="1765">1765</span>
+<span id="1766">1766</span>
+<span id="1767">1767</span>
+<span id="1768">1768</span>
+<span id="1769">1769</span>
+<span id="1770">1770</span>
+<span id="1771">1771</span>
+<span id="1772">1772</span>
+<span id="1773">1773</span>
+<span id="1774">1774</span>
+<span id="1775">1775</span>
+<span id="1776">1776</span>
+<span id="1777">1777</span>
+<span id="1778">1778</span>
+<span id="1779">1779</span>
+<span id="1780">1780</span>
+<span id="1781">1781</span>
+<span id="1782">1782</span>
+<span id="1783">1783</span>
+<span id="1784">1784</span>
+<span id="1785">1785</span>
+<span id="1786">1786</span>
+<span id="1787">1787</span>
+<span id="1788">1788</span>
+<span id="1789">1789</span>
+<span id="1790">1790</span>
+<span id="1791">1791</span>
+<span id="1792">1792</span>
+<span id="1793">1793</span>
+<span id="1794">1794</span>
+<span id="1795">1795</span>
+<span id="1796">1796</span>
+<span id="1797">1797</span>
+<span id="1798">1798</span>
+<span id="1799">1799</span>
+<span id="1800">1800</span>
+<span id="1801">1801</span>
+<span id="1802">1802</span>
+<span id="1803">1803</span>
+<span id="1804">1804</span>
+<span id="1805">1805</span>
+<span id="1806">1806</span>
+<span id="1807">1807</span>
+<span id="1808">1808</span>
+<span id="1809">1809</span>
+<span id="1810">1810</span>
+<span id="1811">1811</span>
+<span id="1812">1812</span>
+<span id="1813">1813</span>
+<span id="1814">1814</span>
 </pre><pre class="rust"><code><span class="comment">/*
  * Copyright © 2022 Neil M. Sheldon
  * 
@@ -2163,6 +2250,56 @@ The documentation below is automatically produced with tools which assume you ar
     When interpolating descriptions, it is often necessary to refer to the creature by name. The interpolation variable `Poss` is used when the creature is referred to as posessing something, and this occurs at the beginning of a setence. By default, the value returned is the value from `PossessiveName` with the first letter capitalized. If you need to override this somehow, you can set a different value here.
     */</span>
     <span class="ident">CapitalizePossessiveName</span>(<span class="ident">String</span>),
+
+    <span class="doccomment">/**
+     `Pronoun(&lt;string&gt;)`
+
+    When interpolating descriptions, it is often necessary to use a pronoun for the creature. Various interpolation variables are used to determine these, and all of them can be overridden. You can use this command as a shortcut to overriding all of them based on a linguistic gender. You can pass the following words: &quot;she&quot;, &quot;her&quot;, &quot;he&quot;, &quot;him&quot;, &quot;his&quot;, &quot;they&quot;, &quot;them&quot;, &quot;their&quot;, &quot;xe&quot;, &quot;xem&quot;, &quot;xir&quot;, &quot;it&quot; or &quot;its&quot;. If those words are passed, appropriate values will be overridden for all of the pronoun cases. If any other words are passed to this command, that word will be used in all cases.
+     */</span>
+    <span class="ident">Pronoun</span>(<span class="ident">String</span>),
+
+    <span class="doccomment">/**
+    `SubjectPronoun(&lt;string&gt;)`
+
+    When interpolating descriptions, it is often necessary to use a pronoun for the creature. The interpolation variable `subjpro` is used when the creature is referred to as the subject of an action. By default, the value returned is &#39;it&#39;. If you need to override this somehow, you can set a different value here.
+    */</span>
+    <span class="ident">SubjectPronoun</span>(<span class="ident">String</span>),
+
+    <span class="doccomment">/**
+    `CapitalizeSubjectPronoun(&lt;string&gt;)`
+
+    When interpolating descriptions, it is often necessary to use a pronoun for the creature. The interpolation variable `Subjpro` is used when the creature is referred to as the subject of an action. By default, the value returned is &#39;It&#39;. If you need to override this somehow, you can set a different value here.
+    */</span>
+    <span class="ident">CapitalizeSubjectPronoun</span>(<span class="ident">String</span>),
+
+    <span class="doccomment">/**
+    `PossessivePronoun(&lt;string&gt;)`
+
+    When interpolating descriptions, it is often necessary to use a pronoun for the creature. The interpolation variable `posspro` is used when the creature is referred to as possessing something. By default, the value returned is &#39;its&#39;. If you need to override this somehow, you can set a different value here.
+    */</span>
+    <span class="ident">PossessivePronoun</span>(<span class="ident">String</span>),
+
+    <span class="doccomment">/**
+    `CapitalizePossessivePronoun(&lt;string&gt;)`
+
+    When interpolating descriptions, it is often necessary to use a pronoun for the creature. The interpolation variable `Posspro` is used when the creature is referred to as possessing something. By default, the value returned is &#39;Its&#39;. If you need to override this somehow, you can set a different value here.
+    */</span>
+    <span class="ident">CapitalizePossessivePronoun</span>(<span class="ident">String</span>),
+
+    <span class="doccomment">/**
+    `ObjectPronoun(&lt;string&gt;)`
+
+    When interpolating descriptions, it is often necessary to use a pronoun for the creature. The interpolation variable `objpro` is used when the creature is referred to as the object of an action. By default, the value returned is &#39;it&#39;. If you need to override this somehow, you can set a different value here.
+    */</span>
+    <span class="ident">ObjectPronoun</span>(<span class="ident">String</span>),
+
+    <span class="doccomment">/**
+    `ReflexivePronoun(&lt;string&gt;)`
+
+    When interpolating descriptions, it is often necessary to use a pronoun for the creature. The interpolation variable `refpro` is used when the creature is referred to as the object of an action. By default, the value returned is &#39;itself&#39;. If you need to override this somehow, you can set a different value here.
+    */</span>
+    <span class="ident">ReflexivePronoun</span>(<span class="ident">String</span>),
+
 
     <span class="doccomment">/**
     `Tiny`
@@ -2766,7 +2903,7 @@ The documentation below is automatically produced with tools which assume you ar
     <span class="doccomment">/**
     `Languages([&lt;Language&gt;])`
 
-    Adds the specified languages to the creature. See [`crate::stats::Language`] for possible values.
+    Sets the specified languages to the creature. See [`crate::stats::Language`] for possible values.
 
     */</span>
     <span class="ident">Languages</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Language</span><span class="op">&gt;</span>),
@@ -2995,11 +3132,25 @@ The documentation below is automatically produced with tools which assume you ar
     <span class="ident">RemoveWeapon</span>(<span class="ident">Weapon</span>),
 
     <span class="doccomment">/**
+    `MoveWeapon(&lt;Weapon&gt;,&lt;integer&gt;)
+
+    Moves a weapon down or up on the list. This is useful when you are overriding an existing creature and want to ensure that actions appear in the correct order.
+     */</span>
+    <span class="ident">MoveWeapon</span>(<span class="ident">Weapon</span>,<span class="ident">i8</span>),
+
+    <span class="doccomment">/**
     `RemoveAction(&lt;string&gt;)`
 
     Removes the first action with the specified name from the list of actions.
     */</span>
     <span class="ident">RemoveAction</span>(<span class="ident">String</span>),
+
+    <span class="doccomment">/**
+    `MoveAction(&lt;string&gt;,&lt;integer&gt;)
+
+    Moves an action down or up on the list. This is useful when you are overriding an existing creature and want to ensure that actions appear in the correct order.
+     */</span>
+    <span class="ident">MoveAction</span>(<span class="ident">String</span>,<span class="ident">i8</span>),
 
     <span class="doccomment">/**
     `Reaction(&lt;Reaction&gt;)`
@@ -3128,6 +3279,27 @@ The documentation below is automatically produced with tools which assume you ar
             <span class="ident">CreatureCommand::CapitalizeSubjectName</span>(<span class="ident">name</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">set_capitalized_subject</span>(<span class="ident">name</span>),
             <span class="ident">CreatureCommand::PossessiveName</span>(<span class="ident">name</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">set_possessive</span>(<span class="ident">name</span>),
             <span class="ident">CreatureCommand::CapitalizePossessiveName</span>(<span class="ident">name</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">set_capitalized_possessive</span>(<span class="ident">name</span>),
+            <span class="ident">CreatureCommand::Pronoun</span>(<span class="ident">pronoun</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="kw">let</span> (<span class="ident">s</span>,<span class="ident">o</span>,<span class="ident">p</span>,<span class="ident">r</span>) <span class="op">=</span> <span class="kw">match</span> <span class="ident">pronoun</span>.<span class="ident">as_str</span>() {
+                    <span class="string">&quot;she&quot;</span> <span class="op">|</span> <span class="string">&quot;her&quot;</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="string">&quot;she&quot;</span>,<span class="string">&quot;her&quot;</span>,<span class="string">&quot;her&quot;</span>,<span class="string">&quot;herself&quot;</span>),
+                    <span class="string">&quot;he&quot;</span> <span class="op">|</span> <span class="string">&quot;him&quot;</span> <span class="op">|</span> <span class="string">&quot;his&quot;</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="string">&quot;he&quot;</span>,<span class="string">&quot;him&quot;</span>,<span class="string">&quot;his&quot;</span>,<span class="string">&quot;himself&quot;</span>),
+                    <span class="string">&quot;they&quot;</span> <span class="op">|</span> <span class="string">&quot;them&quot;</span> <span class="op">|</span> <span class="string">&quot;their&quot;</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="string">&quot;they&quot;</span>,<span class="string">&quot;them&quot;</span>,<span class="string">&quot;their&quot;</span>,<span class="string">&quot;themself&quot;</span>),
+                    <span class="string">&quot;xe&quot;</span> <span class="op">|</span> <span class="string">&quot;xem&quot;</span> <span class="op">|</span> <span class="string">&quot;xir&quot;</span>  <span class="op">=</span><span class="op">&gt;</span> (<span class="string">&quot;xe&quot;</span>,<span class="string">&quot;xem&quot;</span>,<span class="string">&quot;xir&quot;</span>,<span class="string">&quot;xirself&quot;</span>),
+                    <span class="string">&quot;it&quot;</span> <span class="op">|</span> <span class="string">&quot;its&quot;</span>  <span class="op">=</span><span class="op">&gt;</span>  (<span class="string">&quot;it&quot;</span>,<span class="string">&quot;it&quot;</span>,<span class="string">&quot;its&quot;</span>,<span class="string">&quot;itself&quot;</span>),
+                    <span class="ident">a</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">a</span>,<span class="ident">a</span>,<span class="ident">a</span>,<span class="ident">a</span>)
+    
+                };
+                <span class="ident">creature</span>.<span class="ident">set_subject_pronoun</span>(<span class="ident">s</span>);
+                <span class="ident">creature</span>.<span class="ident">set_object_pronoun</span>(<span class="ident">o</span>);
+                <span class="ident">creature</span>.<span class="ident">set_possessive_pronoun</span>(<span class="ident">p</span>);
+                <span class="ident">creature</span>.<span class="ident">set_reflexive_pronoun</span>(<span class="ident">r</span>);
+            },
+            <span class="ident">CreatureCommand::SubjectPronoun</span>(<span class="ident">pronoun</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">set_subject_pronoun</span>(<span class="ident">pronoun</span>),
+            <span class="ident">CreatureCommand::CapitalizeSubjectPronoun</span>(<span class="ident">pronoun</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">set_subject_pronoun_cap</span>(<span class="ident">pronoun</span>),
+            <span class="ident">CreatureCommand::PossessivePronoun</span>(<span class="ident">pronoun</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">set_possessive_pronoun</span>(<span class="ident">pronoun</span>),
+            <span class="ident">CreatureCommand::CapitalizePossessivePronoun</span>(<span class="ident">pronoun</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">set_possessive_pronoun_cap</span>(<span class="ident">pronoun</span>),
+            <span class="ident">CreatureCommand::ObjectPronoun</span>(<span class="ident">pronoun</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">set_object_pronoun</span>(<span class="ident">pronoun</span>),
+            <span class="ident">CreatureCommand::ReflexivePronoun</span>(<span class="ident">pronoun</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">set_reflexive_pronoun</span>(<span class="ident">pronoun</span>),
             <span class="ident">CreatureCommand::Tiny</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">set_tiny</span>(),
             <span class="ident">CreatureCommand::Small</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">set_small</span>(),
             <span class="ident">CreatureCommand::Medium</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">set_medium</span>(),
@@ -3212,7 +3384,7 @@ The documentation below is automatically produced with tools which assume you ar
             <span class="ident">CreatureCommand::NonSilveredImmunity</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">add_nonsilvered_immunity</span>(),
             <span class="ident">CreatureCommand::NonAdamantineImmunity</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">add_nonadamantine_immunity</span>(),
             <span class="ident">CreatureCommand::CustomImmunity</span>(<span class="ident">custom</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">add_custom_immunity</span>(<span class="ident">custom</span>),
-            <span class="ident">CreatureCommand::Languages</span>(<span class="ident">languages</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">add_languages</span>(<span class="ident">languages</span>),
+            <span class="ident">CreatureCommand::Languages</span>(<span class="ident">languages</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">set_languages</span>(<span class="ident">languages</span>),
             <span class="ident">CreatureCommand::UnspokenLanguages</span>(<span class="ident">languages</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">add_unspoken_languages</span>(<span class="ident">languages</span>),
             <span class="ident">CreatureCommand::Darkvision</span>(<span class="ident">distance</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">add_darkvision</span>(<span class="ident">distance</span>),
             <span class="ident">CreatureCommand::Blindsight</span>(<span class="ident">distance</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">add_blindsight</span>(<span class="ident">distance</span>),
@@ -3243,7 +3415,9 @@ The documentation below is automatically produced with tools which assume you ar
             <span class="ident">CreatureCommand::Action</span>(<span class="ident">action</span>,<span class="ident">usage_limit</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">add_action</span>(<span class="ident">action</span>, <span class="ident">usage_limit</span>),
             <span class="ident">CreatureCommand::OverrideActionDescription</span>(<span class="ident">name</span>,<span class="ident">description</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">override_action_description</span>(<span class="ident">name</span>, <span class="ident">description</span>.<span class="ident">to_owned</span>())<span class="question-mark">?</span>,
             <span class="ident">CreatureCommand::RemoveWeapon</span>(<span class="ident">weapon</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">remove_weapon</span>(<span class="ident">weapon</span>),
+            <span class="ident">CreatureCommand::MoveWeapon</span>(<span class="ident">weapon</span>,<span class="ident">delta</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">move_weapon</span>(<span class="ident">weapon</span>,<span class="ident">delta</span>)<span class="question-mark">?</span>,
             <span class="ident">CreatureCommand::RemoveAction</span>(<span class="ident">name</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">remove_action</span>(<span class="ident">name</span>),
+            <span class="ident">CreatureCommand::MoveAction</span>(<span class="ident">name</span>,<span class="ident">delta</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">move_action</span>(<span class="ident">name</span>,<span class="ident">delta</span>)<span class="question-mark">?</span>,
             <span class="ident">CreatureCommand::Reaction</span>(<span class="ident">reaction</span>,<span class="ident">usage_limit</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">add_reaction</span>(<span class="ident">reaction</span>.<span class="ident">clone</span>(), <span class="ident">usage_limit</span>.<span class="ident">clone</span>()),
             <span class="ident">CreatureCommand::RemoveReaction</span>(<span class="ident">name</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">creature</span>.<span class="ident">remove_reaction</span>(<span class="ident">name</span>),
             <span class="ident">CreatureCommand::Feature</span>(<span class="ident">feature</span>,<span class="ident">usage_limit</span>) <span class="op">=</span><span class="op">&gt;</span> {

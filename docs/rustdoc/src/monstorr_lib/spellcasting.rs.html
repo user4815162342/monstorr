@@ -428,6 +428,14 @@
 <span id="428">428</span>
 <span id="429">429</span>
 <span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
 </pre><pre class="rust"><code><span class="comment">/*
  * Copyright © 2022 Neil M. Sheldon
  * 
@@ -546,6 +554,14 @@
     (<span class="number">5</span>,<span class="number">4</span>)
 ];
 
+<span class="kw">fn</span> <span class="ident">ordinal</span>(<span class="ident">level</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">match</span> <span class="ident">level</span> {
+        <span class="number">1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;1st&quot;</span>.<span class="ident">to_owned</span>(),
+        <span class="number">2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;2nd&quot;</span>.<span class="ident">to_owned</span>(),
+        <span class="number">3</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;3rd&quot;</span>.<span class="ident">to_owned</span>(),
+        <span class="ident">a</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;{}th&quot;</span>,<span class="ident">a</span>)
+    }
+}
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Spellcasting</span> {
     <span class="kw">pub</span> <span class="ident">caster_level</span>: <span class="ident">u8</span>,
@@ -665,7 +681,7 @@
             <span class="string">&quot;&quot;</span>.<span class="ident">to_owned</span>()
         };
         
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} is a {}-level spellcaster. Its spellcasting ability is {} (spell save DC {}, {} to hit with spell attacks). ${{Subj}} has the following {} spells prepared{}:&quot;</span>,<span class="self">self</span>.<span class="ident">caster_level</span>,<span class="self">self</span>.<span class="ident">ability</span>,<span class="ident">save_dc</span>,<span class="ident">attack_bonus</span>,<span class="self">self</span>.<span class="ident">class</span>,<span class="ident">warlock_style</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} is a {}-level spellcaster. ${{Posspro}} spellcasting ability is {} (spell save DC {}, {} to hit with spell attacks). ${{Subj}} has the following {} spells prepared{}:&quot;</span>,<span class="ident">ordinal</span>(<span class="self">self</span>.<span class="ident">caster_level</span>),<span class="self">self</span>.<span class="ident">ability</span>,<span class="ident">save_dc</span>,<span class="ident">attack_bonus</span>,<span class="self">self</span>.<span class="ident">class</span>,<span class="ident">warlock_style</span>);
 
         <span class="kw">for</span> (<span class="ident">level</span>,<span class="ident">list</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">spells</span> {
 
@@ -716,19 +732,19 @@
             <span class="ident">SpellcastingStyle::Full</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">slot_array</span> <span class="op">=</span> <span class="ident">FULL_CAST_SLOTS</span>[<span class="self">self</span>.<span class="ident">caster_level</span> <span class="kw">as</span> <span class="ident">usize</span>];
                 <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">slot_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u8</span> {
-                    <span class="self">self</span>.<span class="ident">slots</span>.<span class="ident">insert</span>(<span class="ident">i</span><span class="op">+</span><span class="number">1</span>,<span class="ident">slot_array</span>[<span class="ident">i</span> <span class="kw">as</span> <span class="ident">usize</span>]);
+                    <span class="self">self</span>.<span class="ident">slots</span>.<span class="ident">insert</span>(<span class="ident">i</span>,<span class="ident">slot_array</span>[<span class="ident">i</span> <span class="kw">as</span> <span class="ident">usize</span>]);
                 }
             },
             <span class="ident">SpellcastingStyle::Half</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">slot_array</span> <span class="op">=</span> <span class="ident">HALF_CAST_SLOTS</span>[<span class="self">self</span>.<span class="ident">caster_level</span> <span class="kw">as</span> <span class="ident">usize</span>];
                 <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">slot_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u8</span> {
-                    <span class="self">self</span>.<span class="ident">slots</span>.<span class="ident">insert</span>(<span class="ident">i</span><span class="op">+</span><span class="number">1</span>,<span class="ident">slot_array</span>[<span class="ident">i</span> <span class="kw">as</span> <span class="ident">usize</span>]);
+                    <span class="self">self</span>.<span class="ident">slots</span>.<span class="ident">insert</span>(<span class="ident">i</span>,<span class="ident">slot_array</span>[<span class="ident">i</span> <span class="kw">as</span> <span class="ident">usize</span>]);
                 }
             },
             <span class="ident">SpellcastingStyle::Third</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">slot_array</span> <span class="op">=</span> <span class="ident">THIRD_CAST_SLOTS</span>[<span class="self">self</span>.<span class="ident">caster_level</span> <span class="kw">as</span> <span class="ident">usize</span>];
                 <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">slot_array</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u8</span> {
-                    <span class="self">self</span>.<span class="ident">slots</span>.<span class="ident">insert</span>(<span class="ident">i</span><span class="op">+</span><span class="number">1</span>,<span class="ident">slot_array</span>[<span class="ident">i</span> <span class="kw">as</span> <span class="ident">usize</span>]);
+                    <span class="self">self</span>.<span class="ident">slots</span>.<span class="ident">insert</span>(<span class="ident">i</span>,<span class="ident">slot_array</span>[<span class="ident">i</span> <span class="kw">as</span> <span class="ident">usize</span>]);
                 }
             },
             <span class="ident">SpellcastingStyle::Warlock</span> <span class="op">=</span><span class="op">&gt;</span> {
@@ -832,7 +848,7 @@
         <span class="comment">// -- one problem here is that form doesn&#39;t provide the spell save and attacks, in theory because sleep doesn&#39;t require them. I currently have no way of knowing whether I need those anyway.</span>
         <span class="comment">// -- The main reason I don&#39;t want to do this is because I hate the inconsistency, and I would like their save DC listed somewhere in the stats.</span>
         
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;${{Poss}} innate spellcasting ability is {} (spell save DC {}, {} to hit with spell attacks). It can innately cast the following spells, {}:&quot;</span>,<span class="self">self</span>.<span class="ident">ability</span>,<span class="ident">save_dc</span>,<span class="ident">attack_bonus</span>,<span class="ident">components</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;${{Poss}} innate spellcasting ability is {} (spell save DC {}, {} to hit with spell attacks). ${{Subjpro}} can innately cast the following spells, {}:&quot;</span>,<span class="self">self</span>.<span class="ident">ability</span>,<span class="ident">save_dc</span>,<span class="ident">attack_bonus</span>,<span class="ident">components</span>);
 
 
         <span class="kw">for</span> (<span class="ident">count</span>,<span class="ident">list</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">spells</span> {
