@@ -1598,6 +1598,25 @@ impl Creature {
         self.vulnerabilities.custom = Some(name.to_owned())
     }
 
+    pub fn remove_vulnerability(&mut self, damage: &Damage) {
+        // also turn off all vulnerabilitys if possible.
+        self.vulnerabilities.all = false;
+        match damage {
+            Damage::Bludgeoning => self.vulnerabilities.bludgeoning = false,
+            Damage::Piercing => self.vulnerabilities.piercing = false,
+            Damage::Slashing => self.vulnerabilities.slashing = false,
+            Damage::Cold => self.vulnerabilities.cold = false,
+            Damage::Fire => self.vulnerabilities.fire = false,
+            Damage::Thunder => self.vulnerabilities.thunder = false,
+            Damage::Radiant => self.vulnerabilities.radiant = false,
+            Damage::Lightning => self.vulnerabilities.lightning = false,
+            Damage::Poison => self.vulnerabilities.poison = false,
+            Damage::Acid => self.vulnerabilities.acid = false,
+            Damage::Necrotic => self.vulnerabilities.necrotic = false,
+            Damage::Psychic => self.vulnerabilities.psychic = false 
+        }
+    }
+
     pub fn add_resistance(&mut self, damage: &Damage) {
         match damage {
             Damage::Bludgeoning => self.resistances.bludgeoning = true,
@@ -1634,6 +1653,33 @@ impl Creature {
 
     pub fn add_nonadamantine_resistance(&mut self) {
         self.resistances.non_adamantine_attacks = true;
+    }
+
+    pub fn remove_resistance(&mut self, damage: &Damage) {
+        // also turn off all vulnerabilitys if possible.
+        self.resistances.all = false;
+        match damage {
+            Damage::Bludgeoning => self.resistances.bludgeoning = false,
+            Damage::Piercing => self.resistances.piercing = false,
+            Damage::Slashing => self.resistances.slashing = false,
+            Damage::Cold => self.resistances.cold = false,
+            Damage::Fire => self.resistances.fire = false,
+            Damage::Thunder => self.resistances.thunder = false,
+            Damage::Radiant => self.resistances.radiant = false,
+            Damage::Lightning => self.resistances.lightning = false,
+            Damage::Poison => self.resistances.poison = false,
+            Damage::Acid => self.resistances.acid = false,
+            Damage::Necrotic => self.resistances.necrotic = false,
+            Damage::Psychic => self.resistances.psychic = false 
+        }
+    }
+
+    pub fn remove_special_resistance(&mut self) {
+        self.resistances.non_magical_attacks = false;
+        self.resistances.non_silvered_attacks = false;
+        self.resistances.non_adamantine_attacks = false;
+        self.resistances.custom = None;
+        self.resistances.all = false;
     }
 
     pub fn add_immunity(&mut self, damage: &Damage) {
@@ -1673,6 +1719,33 @@ impl Creature {
     pub fn add_nonadamantine_immunity(&mut self) {
         self.immunities.non_adamantine_attacks = true;
     }    
+
+    pub fn remove_immunity(&mut self, damage: &Damage) {
+        // also turn off all vulnerabilitys if possible.
+        self.immunities.all = false;
+        match damage {
+            Damage::Bludgeoning => self.immunities.bludgeoning = false,
+            Damage::Piercing => self.immunities.piercing = false,
+            Damage::Slashing => self.immunities.slashing = false,
+            Damage::Cold => self.immunities.cold = false,
+            Damage::Fire => self.immunities.fire = false,
+            Damage::Thunder => self.immunities.thunder = false,
+            Damage::Radiant => self.immunities.radiant = false,
+            Damage::Lightning => self.immunities.lightning = false,
+            Damage::Poison => self.immunities.poison = false,
+            Damage::Acid => self.immunities.acid = false,
+            Damage::Necrotic => self.immunities.necrotic = false,
+            Damage::Psychic => self.immunities.psychic = false 
+        }
+    }
+
+    pub fn remove_special_immunity(&mut self) {
+        self.immunities.non_magical_attacks = false;
+        self.immunities.non_silvered_attacks = false;
+        self.immunities.non_adamantine_attacks = false;
+        self.immunities.custom = None;
+        self.immunities.all = false;
+    }
 
     pub fn set_languages(&mut self, languages: &[Language]) {
         self.languages.clear();

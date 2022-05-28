@@ -995,6 +995,14 @@ pub enum CreatureCommand {
     AllVulnerability,
 
     /**
+    `RemoveVulnerability(<Damage>)`
+
+    Removes a specified damage vulnerability.
+     */
+    RemoveVulnerability(Damage),
+
+
+    /**
     `CustomVulnerability(<string>)`
 
     Overrides the text of the vulnerabilities property.
@@ -1036,6 +1044,19 @@ pub enum CreatureCommand {
     */
     NonAdamantineResistance,
 
+    /**
+    `RemoveResistance(<Damage>)`
+
+    Removes a specified damage resistance.
+     */
+    RemoveResistance(Damage),
+
+    /**
+    `RemoveSpecialResistance`
+
+    Removes non-magical, non-silvered and non-adamantine resistance.
+     */
+    RemoveSpecialResistance,
 
     /**
     `CustomResistance(<string>)`
@@ -1078,6 +1099,20 @@ pub enum CreatureCommand {
     Adds immunity to non-adamantine and non-magical attacks.
     */
     NonAdamantineImmunity,
+
+    /**
+    `RemoveImmunity(<Damage>)`
+
+    Removes a specified damage immunity.
+     */
+    RemoveImmunity(Damage),
+
+    /**
+    `RemoveSpecialImmunity`
+
+    Removes non-magical, non-silvered and non-adamantine immunity.
+     */
+    RemoveSpecialImmunity,
 
     /**
     `CustomImmunity(<string>)`
@@ -1557,18 +1592,23 @@ impl CreatureCommand {
             CreatureCommand::ConditionImmunity(condition) => creature.add_condition_immunity(condition),
             CreatureCommand::Vulnerability(damage) => creature.add_vulnerability(damage),
             CreatureCommand::AllVulnerability => creature.add_all_vulnerability(),
+            CreatureCommand::RemoveVulnerability(damage) => creature.remove_vulnerability(damage),
             CreatureCommand::CustomVulnerability(name) => creature.add_custom_vulnerability(name),
             CreatureCommand::Resistance(damage) => creature.add_resistance(damage),
             CreatureCommand::AllResistance => creature.add_all_resistance(),
             CreatureCommand::NonmagicalResistance => creature.add_nonmagical_resistance(),
             CreatureCommand::NonSilveredResistance => creature.add_nonsilvered_resistance(),
             CreatureCommand::NonAdamantineResistance => creature.add_nonadamantine_resistance(),
+            CreatureCommand::RemoveResistance(damage) => creature.remove_resistance(damage),
+            CreatureCommand::RemoveSpecialResistance => creature.remove_special_resistance(),
             CreatureCommand::CustomResistance(custom) => creature.add_custom_resistance(custom),
             CreatureCommand::Immunity(damage) => creature.add_immunity(damage),
             CreatureCommand::AllImmunity => creature.add_all_immunities(),
             CreatureCommand::NonmagicalImmunity => creature.add_nonmagical_immunity(),
             CreatureCommand::NonSilveredImmunity => creature.add_nonsilvered_immunity(),
             CreatureCommand::NonAdamantineImmunity => creature.add_nonadamantine_immunity(),
+            CreatureCommand::RemoveImmunity(damage) => creature.remove_immunity(damage),
+            CreatureCommand::RemoveSpecialImmunity => creature.remove_special_immunity(),
             CreatureCommand::CustomImmunity(custom) => creature.add_custom_immunity(custom),
             CreatureCommand::Languages(languages) => creature.set_languages(languages),
             CreatureCommand::UnspokenLanguages(languages) => creature.add_unspoken_languages(languages),
