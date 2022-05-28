@@ -15,6 +15,7 @@ use crate::dice::Dice;
 use crate::dice_expression::DiceExpression;
 use crate::stats::Ability;
 use crate::stats::CreatureSize;
+use crate::utils::Capitalize;
 
 
 
@@ -156,33 +157,33 @@ impl AttackEffect {
                        alt_damage),
             // Represents an attack result which only causes damage if the target fails to save on a certain ability.
             AttackEffect::SaveAll(save_dc,save_ability,dice,bonus,damage) =>
-               format!("The target must make a DC {} {} saving throw, taking ${{{} + {}}} {} damage on a failed save",
+               format!("the target must make a DC {} {} saving throw, taking ${{{} + {}}} {} damage on a failed save",
                        save_dc,
                        save_ability,
                        dice.serialize_to_string(),
                        bonus.get_expr(default_bonus,false),
                        damage),
             AttackEffect::SaveHalf(save_dc,save_ability,dice,bonus,damage) =>
-               format!("The target must make a DC {} {} saving throw, taking ${{{} + {}}} {} damage on a failed save, or half as much damage on a successful one",
+               format!("the target must make a DC {} {} saving throw, taking ${{{} + {}}} {} damage on a failed save, or half as much damage on a successful one",
                        save_dc,
                        save_ability,
                        dice.serialize_to_string(),
                        bonus.get_expr(default_bonus,false),
                        damage),
             AttackEffect::AreaDamage(dice,bonus,damage) => // FUTURE: I don't know which creature I got this from, so wording might be wrong.
-                format!("Each target in the area takes ${{{} + {}}} {} damage",
+                format!("each target in the area takes ${{{} + {}}} {} damage",
                        dice.serialize_to_string(),
                        bonus.get_expr(default_bonus,false),
                        damage),
             AttackEffect::AreaSaveAll(save_dc,save_ability,dice,bonus,damage) =>
-                format!("Each target in the area must make a DC {} {} saving throw, taking ${{{} + {}}} {} damage on a failed save",
+                format!("each target in the area must make a DC {} {} saving throw, taking ${{{} + {}}} {} damage on a failed save",
                         save_dc,
                         save_ability,
                         dice.serialize_to_string(),
                         bonus.get_expr(default_bonus,false),
                         damage),
             AttackEffect::AreaSaveHalf(save_dc,save_ability,dice,bonus,damage) =>
-                format!("Each target in the area must make a DC {} {} saving throw, taking ${{{} + {}}} {} damage on a failed save, or half as much damage on a successful one",
+                format!("each target in the area must make a DC {} {} saving throw, taking ${{{} + {}}} {} damage on a failed save, or half as much damage on a successful one",
                         save_dc,
                         save_ability,
                         dice.serialize_to_string(),
@@ -201,7 +202,7 @@ impl AttackEffect {
                 CompoundAttackEffect::AndAnd(alt_attack,and) => 
                     format!("{}, and {} and {}.",base,alt_attack.get_base_description(default_bonus),and),
                 CompoundAttackEffect::Additional(alt_attack) => 
-                    format!("{}. {}.",base,alt_attack.get_base_description(default_bonus)),
+                    format!("{}. {}.",base,alt_attack.get_base_description(default_bonus).capitalize_first_letter()),
                 CompoundAttackEffect::AndAdditional(first_alt,second_alt) => 
                     format!("{}, and {}. {}.",base,first_alt.get_base_description(default_bonus),second_alt.get_base_description(default_bonus)),
                 CompoundAttackEffect::Plus(alt) =>
