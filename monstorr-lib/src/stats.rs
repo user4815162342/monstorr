@@ -157,6 +157,8 @@ pub enum Damage {
     Thunder,
     /// `Radiant`
     Radiant,
+    /// `Force`
+    Force,
     /// `Lightning`
     Lightning,
     /// `Poison`
@@ -180,6 +182,7 @@ impl std::fmt::Display for Damage {
             Damage::Fire => write!(f,"fire"),
             Damage::Thunder => write!(f,"thunder"),
             Damage::Radiant => write!(f,"radiant"),
+            Damage::Force => write!(f,"force"),
             Damage::Lightning => write!(f,"lightning"),
             Damage::Poison => write!(f,"poison"),
             Damage::Acid => write!(f,"acid"),
