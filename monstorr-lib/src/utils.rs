@@ -90,17 +90,27 @@ impl_ceiling_div!(isize);
 
 pub trait AndJoin {
 
-    fn and_join(&self) -> String;
+    fn conjunction_join(&self, conjunction: &str) -> String;
+
+    fn and_join(&self) -> String {
+        self.conjunction_join("and")
+    }
+
+    fn or_join(&self) -> String {
+        self.conjunction_join("or")
+    }
+
+
 
 }
 
 impl<ItemType: Display> AndJoin for [ItemType] {
 
-    fn and_join(&self) -> String {
+    fn conjunction_join(&self, conjunction: &str) -> String {
         match self.len() {
             0 => String::new(),
             1 => self[0].to_string(),
-            2 => format!("{} and {}",self[0],self[1]),
+            2 => format!("{} {} {}",self[0],conjunction,self[1]),
             _ => {
                 let mut result = String::new();
                 let (head,end) = self.split_at(self.len()-1);
@@ -108,13 +118,15 @@ impl<ItemType: Display> AndJoin for [ItemType] {
                     result.push_str(&item.to_string());
                     result.push_str(", ");
                 }
-                result.push_str("and ");
+                result.push_str(conjunction);
+                result.push(' ');
                 for item in end {
                     result.push_str(&item.to_string())
                 };
                 result
             }
         }
+
     }
 
 
@@ -122,11 +134,11 @@ impl<ItemType: Display> AndJoin for [ItemType] {
 
 impl<ItemType: Display> AndJoin for &Vec<ItemType> {
 
-    fn and_join(&self) -> String {
+    fn conjunction_join(&self, conjunction: &str) -> String {
         match self.len() {
             0 => String::new(),
             1 => self[0].to_string(),
-            2 => format!("{} and {}",self[0],self[1]),
+            2 => format!("{} {} {}",self[0],conjunction,self[1]),
             _ => {
                 let mut result = String::new();
                 let (head,end) = self.split_at(self.len()-1);
@@ -134,15 +146,16 @@ impl<ItemType: Display> AndJoin for &Vec<ItemType> {
                     result.push_str(&item.to_string());
                     result.push_str(", ");
                 }
-                result.push_str("and ");
+                result.push_str(conjunction);
+                result.push(' ');
                 for item in end {
                     result.push_str(&item.to_string())
                 };
                 result
             }
         }
-    }
 
+    }
 
 }
 

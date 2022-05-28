@@ -15,7 +15,7 @@
     Vulnerability(Fire),
     Resistance(Piercing),
     Languages([
-        Language("one language known by ${posspro} creator")
+        Language("one language known by its creator")
     ]),
     OverrideChallenge(0),
     Feature(Feature("False Appearance","While ${subj} remains motionless, ${subjpro} is indistinguishable from a normal shrub.")),
