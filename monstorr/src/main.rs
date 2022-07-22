@@ -68,28 +68,29 @@ struct InputOutputData {
     /// if the input file is a list, such as open5e-list, this specifies what creature to pick
     creature: Option<String>,
     #[clap(value_name="FILENAME")]
-    /// input file, if not specified will read from stdin
+    /// input file, if not specified will read from stdin. For the 'stored' format, this is the output file.
     input: Option<String>,
     #[clap(value_name="FILENAME")]
-    /// output file, if not specified will write to stdout
+    /// output file, if not specified will write to stdout.
     output: Option<String>,
 
 }
 
 impl InputOutputData {
 
-    /// Retrieves a [`monstorr_lib::InputFormat`] from the I/O arguments.
-    fn get_monstorr_input(&self) -> Result<MonstorrInputFormat,String> {
+    /// Converts to a [`monstorr_lib::InputFormat`] and Option<String> from the I/O arguments.
+    fn into_monstorr_input_output(self) -> Result<(MonstorrInputFormat,Option<String>),String> {
         Ok(match self.format {
-            InputFormat::Creature => MonstorrInputFormat::Creature,
-            InputFormat::Open5e => MonstorrInputFormat::Open5e,
-            InputFormat::Open5eList => if let Some(creature) = &self.creature {
-                MonstorrInputFormat::Open5eList(creature.clone())
+            InputFormat::Creature => (MonstorrInputFormat::Creature(self.input),self.output),
+            InputFormat::Open5e => (MonstorrInputFormat::Open5e(self.input),self.output),
+            InputFormat::Open5eList => if let Some(creature) = self.creature {
+                (MonstorrInputFormat::Open5eList(self.input,creature),self.output)
             } else {
                 Err("Please specify a creature name to process.")?
             },
             InputFormat::Stored => if let Some(creature) = &self.creature {
-                MonstorrInputFormat::Stored(creature.clone())
+                // NOTE: In this case we don't need an input file, so the input becomes the output file.
+                (MonstorrInputFormat::Stored(creature.clone()),self.input)
             } else {
                 Err("Please specify a creature name to process.")?
             }
@@ -97,6 +98,7 @@ impl InputOutputData {
         })
 
     }
+
 }
 
 #[derive(ArgEnum,Clone)]
@@ -342,32 +344,32 @@ fn run(args: Command) -> Result<(),String> {
         },
         Command::JSON{ugly, input_output} => {
             let output_format = MonstorrOutputFormat::JSON(ugly);
-            let input_format = input_output.get_monstorr_input()?;
-            create_stat_block(input_output.input.as_deref(), input_format, input_output.output.as_deref(), output_format)
+            let (input_format,output) = input_output.into_monstorr_input_output()?;
+            create_stat_block(input_format, output.as_deref(), output_format)
         },
         Command::HTML{input_output, two_column, fragment} => {
             let output_format = MonstorrOutputFormat::HTML(two_column,fragment);
-            let input_format = input_output.get_monstorr_input()?;
-            create_stat_block(input_output.input.as_deref(), input_format, input_output.output.as_deref(), output_format)
+            let (input_format,output) = input_output.into_monstorr_input_output()?;
+            create_stat_block(input_format, output.as_deref(), output_format)
         },
         Command::LATEX{input_output} => {
             let output_format = MonstorrOutputFormat::LaTeX();
-            let input_format = input_output.get_monstorr_input()?;
-            create_stat_block(input_output.input.as_deref(), input_format, input_output.output.as_deref(), output_format)
+            let (input_format,output) = input_output.into_monstorr_input_output()?;
+            create_stat_block(input_format, output.as_deref(), output_format)
         },
         Command::Plain{input_output} => {
             let output_format = MonstorrOutputFormat::Plain();
-            let input_format = input_output.get_monstorr_input()?;
-            create_stat_block(input_output.input.as_deref(), input_format, input_output.output.as_deref(), output_format)
+            let (input_format,output) = input_output.into_monstorr_input_output()?;
+            create_stat_block(input_format, output.as_deref(), output_format)
         }
         Command::MiniJinja{template,include,input_output} => {
             let output_format = MonstorrOutputFormat::MiniJinjaTemplate(template,include);
-            let input_format = input_output.get_monstorr_input()?;
-            create_stat_block(input_output.input.as_deref(), input_format, input_output.output.as_deref(), output_format)
+            let (input_format,output) = input_output.into_monstorr_input_output()?;
+            create_stat_block(input_format, output.as_deref(), output_format)
         },
         Command::Validate{input_output} => {
-            let input_format = input_output.get_monstorr_input()?;
-            validate_creature(input_output.input.as_deref(), input_format, input_output.output.as_deref())
+            let (input_format,output) = input_output.into_monstorr_input_output()?;
+            validate_creature(input_format, output.as_deref())
         },
         Command::ListTemplates{ class } => {
             println!("{}",list_template_names(class.map(|c| c.to_string())).join("\n"));

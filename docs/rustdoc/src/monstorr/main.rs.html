@@ -1,102 +1,107 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `monstorr&#x2F;src&#x2F;main.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>main.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../monstorr/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
-<span id="2">  2</span>
-<span id="3">  3</span>
-<span id="4">  4</span>
-<span id="5">  5</span>
-<span id="6">  6</span>
-<span id="7">  7</span>
-<span id="8">  8</span>
-<span id="9">  9</span>
-<span id="10"> 10</span>
-<span id="11"> 11</span>
-<span id="12"> 12</span>
-<span id="13"> 13</span>
-<span id="14"> 14</span>
-<span id="15"> 15</span>
-<span id="16"> 16</span>
-<span id="17"> 17</span>
-<span id="18"> 18</span>
-<span id="19"> 19</span>
-<span id="20"> 20</span>
-<span id="21"> 21</span>
-<span id="22"> 22</span>
-<span id="23"> 23</span>
-<span id="24"> 24</span>
-<span id="25"> 25</span>
-<span id="26"> 26</span>
-<span id="27"> 27</span>
-<span id="28"> 28</span>
-<span id="29"> 29</span>
-<span id="30"> 30</span>
-<span id="31"> 31</span>
-<span id="32"> 32</span>
-<span id="33"> 33</span>
-<span id="34"> 34</span>
-<span id="35"> 35</span>
-<span id="36"> 36</span>
-<span id="37"> 37</span>
-<span id="38"> 38</span>
-<span id="39"> 39</span>
-<span id="40"> 40</span>
-<span id="41"> 41</span>
-<span id="42"> 42</span>
-<span id="43"> 43</span>
-<span id="44"> 44</span>
-<span id="45"> 45</span>
-<span id="46"> 46</span>
-<span id="47"> 47</span>
-<span id="48"> 48</span>
-<span id="49"> 49</span>
-<span id="50"> 50</span>
-<span id="51"> 51</span>
-<span id="52"> 52</span>
-<span id="53"> 53</span>
-<span id="54"> 54</span>
-<span id="55"> 55</span>
-<span id="56"> 56</span>
-<span id="57"> 57</span>
-<span id="58"> 58</span>
-<span id="59"> 59</span>
-<span id="60"> 60</span>
-<span id="61"> 61</span>
-<span id="62"> 62</span>
-<span id="63"> 63</span>
-<span id="64"> 64</span>
-<span id="65"> 65</span>
-<span id="66"> 66</span>
-<span id="67"> 67</span>
-<span id="68"> 68</span>
-<span id="69"> 69</span>
-<span id="70"> 70</span>
-<span id="71"> 71</span>
-<span id="72"> 72</span>
-<span id="73"> 73</span>
-<span id="74"> 74</span>
-<span id="75"> 75</span>
-<span id="76"> 76</span>
-<span id="77"> 77</span>
-<span id="78"> 78</span>
-<span id="79"> 79</span>
-<span id="80"> 80</span>
-<span id="81"> 81</span>
-<span id="82"> 82</span>
-<span id="83"> 83</span>
-<span id="84"> 84</span>
-<span id="85"> 85</span>
-<span id="86"> 86</span>
-<span id="87"> 87</span>
-<span id="88"> 88</span>
-<span id="89"> 89</span>
-<span id="90"> 90</span>
-<span id="91"> 91</span>
-<span id="92"> 92</span>
-<span id="93"> 93</span>
-<span id="94"> 94</span>
-<span id="95"> 95</span>
-<span id="96"> 96</span>
-<span id="97"> 97</span>
-<span id="98"> 98</span>
-<span id="99"> 99</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `monstorr/src/main.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>main.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../monstorr/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../monstorr/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../monstorr/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
 <span id="100">100</span>
 <span id="101">101</span>
 <span id="102">102</span>
@@ -419,6 +424,8 @@
 <span id="419">419</span>
 <span id="420">420</span>
 <span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
 </pre><pre class="rust"><code><span class="comment">/*
  * Copyright © 2022 Neil M. Sheldon
  * 
@@ -489,28 +496,29 @@ For more detailed documentation, including information on how to build a creatur
     <span class="doccomment">/// if the input file is a list, such as open5e-list, this specifies what creature to pick</span>
     <span class="ident">creature</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">value_name</span><span class="op">=</span><span class="string">&quot;FILENAME&quot;</span>)]</span>
-    <span class="doccomment">/// input file, if not specified will read from stdin</span>
+    <span class="doccomment">/// input file, if not specified will read from stdin. For the &#39;stored&#39; format, this is the output file.</span>
     <span class="ident">input</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">value_name</span><span class="op">=</span><span class="string">&quot;FILENAME&quot;</span>)]</span>
-    <span class="doccomment">/// output file, if not specified will write to stdout</span>
+    <span class="doccomment">/// output file, if not specified will write to stdout.</span>
     <span class="ident">output</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 
 }
 
 <span class="kw">impl</span> <span class="ident">InputOutputData</span> {
 
-    <span class="doccomment">/// Retrieves a [`monstorr_lib::InputFormat`] from the I/O arguments.</span>
-    <span class="kw">fn</span> <span class="ident">get_monstorr_input</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MonstorrInputFormat</span>,<span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Converts to a [`monstorr_lib::InputFormat`] and Option&lt;String&gt; from the I/O arguments.</span>
+    <span class="kw">fn</span> <span class="ident">into_monstorr_input_output</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">MonstorrInputFormat</span>,<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>),<span class="ident">String</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="kw">match</span> <span class="self">self</span>.<span class="ident">format</span> {
-            <span class="ident">InputFormat::Creature</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MonstorrInputFormat::Creature</span>,
-            <span class="ident">InputFormat::Open5e</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MonstorrInputFormat::Open5e</span>,
-            <span class="ident">InputFormat::Open5eList</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">creature</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">creature</span> {
-                <span class="ident">MonstorrInputFormat::Open5eList</span>(<span class="ident">creature</span>.<span class="ident">clone</span>())
+            <span class="ident">InputFormat::Creature</span> =&gt; (<span class="ident">MonstorrInputFormat::Creature</span>(<span class="self">self</span>.<span class="ident">input</span>),<span class="self">self</span>.<span class="ident">output</span>),
+            <span class="ident">InputFormat::Open5e</span> =&gt; (<span class="ident">MonstorrInputFormat::Open5e</span>(<span class="self">self</span>.<span class="ident">input</span>),<span class="self">self</span>.<span class="ident">output</span>),
+            <span class="ident">InputFormat::Open5eList</span> =&gt; <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">creature</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">creature</span> {
+                (<span class="ident">MonstorrInputFormat::Open5eList</span>(<span class="self">self</span>.<span class="ident">input</span>,<span class="ident">creature</span>),<span class="self">self</span>.<span class="ident">output</span>)
             } <span class="kw">else</span> {
                 <span class="prelude-val">Err</span>(<span class="string">&quot;Please specify a creature name to process.&quot;</span>)<span class="question-mark">?</span>
             },
-            <span class="ident">InputFormat::Stored</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">creature</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">creature</span> {
-                <span class="ident">MonstorrInputFormat::Stored</span>(<span class="ident">creature</span>.<span class="ident">clone</span>())
+            <span class="ident">InputFormat::Stored</span> =&gt; <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">creature</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">creature</span> {
+                <span class="comment">// NOTE: In this case we don&#39;t need an input file, so the input becomes the output file.</span>
+                (<span class="ident">MonstorrInputFormat::Stored</span>(<span class="ident">creature</span>.<span class="ident">clone</span>()),<span class="self">self</span>.<span class="ident">input</span>)
             } <span class="kw">else</span> {
                 <span class="prelude-val">Err</span>(<span class="string">&quot;Please specify a creature name to process.&quot;</span>)<span class="question-mark">?</span>
             }
@@ -518,6 +526,7 @@ For more detailed documentation, including information on how to build a creatur
         })
 
     }
+
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">ArgEnum</span>,<span class="ident">Clone</span>)]</span>
@@ -533,11 +542,11 @@ For more detailed documentation, including information on how to build a creatur
 
 <span class="kw">impl</span> <span class="ident">TemplateClass</span> {
 
-    <span class="kw">fn</span> <span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
+    <span class="kw">fn</span> <span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">TemplateClass::HTML</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;html&quot;</span>,
-            <span class="ident">TemplateClass::LATEX</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;latex&quot;</span>,
-            <span class="ident">TemplateClass::Plain</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;plain&quot;</span>
+            <span class="ident">TemplateClass::HTML</span> =&gt; <span class="string">&quot;html&quot;</span>,
+            <span class="ident">TemplateClass::LATEX</span> =&gt; <span class="string">&quot;latex&quot;</span>,
+            <span class="ident">TemplateClass::Plain</span> =&gt; <span class="string">&quot;plain&quot;</span>
         }
     }
 }
@@ -754,50 +763,50 @@ Monstorr recognizes a few formats for the input data for generating stat blocks.
 <span class="doccomment">/**
 Runs the tool with the given arguments.
 */</span>
-<span class="kw">fn</span> <span class="ident">run</span>(<span class="ident">args</span>: <span class="ident">Command</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">String</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">run</span>(<span class="ident">args</span>: <span class="ident">Command</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">String</span><span class="op">&gt;</span> {
 
     <span class="kw">match</span> <span class="ident">args</span> {
-        <span class="ident">Command::MonstorrVersion</span> <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">Command::MonstorrVersion</span> =&gt; {
             <span class="macro">println!</span>(<span class="string">&quot;monstorr creature commands version: {}&quot;</span>,<span class="ident">MONSTORR_VERSION</span>);
             <span class="ident">process::exit</span>(<span class="number">0</span>);
         },
-        <span class="ident">Command::JSON</span>{<span class="ident">ugly</span>, <span class="ident">input_output</span>} <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">Command::JSON</span>{<span class="ident">ugly</span>, <span class="ident">input_output</span>} =&gt; {
             <span class="kw">let</span> <span class="ident">output_format</span> <span class="op">=</span> <span class="ident">MonstorrOutputFormat::JSON</span>(<span class="ident">ugly</span>);
-            <span class="kw">let</span> <span class="ident">input_format</span> <span class="op">=</span> <span class="ident">input_output</span>.<span class="ident">get_monstorr_input</span>()<span class="question-mark">?</span>;
-            <span class="ident">create_stat_block</span>(<span class="ident">input_output</span>.<span class="ident">input</span>.<span class="ident">as_deref</span>(), <span class="ident">input_format</span>, <span class="ident">input_output</span>.<span class="ident">output</span>.<span class="ident">as_deref</span>(), <span class="ident">output_format</span>)
+            <span class="kw">let</span> (<span class="ident">input_format</span>,<span class="ident">output</span>) <span class="op">=</span> <span class="ident">input_output</span>.<span class="ident">into_monstorr_input_output</span>()<span class="question-mark">?</span>;
+            <span class="ident">create_stat_block</span>(<span class="ident">input_format</span>, <span class="ident">output</span>.<span class="ident">as_deref</span>(), <span class="ident">output_format</span>)
         },
-        <span class="ident">Command::HTML</span>{<span class="ident">input_output</span>, <span class="ident">two_column</span>, <span class="ident">fragment</span>} <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">Command::HTML</span>{<span class="ident">input_output</span>, <span class="ident">two_column</span>, <span class="ident">fragment</span>} =&gt; {
             <span class="kw">let</span> <span class="ident">output_format</span> <span class="op">=</span> <span class="ident">MonstorrOutputFormat::HTML</span>(<span class="ident">two_column</span>,<span class="ident">fragment</span>);
-            <span class="kw">let</span> <span class="ident">input_format</span> <span class="op">=</span> <span class="ident">input_output</span>.<span class="ident">get_monstorr_input</span>()<span class="question-mark">?</span>;
-            <span class="ident">create_stat_block</span>(<span class="ident">input_output</span>.<span class="ident">input</span>.<span class="ident">as_deref</span>(), <span class="ident">input_format</span>, <span class="ident">input_output</span>.<span class="ident">output</span>.<span class="ident">as_deref</span>(), <span class="ident">output_format</span>)
+            <span class="kw">let</span> (<span class="ident">input_format</span>,<span class="ident">output</span>) <span class="op">=</span> <span class="ident">input_output</span>.<span class="ident">into_monstorr_input_output</span>()<span class="question-mark">?</span>;
+            <span class="ident">create_stat_block</span>(<span class="ident">input_format</span>, <span class="ident">output</span>.<span class="ident">as_deref</span>(), <span class="ident">output_format</span>)
         },
-        <span class="ident">Command::LATEX</span>{<span class="ident">input_output</span>} <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">Command::LATEX</span>{<span class="ident">input_output</span>} =&gt; {
             <span class="kw">let</span> <span class="ident">output_format</span> <span class="op">=</span> <span class="ident">MonstorrOutputFormat::LaTeX</span>();
-            <span class="kw">let</span> <span class="ident">input_format</span> <span class="op">=</span> <span class="ident">input_output</span>.<span class="ident">get_monstorr_input</span>()<span class="question-mark">?</span>;
-            <span class="ident">create_stat_block</span>(<span class="ident">input_output</span>.<span class="ident">input</span>.<span class="ident">as_deref</span>(), <span class="ident">input_format</span>, <span class="ident">input_output</span>.<span class="ident">output</span>.<span class="ident">as_deref</span>(), <span class="ident">output_format</span>)
+            <span class="kw">let</span> (<span class="ident">input_format</span>,<span class="ident">output</span>) <span class="op">=</span> <span class="ident">input_output</span>.<span class="ident">into_monstorr_input_output</span>()<span class="question-mark">?</span>;
+            <span class="ident">create_stat_block</span>(<span class="ident">input_format</span>, <span class="ident">output</span>.<span class="ident">as_deref</span>(), <span class="ident">output_format</span>)
         },
-        <span class="ident">Command::Plain</span>{<span class="ident">input_output</span>} <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">Command::Plain</span>{<span class="ident">input_output</span>} =&gt; {
             <span class="kw">let</span> <span class="ident">output_format</span> <span class="op">=</span> <span class="ident">MonstorrOutputFormat::Plain</span>();
-            <span class="kw">let</span> <span class="ident">input_format</span> <span class="op">=</span> <span class="ident">input_output</span>.<span class="ident">get_monstorr_input</span>()<span class="question-mark">?</span>;
-            <span class="ident">create_stat_block</span>(<span class="ident">input_output</span>.<span class="ident">input</span>.<span class="ident">as_deref</span>(), <span class="ident">input_format</span>, <span class="ident">input_output</span>.<span class="ident">output</span>.<span class="ident">as_deref</span>(), <span class="ident">output_format</span>)
+            <span class="kw">let</span> (<span class="ident">input_format</span>,<span class="ident">output</span>) <span class="op">=</span> <span class="ident">input_output</span>.<span class="ident">into_monstorr_input_output</span>()<span class="question-mark">?</span>;
+            <span class="ident">create_stat_block</span>(<span class="ident">input_format</span>, <span class="ident">output</span>.<span class="ident">as_deref</span>(), <span class="ident">output_format</span>)
         }
-        <span class="ident">Command::MiniJinja</span>{<span class="ident">template</span>,<span class="ident">include</span>,<span class="ident">input_output</span>} <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">Command::MiniJinja</span>{<span class="ident">template</span>,<span class="ident">include</span>,<span class="ident">input_output</span>} =&gt; {
             <span class="kw">let</span> <span class="ident">output_format</span> <span class="op">=</span> <span class="ident">MonstorrOutputFormat::MiniJinjaTemplate</span>(<span class="ident">template</span>,<span class="ident">include</span>);
-            <span class="kw">let</span> <span class="ident">input_format</span> <span class="op">=</span> <span class="ident">input_output</span>.<span class="ident">get_monstorr_input</span>()<span class="question-mark">?</span>;
-            <span class="ident">create_stat_block</span>(<span class="ident">input_output</span>.<span class="ident">input</span>.<span class="ident">as_deref</span>(), <span class="ident">input_format</span>, <span class="ident">input_output</span>.<span class="ident">output</span>.<span class="ident">as_deref</span>(), <span class="ident">output_format</span>)
+            <span class="kw">let</span> (<span class="ident">input_format</span>,<span class="ident">output</span>) <span class="op">=</span> <span class="ident">input_output</span>.<span class="ident">into_monstorr_input_output</span>()<span class="question-mark">?</span>;
+            <span class="ident">create_stat_block</span>(<span class="ident">input_format</span>, <span class="ident">output</span>.<span class="ident">as_deref</span>(), <span class="ident">output_format</span>)
         },
-        <span class="ident">Command::Validate</span>{<span class="ident">input_output</span>} <span class="op">=</span><span class="op">&gt;</span> {
-            <span class="kw">let</span> <span class="ident">input_format</span> <span class="op">=</span> <span class="ident">input_output</span>.<span class="ident">get_monstorr_input</span>()<span class="question-mark">?</span>;
-            <span class="ident">validate_creature</span>(<span class="ident">input_output</span>.<span class="ident">input</span>.<span class="ident">as_deref</span>(), <span class="ident">input_format</span>, <span class="ident">input_output</span>.<span class="ident">output</span>.<span class="ident">as_deref</span>())
+        <span class="ident">Command::Validate</span>{<span class="ident">input_output</span>} =&gt; {
+            <span class="kw">let</span> (<span class="ident">input_format</span>,<span class="ident">output</span>) <span class="op">=</span> <span class="ident">input_output</span>.<span class="ident">into_monstorr_input_output</span>()<span class="question-mark">?</span>;
+            <span class="ident">validate_creature</span>(<span class="ident">input_format</span>, <span class="ident">output</span>.<span class="ident">as_deref</span>())
         },
-        <span class="ident">Command::ListTemplates</span>{ <span class="ident">class</span> } <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">Command::ListTemplates</span>{ <span class="ident">class</span> } =&gt; {
             <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>,<span class="ident">list_template_names</span>(<span class="ident">class</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="ident">c</span>.<span class="ident">to_string</span>())).<span class="ident">join</span>(<span class="string">&quot;\n&quot;</span>));
             <span class="prelude-val">Ok</span>(())
         },
-        <span class="ident">Command::ListCreatures</span>{<span class="ident">format</span>,<span class="ident">input</span>,<span class="ident">type_</span>,<span class="ident">subtype</span>,<span class="ident">size</span>,<span class="ident">alignment</span>,<span class="ident">max_cr</span>,<span class="ident">min_cr</span>} <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">Command::ListCreatures</span>{<span class="ident">format</span>,<span class="ident">input</span>,<span class="ident">type_</span>,<span class="ident">subtype</span>,<span class="ident">size</span>,<span class="ident">alignment</span>,<span class="ident">max_cr</span>,<span class="ident">min_cr</span>} =&gt; {
             <span class="kw">let</span> <span class="ident">format</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">format</span> {
-                <span class="ident">ListInputFormat::Open5eList</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MonstorrListInputFormat::Open5eList</span>,
-                <span class="ident">ListInputFormat::Stored</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MonstorrListInputFormat::Stored</span>
+                <span class="ident">ListInputFormat::Open5eList</span> =&gt; <span class="ident">MonstorrListInputFormat::Open5eList</span>,
+                <span class="ident">ListInputFormat::Stored</span> =&gt; <span class="ident">MonstorrListInputFormat::Stored</span>
             };
             <span class="kw">for</span> <span class="ident">creature</span> <span class="kw">in</span> <span class="ident">list_creatures</span>(<span class="ident">input</span>.<span class="ident">as_deref</span>(),<span class="ident">format</span>,<span class="ident">type_</span>,<span class="ident">subtype</span>,<span class="ident">size</span>,<span class="ident">alignment</span>,<span class="ident">max_cr</span>,<span class="ident">min_cr</span>)<span class="question-mark">?</span> {
                 <span class="macro">println!</span>(<span class="string">&quot;{} [{}] Challenge {}: {} {}{}, {} &quot;</span>,
@@ -816,11 +825,11 @@ Runs the tool with the given arguments.
             <span class="prelude-val">Ok</span>(())
         },
 
-        <span class="ident">Command::GetTemplate</span>{<span class="ident">name</span>} <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">Command::GetTemplate</span>{<span class="ident">name</span>} =&gt; {
             <span class="ident">print_template</span>(<span class="kw-2">&amp;</span><span class="ident">name</span>)
         },
 
-        <span class="ident">Command::GenCreaturesRustArray</span>{<span class="ident">dir</span>} <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">Command::GenCreaturesRustArray</span>{<span class="ident">dir</span>} =&gt; {
             <span class="ident">generate_creatures_as_rust_array</span>(<span class="kw-2">&amp;</span><span class="ident">dir</span>)
         },
     }
@@ -841,6 +850,5 @@ Parses the command line arguments, runs the tool, and prints out any error messa
 
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="monstorr" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
-    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="monstorr" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0 (fe5b13d68 2022-05-18)" ></div>
 </body></html>

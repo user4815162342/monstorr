@@ -97,13 +97,6 @@ pub enum StructureKeyword {
     Bold
 }
 
-
-#[derive(Clone,Debug)]
-struct TokenDetails {
-    position: PositionRange,
-    token: Token<StructureKeyword>
-}
-
 enum InterpolationState {
     Initial,
     Continuing
@@ -449,7 +442,7 @@ impl InterpolationValue {
 
     fn divide_floor(&self,rhs: &InterpolationValue) -> Result<InterpolationValue,InterpolationError> {
         match (self,rhs) {
-            (InterpolationValue::Number(num,sign),InterpolationValue::Number(rhs,_)) => Ok(InterpolationValue::Number(num.div_floor(rhs),*sign)),
+            (InterpolationValue::Number(num,sign),InterpolationValue::Number(rhs,_)) => Ok(InterpolationValue::Number(num.nms_div_floor(rhs),*sign)),
             (InterpolationValue::Dice(dice,sign),InterpolationValue::Number(rhs,_)) => Ok(InterpolationValue::Dice(dice.div_floor(rhs),*sign)),
             (InterpolationValue::String(_),_) | (_,InterpolationValue::String(_)) => Err(InterpolationError::CantDivideStrings),
             (InterpolationValue::Object(_),_) | (_,InterpolationValue::Object(_)) => Err(InterpolationError::CantDivideObjects),

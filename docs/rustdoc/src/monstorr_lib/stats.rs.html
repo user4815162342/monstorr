@@ -1,102 +1,107 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `monstorr-lib&#x2F;src&#x2F;stats.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>stats.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../monstorr_lib/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
-<span id="2">  2</span>
-<span id="3">  3</span>
-<span id="4">  4</span>
-<span id="5">  5</span>
-<span id="6">  6</span>
-<span id="7">  7</span>
-<span id="8">  8</span>
-<span id="9">  9</span>
-<span id="10"> 10</span>
-<span id="11"> 11</span>
-<span id="12"> 12</span>
-<span id="13"> 13</span>
-<span id="14"> 14</span>
-<span id="15"> 15</span>
-<span id="16"> 16</span>
-<span id="17"> 17</span>
-<span id="18"> 18</span>
-<span id="19"> 19</span>
-<span id="20"> 20</span>
-<span id="21"> 21</span>
-<span id="22"> 22</span>
-<span id="23"> 23</span>
-<span id="24"> 24</span>
-<span id="25"> 25</span>
-<span id="26"> 26</span>
-<span id="27"> 27</span>
-<span id="28"> 28</span>
-<span id="29"> 29</span>
-<span id="30"> 30</span>
-<span id="31"> 31</span>
-<span id="32"> 32</span>
-<span id="33"> 33</span>
-<span id="34"> 34</span>
-<span id="35"> 35</span>
-<span id="36"> 36</span>
-<span id="37"> 37</span>
-<span id="38"> 38</span>
-<span id="39"> 39</span>
-<span id="40"> 40</span>
-<span id="41"> 41</span>
-<span id="42"> 42</span>
-<span id="43"> 43</span>
-<span id="44"> 44</span>
-<span id="45"> 45</span>
-<span id="46"> 46</span>
-<span id="47"> 47</span>
-<span id="48"> 48</span>
-<span id="49"> 49</span>
-<span id="50"> 50</span>
-<span id="51"> 51</span>
-<span id="52"> 52</span>
-<span id="53"> 53</span>
-<span id="54"> 54</span>
-<span id="55"> 55</span>
-<span id="56"> 56</span>
-<span id="57"> 57</span>
-<span id="58"> 58</span>
-<span id="59"> 59</span>
-<span id="60"> 60</span>
-<span id="61"> 61</span>
-<span id="62"> 62</span>
-<span id="63"> 63</span>
-<span id="64"> 64</span>
-<span id="65"> 65</span>
-<span id="66"> 66</span>
-<span id="67"> 67</span>
-<span id="68"> 68</span>
-<span id="69"> 69</span>
-<span id="70"> 70</span>
-<span id="71"> 71</span>
-<span id="72"> 72</span>
-<span id="73"> 73</span>
-<span id="74"> 74</span>
-<span id="75"> 75</span>
-<span id="76"> 76</span>
-<span id="77"> 77</span>
-<span id="78"> 78</span>
-<span id="79"> 79</span>
-<span id="80"> 80</span>
-<span id="81"> 81</span>
-<span id="82"> 82</span>
-<span id="83"> 83</span>
-<span id="84"> 84</span>
-<span id="85"> 85</span>
-<span id="86"> 86</span>
-<span id="87"> 87</span>
-<span id="88"> 88</span>
-<span id="89"> 89</span>
-<span id="90"> 90</span>
-<span id="91"> 91</span>
-<span id="92"> 92</span>
-<span id="93"> 93</span>
-<span id="94"> 94</span>
-<span id="95"> 95</span>
-<span id="96"> 96</span>
-<span id="97"> 97</span>
-<span id="98"> 98</span>
-<span id="99"> 99</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `monstorr-lib/src/stats.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>stats.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../monstorr_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../monstorr_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../monstorr_lib/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
 <span id="100">100</span>
 <span id="101">101</span>
 <span id="102">102</span>
@@ -824,6 +829,9 @@
 <span id="824">824</span>
 <span id="825">825</span>
 <span id="826">826</span>
+<span id="827">827</span>
+<span id="828">828</span>
+<span id="829">829</span>
 </pre><pre class="rust"><code><span class="comment">/*
  * Copyright © 2022 Neil M. Sheldon
  * 
@@ -860,22 +868,22 @@
 
 <span class="kw">impl</span> <span class="ident">Ability</span> {
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">score_to_mod</span>(<span class="ident">score</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i8</span> {
-        (<span class="ident">score</span> <span class="kw">as</span> <span class="ident">i8</span><span class="op">-</span><span class="number">10</span>).<span class="ident">div_floor</span>(<span class="kw-2">&amp;</span><span class="number">2</span>)
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">score_to_mod</span>(<span class="ident">score</span>: <span class="ident">u8</span>) -&gt; <span class="ident">i8</span> {
+        (<span class="ident">score</span> <span class="kw">as</span> <span class="ident">i8</span><span class="op">-</span><span class="number">10</span>).<span class="ident">nms_div_floor</span>(<span class="kw-2">&amp;</span><span class="number">2</span>)
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_short_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_short_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Ability::Strength</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;str&quot;</span>,
-            <span class="ident">Ability::Dexterity</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;dex&quot;</span>,
-            <span class="ident">Ability::Constitution</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;con&quot;</span>,
-            <span class="ident">Ability::Intelligence</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;int&quot;</span>,
-            <span class="ident">Ability::Wisdom</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;wis&quot;</span>,
-            <span class="ident">Ability::Charisma</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;cha&quot;</span>
+            <span class="ident">Ability::Strength</span> =&gt; <span class="string">&quot;str&quot;</span>,
+            <span class="ident">Ability::Dexterity</span> =&gt; <span class="string">&quot;dex&quot;</span>,
+            <span class="ident">Ability::Constitution</span> =&gt; <span class="string">&quot;con&quot;</span>,
+            <span class="ident">Ability::Intelligence</span> =&gt; <span class="string">&quot;int&quot;</span>,
+            <span class="ident">Ability::Wisdom</span> =&gt; <span class="string">&quot;wis&quot;</span>,
+            <span class="ident">Ability::Charisma</span> =&gt; <span class="string">&quot;cha&quot;</span>
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_stat_block</span>(<span class="ident">score</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_stat_block</span>(<span class="ident">score</span>: <span class="ident">u8</span>) -&gt; <span class="ident">String</span> {
         <span class="macro">format!</span>(<span class="string">&quot;{} ({:+})&quot;</span>,<span class="ident">score</span>,<span class="ident"><span class="self">Self</span>::score_to_mod</span>(<span class="ident">score</span>))
     }
 
@@ -885,14 +893,14 @@
 
 <span class="kw">impl</span> <span class="ident">std::fmt::Display</span> <span class="kw">for</span> <span class="ident">Ability</span> {
 
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Ability::Strength</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Strength&quot;</span>),
-            <span class="ident">Ability::Dexterity</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Dexterity&quot;</span>),
-            <span class="ident">Ability::Constitution</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Constitution&quot;</span>),
-            <span class="ident">Ability::Intelligence</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Intelligence&quot;</span>),
-            <span class="ident">Ability::Wisdom</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Wisdom&quot;</span>),
-            <span class="ident">Ability::Charisma</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Charisma&quot;</span>),
+            <span class="ident">Ability::Strength</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Strength&quot;</span>),
+            <span class="ident">Ability::Dexterity</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Dexterity&quot;</span>),
+            <span class="ident">Ability::Constitution</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Constitution&quot;</span>),
+            <span class="ident">Ability::Intelligence</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Intelligence&quot;</span>),
+            <span class="ident">Ability::Wisdom</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Wisdom&quot;</span>),
+            <span class="ident">Ability::Charisma</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Charisma&quot;</span>),
         }
     }
 }
@@ -905,15 +913,15 @@
 <span class="kw">impl</span> <span class="ident">std::str::FromStr</span> <span class="kw">for</span> <span class="ident">Ability</span> {
     <span class="kw">type</span> <span class="prelude-val">Err</span> <span class="op">=</span> <span class="ident">ParseAbilityError</span>;
     
-    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="kw">match</span> <span class="ident">s</span>.<span class="ident">trim</span>().<span class="ident">to_lowercase</span>().<span class="ident">as_str</span>() {
-            <span class="string">&quot;strength&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Ability::Strength</span>,
-            <span class="string">&quot;dexterity&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Ability::Dexterity</span>,
-            <span class="string">&quot;constitution&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Ability::Constitution</span>,
-            <span class="string">&quot;intelligence&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Ability::Intelligence</span>,
-            <span class="string">&quot;wisdom&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Ability::Wisdom</span>,
-            <span class="string">&quot;charisma&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Ability::Charisma</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ParseAbilityError</span>)<span class="question-mark">?</span>
+            <span class="string">&quot;strength&quot;</span> =&gt; <span class="ident">Ability::Strength</span>,
+            <span class="string">&quot;dexterity&quot;</span> =&gt; <span class="ident">Ability::Dexterity</span>,
+            <span class="string">&quot;constitution&quot;</span> =&gt; <span class="ident">Ability::Constitution</span>,
+            <span class="string">&quot;intelligence&quot;</span> =&gt; <span class="ident">Ability::Intelligence</span>,
+            <span class="string">&quot;wisdom&quot;</span> =&gt; <span class="ident">Ability::Wisdom</span>,
+            <span class="string">&quot;charisma&quot;</span> =&gt; <span class="ident">Ability::Charisma</span>,
+            <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ParseAbilityError</span>)<span class="question-mark">?</span>
         })
     }    
 }
@@ -941,23 +949,23 @@
 
 <span class="kw">impl</span> <span class="ident">std::fmt::Display</span> <span class="kw">for</span> <span class="ident">Condition</span> {
 
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Condition::Blinded</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;blinded&quot;</span>),
-            <span class="ident">Condition::Charmed</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;charmed&quot;</span>),
-            <span class="ident">Condition::Deafened</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;deafened&quot;</span>),
-            <span class="ident">Condition::Exhaustion</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;exhaustion&quot;</span>),
-            <span class="ident">Condition::Frightened</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;frightened&quot;</span>),
-            <span class="ident">Condition::Grappled</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;grappled&quot;</span>),
-            <span class="ident">Condition::Incapacitated</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;incapacitated&quot;</span>),
-            <span class="ident">Condition::Invisible</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;invisible&quot;</span>),
-            <span class="ident">Condition::Paralyzed</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;paralyzed&quot;</span>),
-            <span class="ident">Condition::Petrified</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;petrified&quot;</span>),
-            <span class="ident">Condition::Poisoned</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;poisoned&quot;</span>),
-            <span class="ident">Condition::Prone</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;prone&quot;</span>),
-            <span class="ident">Condition::Restrained</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;restrained&quot;</span>),
-            <span class="ident">Condition::Stunned</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;stunned&quot;</span>),
-            <span class="ident">Condition::Unconscious</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;unconscious&quot;</span>),
+            <span class="ident">Condition::Blinded</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;blinded&quot;</span>),
+            <span class="ident">Condition::Charmed</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;charmed&quot;</span>),
+            <span class="ident">Condition::Deafened</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;deafened&quot;</span>),
+            <span class="ident">Condition::Exhaustion</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;exhaustion&quot;</span>),
+            <span class="ident">Condition::Frightened</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;frightened&quot;</span>),
+            <span class="ident">Condition::Grappled</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;grappled&quot;</span>),
+            <span class="ident">Condition::Incapacitated</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;incapacitated&quot;</span>),
+            <span class="ident">Condition::Invisible</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;invisible&quot;</span>),
+            <span class="ident">Condition::Paralyzed</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;paralyzed&quot;</span>),
+            <span class="ident">Condition::Petrified</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;petrified&quot;</span>),
+            <span class="ident">Condition::Poisoned</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;poisoned&quot;</span>),
+            <span class="ident">Condition::Prone</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;prone&quot;</span>),
+            <span class="ident">Condition::Restrained</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;restrained&quot;</span>),
+            <span class="ident">Condition::Stunned</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;stunned&quot;</span>),
+            <span class="ident">Condition::Unconscious</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;unconscious&quot;</span>),
         }
     }
 }
@@ -983,6 +991,8 @@ These values are used to represent standard damage types.
     <span class="ident">Thunder</span>,
     <span class="doccomment">/// `Radiant`</span>
     <span class="ident">Radiant</span>,
+    <span class="doccomment">/// `Force`</span>
+    <span class="ident">Force</span>,
     <span class="doccomment">/// `Lightning`</span>
     <span class="ident">Lightning</span>,
     <span class="doccomment">/// `Poison`</span>
@@ -997,20 +1007,21 @@ These values are used to represent standard damage types.
 
 <span class="kw">impl</span> <span class="ident">std::fmt::Display</span> <span class="kw">for</span> <span class="ident">Damage</span> {
 
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Damage::Bludgeoning</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;bludgeoning&quot;</span>),
-            <span class="ident">Damage::Piercing</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;piercing&quot;</span>),
-            <span class="ident">Damage::Slashing</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;slashing&quot;</span>),
-            <span class="ident">Damage::Cold</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;cold&quot;</span>),
-            <span class="ident">Damage::Fire</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;fire&quot;</span>),
-            <span class="ident">Damage::Thunder</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;thunder&quot;</span>),
-            <span class="ident">Damage::Radiant</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;radiant&quot;</span>),
-            <span class="ident">Damage::Lightning</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;lightning&quot;</span>),
-            <span class="ident">Damage::Poison</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;poison&quot;</span>),
-            <span class="ident">Damage::Acid</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;acid&quot;</span>),
-            <span class="ident">Damage::Necrotic</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;necrotic&quot;</span>),
-            <span class="ident">Damage::Psychic</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;psychic&quot;</span>),
+            <span class="ident">Damage::Bludgeoning</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;bludgeoning&quot;</span>),
+            <span class="ident">Damage::Piercing</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;piercing&quot;</span>),
+            <span class="ident">Damage::Slashing</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;slashing&quot;</span>),
+            <span class="ident">Damage::Cold</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;cold&quot;</span>),
+            <span class="ident">Damage::Fire</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;fire&quot;</span>),
+            <span class="ident">Damage::Thunder</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;thunder&quot;</span>),
+            <span class="ident">Damage::Radiant</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;radiant&quot;</span>),
+            <span class="ident">Damage::Force</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;force&quot;</span>),
+            <span class="ident">Damage::Lightning</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;lightning&quot;</span>),
+            <span class="ident">Damage::Poison</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;poison&quot;</span>),
+            <span class="ident">Damage::Acid</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;acid&quot;</span>),
+            <span class="ident">Damage::Necrotic</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;necrotic&quot;</span>),
+            <span class="ident">Damage::Psychic</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;psychic&quot;</span>),
         }
 
     }
@@ -1026,21 +1037,21 @@ These values are used to represent standard damage types.
 <span class="kw">impl</span> <span class="ident">std::str::FromStr</span> <span class="kw">for</span> <span class="ident">Damage</span> {
     <span class="kw">type</span> <span class="prelude-val">Err</span> <span class="op">=</span> <span class="ident">ParseDamageError</span>;
     
-    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="kw">match</span> <span class="ident">s</span>.<span class="ident">trim</span>().<span class="ident">to_lowercase</span>().<span class="ident">as_str</span>() {
-            <span class="string">&quot;bludgeoning&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Damage::Bludgeoning</span>,
-            <span class="string">&quot;piercing&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Damage::Piercing</span>,
-            <span class="string">&quot;slashing&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Damage::Slashing</span>,
-            <span class="string">&quot;cold&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Damage::Cold</span>,
-            <span class="string">&quot;fire&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Damage::Fire</span>,
-            <span class="string">&quot;thunder&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Damage::Thunder</span>,
-            <span class="string">&quot;radiant&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Damage::Radiant</span>,
-            <span class="string">&quot;lightning&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Damage::Lightning</span>,
-            <span class="string">&quot;poison&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Damage::Poison</span>,
-            <span class="string">&quot;acid&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Damage::Acid</span>,
-            <span class="string">&quot;necrotic&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Damage::Necrotic</span>,
-            <span class="string">&quot;psychic&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Damage::Psychic</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ParseDamageError</span>)<span class="question-mark">?</span>
+            <span class="string">&quot;bludgeoning&quot;</span> =&gt; <span class="ident">Damage::Bludgeoning</span>,
+            <span class="string">&quot;piercing&quot;</span> =&gt; <span class="ident">Damage::Piercing</span>,
+            <span class="string">&quot;slashing&quot;</span> =&gt; <span class="ident">Damage::Slashing</span>,
+            <span class="string">&quot;cold&quot;</span> =&gt; <span class="ident">Damage::Cold</span>,
+            <span class="string">&quot;fire&quot;</span> =&gt; <span class="ident">Damage::Fire</span>,
+            <span class="string">&quot;thunder&quot;</span> =&gt; <span class="ident">Damage::Thunder</span>,
+            <span class="string">&quot;radiant&quot;</span> =&gt; <span class="ident">Damage::Radiant</span>,
+            <span class="string">&quot;lightning&quot;</span> =&gt; <span class="ident">Damage::Lightning</span>,
+            <span class="string">&quot;poison&quot;</span> =&gt; <span class="ident">Damage::Poison</span>,
+            <span class="string">&quot;acid&quot;</span> =&gt; <span class="ident">Damage::Acid</span>,
+            <span class="string">&quot;necrotic&quot;</span> =&gt; <span class="ident">Damage::Necrotic</span>,
+            <span class="string">&quot;psychic&quot;</span> =&gt; <span class="ident">Damage::Psychic</span>,
+            <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ParseDamageError</span>)<span class="question-mark">?</span>
         })
     }    
 }
@@ -1141,41 +1152,41 @@ These values are used to represent most of the standard languages found in the c
 
 <span class="kw">impl</span> <span class="ident">std::fmt::Display</span> <span class="kw">for</span> <span class="ident">Language</span> {
 
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Language::All</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;all&quot;</span>),
-            <span class="ident">Language::Common</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Common&quot;</span>),
-            <span class="ident">Language::Goblin</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Goblin&quot;</span>),
-            <span class="ident">Language::DeepSpeech</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Deep Speech&quot;</span>),
-            <span class="ident">Language::Draconic</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Draconic&quot;</span>),
-            <span class="ident">Language::Auran</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Auran&quot;</span>),
-            <span class="ident">Language::Sphinx</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Sphinx&quot;</span>),
-            <span class="ident">Language::Ignan</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Ignan&quot;</span>),
-            <span class="ident">Language::Abyssal</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Abyssal&quot;</span>),
-            <span class="ident">Language::Infernal</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Infernal&quot;</span>),
-            <span class="ident">Language::Elvish</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Elvish&quot;</span>),
-            <span class="ident">Language::Sylvan</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Sylvan&quot;</span>),
-            <span class="ident">Language::Undercommon</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Undercommon&quot;</span>),
-            <span class="ident">Language::Giant</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Giant&quot;</span>),
-            <span class="ident">Language::Gnomish</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Gnomish&quot;</span>),
-            <span class="ident">Language::Terran</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Terran&quot;</span>),
-            <span class="ident">Language::Aquan</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Aquan&quot;</span>),
-            <span class="ident">Language::Dwarvish</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Dwarvish&quot;</span>),
-            <span class="ident">Language::Orc</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Orc&quot;</span>),
-            <span class="ident">Language::GiantEagle</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Giant Eagle&quot;</span>),
-            <span class="ident">Language::GiantElk</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Giant Elk&quot;</span>),
-            <span class="ident">Language::BlinkDog</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Blink Dog&quot;</span>),
-            <span class="ident">Language::GiantOwl</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Giant Owl&quot;</span>),
-            <span class="ident">Language::Gnoll</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Gnoll&quot;</span>),
-            <span class="ident">Language::Celestial</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Celestial&quot;</span>),
-            <span class="ident">Language::Primordial</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Primordial&quot;</span>),
-            <span class="ident">Language::Otyugh</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Otyugh&quot;</span>),
-            <span class="ident">Language::Sahuagin</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Sahuagin&quot;</span>),
-            <span class="ident">Language::Druidic</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Druidic&quot;</span>),
-            <span class="ident">Language::WinterWolf</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Winter Wolf&quot;</span>),
-            <span class="ident">Language::Worg</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Worg&quot;</span>),
-            <span class="ident">Language::Telepathy</span>(<span class="ident">a</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;telepathy {} ft.&quot;</span>,<span class="ident">a</span>),
-            <span class="ident">Language::Language</span>(<span class="ident">a</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;{}&quot;</span>,<span class="ident">a</span>)
+            <span class="ident">Language::All</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;all&quot;</span>),
+            <span class="ident">Language::Common</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Common&quot;</span>),
+            <span class="ident">Language::Goblin</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Goblin&quot;</span>),
+            <span class="ident">Language::DeepSpeech</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Deep Speech&quot;</span>),
+            <span class="ident">Language::Draconic</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Draconic&quot;</span>),
+            <span class="ident">Language::Auran</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Auran&quot;</span>),
+            <span class="ident">Language::Sphinx</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Sphinx&quot;</span>),
+            <span class="ident">Language::Ignan</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Ignan&quot;</span>),
+            <span class="ident">Language::Abyssal</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Abyssal&quot;</span>),
+            <span class="ident">Language::Infernal</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Infernal&quot;</span>),
+            <span class="ident">Language::Elvish</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Elvish&quot;</span>),
+            <span class="ident">Language::Sylvan</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Sylvan&quot;</span>),
+            <span class="ident">Language::Undercommon</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Undercommon&quot;</span>),
+            <span class="ident">Language::Giant</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Giant&quot;</span>),
+            <span class="ident">Language::Gnomish</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Gnomish&quot;</span>),
+            <span class="ident">Language::Terran</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Terran&quot;</span>),
+            <span class="ident">Language::Aquan</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Aquan&quot;</span>),
+            <span class="ident">Language::Dwarvish</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Dwarvish&quot;</span>),
+            <span class="ident">Language::Orc</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Orc&quot;</span>),
+            <span class="ident">Language::GiantEagle</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Giant Eagle&quot;</span>),
+            <span class="ident">Language::GiantElk</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Giant Elk&quot;</span>),
+            <span class="ident">Language::BlinkDog</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Blink Dog&quot;</span>),
+            <span class="ident">Language::GiantOwl</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Giant Owl&quot;</span>),
+            <span class="ident">Language::Gnoll</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Gnoll&quot;</span>),
+            <span class="ident">Language::Celestial</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Celestial&quot;</span>),
+            <span class="ident">Language::Primordial</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Primordial&quot;</span>),
+            <span class="ident">Language::Otyugh</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Otyugh&quot;</span>),
+            <span class="ident">Language::Sahuagin</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Sahuagin&quot;</span>),
+            <span class="ident">Language::Druidic</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Druidic&quot;</span>),
+            <span class="ident">Language::WinterWolf</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Winter Wolf&quot;</span>),
+            <span class="ident">Language::Worg</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Worg&quot;</span>),
+            <span class="ident">Language::Telepathy</span>(<span class="ident">a</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;telepathy {} ft.&quot;</span>,<span class="ident">a</span>),
+            <span class="ident">Language::Language</span>(<span class="ident">a</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;{}&quot;</span>,<span class="ident">a</span>)
        
         }
     }
@@ -1236,39 +1247,39 @@ These are used to add skill proficiencies to a creature.
 <span class="kw">impl</span> <span class="ident">std::str::FromStr</span> <span class="kw">for</span> <span class="ident">Language</span> {
     <span class="kw">type</span> <span class="prelude-val">Err</span> <span class="op">=</span> <span class="ident">ParseLanguageError</span>;
     
-    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="kw">match</span> <span class="ident">s</span>.<span class="ident">trim</span>().<span class="ident">to_lowercase</span>().<span class="ident">as_str</span>() {
-            <span class="string">&quot;common&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Common</span>,
-            <span class="string">&quot;goblin&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Goblin</span>,
-            <span class="string">&quot;deep speech&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::DeepSpeech</span>,
-            <span class="string">&quot;draconic&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Draconic</span>,
-            <span class="string">&quot;auran&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Auran</span>,
-            <span class="string">&quot;sphinx&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Sphinx</span>,
-            <span class="string">&quot;ignan&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Ignan</span>,
-            <span class="string">&quot;abyssal&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Abyssal</span>,
-            <span class="string">&quot;infernal&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Infernal</span>,
-            <span class="string">&quot;elvish&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Elvish</span>,
-            <span class="string">&quot;sylvan&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Sylvan</span>,
-            <span class="string">&quot;undercommon&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Undercommon</span>,
-            <span class="string">&quot;giant&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Giant</span>,
-            <span class="string">&quot;gnomish&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Gnomish</span>,
-            <span class="string">&quot;terran&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Terran</span>,
-            <span class="string">&quot;aquan&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Aquan</span>,
-            <span class="string">&quot;dwarvish&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Dwarvish</span>,
-            <span class="string">&quot;orc&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Orc</span>,
-            <span class="string">&quot;giant eagle&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::GiantEagle</span>,
-            <span class="string">&quot;giant elk&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::GiantElk</span>,
-            <span class="string">&quot;blink dog&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::BlinkDog</span>,
-            <span class="string">&quot;giant owl&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::GiantOwl</span>,
-            <span class="string">&quot;gnoll&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Gnoll</span>,
-            <span class="string">&quot;celestial&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Celestial</span>,
-            <span class="string">&quot;primordial&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Primordial</span>,
-            <span class="string">&quot;otyugh&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Otyugh</span>,
-            <span class="string">&quot;sahuagin&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Sahuagin</span>,
-            <span class="string">&quot;druidic&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Druidic</span>,
-            <span class="string">&quot;winter wolf&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::WinterWolf</span>,
-            <span class="string">&quot;worg&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Language::Worg</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ParseLanguageError</span>)<span class="question-mark">?</span>
+            <span class="string">&quot;common&quot;</span> =&gt; <span class="ident">Language::Common</span>,
+            <span class="string">&quot;goblin&quot;</span> =&gt; <span class="ident">Language::Goblin</span>,
+            <span class="string">&quot;deep speech&quot;</span> =&gt; <span class="ident">Language::DeepSpeech</span>,
+            <span class="string">&quot;draconic&quot;</span> =&gt; <span class="ident">Language::Draconic</span>,
+            <span class="string">&quot;auran&quot;</span> =&gt; <span class="ident">Language::Auran</span>,
+            <span class="string">&quot;sphinx&quot;</span> =&gt; <span class="ident">Language::Sphinx</span>,
+            <span class="string">&quot;ignan&quot;</span> =&gt; <span class="ident">Language::Ignan</span>,
+            <span class="string">&quot;abyssal&quot;</span> =&gt; <span class="ident">Language::Abyssal</span>,
+            <span class="string">&quot;infernal&quot;</span> =&gt; <span class="ident">Language::Infernal</span>,
+            <span class="string">&quot;elvish&quot;</span> =&gt; <span class="ident">Language::Elvish</span>,
+            <span class="string">&quot;sylvan&quot;</span> =&gt; <span class="ident">Language::Sylvan</span>,
+            <span class="string">&quot;undercommon&quot;</span> =&gt; <span class="ident">Language::Undercommon</span>,
+            <span class="string">&quot;giant&quot;</span> =&gt; <span class="ident">Language::Giant</span>,
+            <span class="string">&quot;gnomish&quot;</span> =&gt; <span class="ident">Language::Gnomish</span>,
+            <span class="string">&quot;terran&quot;</span> =&gt; <span class="ident">Language::Terran</span>,
+            <span class="string">&quot;aquan&quot;</span> =&gt; <span class="ident">Language::Aquan</span>,
+            <span class="string">&quot;dwarvish&quot;</span> =&gt; <span class="ident">Language::Dwarvish</span>,
+            <span class="string">&quot;orc&quot;</span> =&gt; <span class="ident">Language::Orc</span>,
+            <span class="string">&quot;giant eagle&quot;</span> =&gt; <span class="ident">Language::GiantEagle</span>,
+            <span class="string">&quot;giant elk&quot;</span> =&gt; <span class="ident">Language::GiantElk</span>,
+            <span class="string">&quot;blink dog&quot;</span> =&gt; <span class="ident">Language::BlinkDog</span>,
+            <span class="string">&quot;giant owl&quot;</span> =&gt; <span class="ident">Language::GiantOwl</span>,
+            <span class="string">&quot;gnoll&quot;</span> =&gt; <span class="ident">Language::Gnoll</span>,
+            <span class="string">&quot;celestial&quot;</span> =&gt; <span class="ident">Language::Celestial</span>,
+            <span class="string">&quot;primordial&quot;</span> =&gt; <span class="ident">Language::Primordial</span>,
+            <span class="string">&quot;otyugh&quot;</span> =&gt; <span class="ident">Language::Otyugh</span>,
+            <span class="string">&quot;sahuagin&quot;</span> =&gt; <span class="ident">Language::Sahuagin</span>,
+            <span class="string">&quot;druidic&quot;</span> =&gt; <span class="ident">Language::Druidic</span>,
+            <span class="string">&quot;winter wolf&quot;</span> =&gt; <span class="ident">Language::WinterWolf</span>,
+            <span class="string">&quot;worg&quot;</span> =&gt; <span class="ident">Language::Worg</span>,
+            <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ParseLanguageError</span>)<span class="question-mark">?</span>
         })
     }    
 }
@@ -1339,14 +1350,14 @@ Represents the possible types of armor from the player&#39;s handbook, plus a co
 
 <span class="kw">impl</span> <span class="ident">std::fmt::Display</span> <span class="kw">for</span> <span class="ident">CreatureSize</span> {
 
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">CreatureSize::Tiny</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Tiny&quot;</span>),
-            <span class="ident">CreatureSize::Small</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Small&quot;</span>),
-            <span class="ident">CreatureSize::Medium</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Medium&quot;</span>),
-            <span class="ident">CreatureSize::Large</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Large&quot;</span>),
-            <span class="ident">CreatureSize::Huge</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Huge&quot;</span>),
-            <span class="ident">CreatureSize::Gargantuan</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Gargantuan&quot;</span>)
+            <span class="ident">CreatureSize::Tiny</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Tiny&quot;</span>),
+            <span class="ident">CreatureSize::Small</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Small&quot;</span>),
+            <span class="ident">CreatureSize::Medium</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Medium&quot;</span>),
+            <span class="ident">CreatureSize::Large</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Large&quot;</span>),
+            <span class="ident">CreatureSize::Huge</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Huge&quot;</span>),
+            <span class="ident">CreatureSize::Gargantuan</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Gargantuan&quot;</span>)
         }
 
     }
@@ -1374,23 +1385,23 @@ Represents the possible types of armor from the player&#39;s handbook, plus a co
 
 <span class="kw">impl</span> <span class="ident">std::fmt::Display</span> <span class="kw">for</span> <span class="ident">CreatureType</span> {
 
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">CreatureType::Aberration</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;aberration&quot;</span>),
-            <span class="ident">CreatureType::Beast</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;beast&quot;</span>),
-            <span class="ident">CreatureType::Celestial</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;celestial&quot;</span>),
-            <span class="ident">CreatureType::Construct</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;construct&quot;</span>),
-            <span class="ident">CreatureType::Dragon</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;dragon&quot;</span>),
-            <span class="ident">CreatureType::Elemental</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;elemental&quot;</span>),
-            <span class="ident">CreatureType::Fey</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;fey&quot;</span>),
-            <span class="ident">CreatureType::Fiend</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;fiend&quot;</span>),
-            <span class="ident">CreatureType::Giant</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;giant&quot;</span>),
-            <span class="ident">CreatureType::Humanoid</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;humanoid&quot;</span>),
-            <span class="ident">CreatureType::Monstrosity</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;monstrosity&quot;</span>),
-            <span class="ident">CreatureType::Ooze</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;ooze&quot;</span>),
-            <span class="ident">CreatureType::Plant</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;plant&quot;</span>),
-            <span class="ident">CreatureType::Undead</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;undead&quot;</span>),
-            <span class="ident">CreatureType::Custom</span>(<span class="ident">a</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;{}&quot;</span>,<span class="ident">a</span>)
+            <span class="ident">CreatureType::Aberration</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;aberration&quot;</span>),
+            <span class="ident">CreatureType::Beast</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;beast&quot;</span>),
+            <span class="ident">CreatureType::Celestial</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;celestial&quot;</span>),
+            <span class="ident">CreatureType::Construct</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;construct&quot;</span>),
+            <span class="ident">CreatureType::Dragon</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;dragon&quot;</span>),
+            <span class="ident">CreatureType::Elemental</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;elemental&quot;</span>),
+            <span class="ident">CreatureType::Fey</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;fey&quot;</span>),
+            <span class="ident">CreatureType::Fiend</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;fiend&quot;</span>),
+            <span class="ident">CreatureType::Giant</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;giant&quot;</span>),
+            <span class="ident">CreatureType::Humanoid</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;humanoid&quot;</span>),
+            <span class="ident">CreatureType::Monstrosity</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;monstrosity&quot;</span>),
+            <span class="ident">CreatureType::Ooze</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;ooze&quot;</span>),
+            <span class="ident">CreatureType::Plant</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;plant&quot;</span>),
+            <span class="ident">CreatureType::Undead</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;undead&quot;</span>),
+            <span class="ident">CreatureType::Custom</span>(<span class="ident">a</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;{}&quot;</span>,<span class="ident">a</span>)
         }
 
     }
@@ -1426,28 +1437,28 @@ Represents the possible types of armor from the player&#39;s handbook, plus a co
 
 <span class="kw">impl</span> <span class="ident">std::fmt::Display</span> <span class="kw">for</span> <span class="ident">Alignment</span> {
 
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Alignment::AnyAlignment</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;any alignment&quot;</span>),
-            <span class="ident">Alignment::AnyNonGood</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;any non-good&quot;</span>),
-            <span class="ident">Alignment::AnyNonEvil</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;any non-evil&quot;</span>),
-            <span class="ident">Alignment::AnyNonLawful</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;any non-lawful&quot;</span>),
-            <span class="ident">Alignment::AnyNonChaotic</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;any non-chaotic&quot;</span>),
-            <span class="ident">Alignment::AnyGood</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;any good&quot;</span>),
-            <span class="ident">Alignment::AnyEvil</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;any evil&quot;</span>),
-            <span class="ident">Alignment::AnyLawful</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;any lawful&quot;</span>),
-            <span class="ident">Alignment::AnyChaotic</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;any chaotic&quot;</span>),
-            <span class="ident">Alignment::LawfulGood</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;lawful good&quot;</span>),
-            <span class="ident">Alignment::NeutralGood</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;neutral good&quot;</span>),
-            <span class="ident">Alignment::ChaoticGood</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;chaotic good&quot;</span>),
-            <span class="ident">Alignment::LawfulNeutral</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;lawful neutral&quot;</span>),
-            <span class="ident">Alignment::Neutral</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;neutral&quot;</span>),
-            <span class="ident">Alignment::ChaoticNeutral</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;chaotic neutral&quot;</span>),
-            <span class="ident">Alignment::LawfulEvil</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;lawful evil&quot;</span>),
-            <span class="ident">Alignment::NeutralEvil</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;neutral evil&quot;</span>),
-            <span class="ident">Alignment::ChaoticEvil</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;chaotic evil&quot;</span>),
-            <span class="ident">Alignment::Unaligned</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;unaligned&quot;</span>),
-            <span class="ident">Alignment::Custom</span>(<span class="ident">a</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;{}&quot;</span>,<span class="ident">a</span>)
+            <span class="ident">Alignment::AnyAlignment</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;any alignment&quot;</span>),
+            <span class="ident">Alignment::AnyNonGood</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;any non-good&quot;</span>),
+            <span class="ident">Alignment::AnyNonEvil</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;any non-evil&quot;</span>),
+            <span class="ident">Alignment::AnyNonLawful</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;any non-lawful&quot;</span>),
+            <span class="ident">Alignment::AnyNonChaotic</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;any non-chaotic&quot;</span>),
+            <span class="ident">Alignment::AnyGood</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;any good&quot;</span>),
+            <span class="ident">Alignment::AnyEvil</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;any evil&quot;</span>),
+            <span class="ident">Alignment::AnyLawful</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;any lawful&quot;</span>),
+            <span class="ident">Alignment::AnyChaotic</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;any chaotic&quot;</span>),
+            <span class="ident">Alignment::LawfulGood</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;lawful good&quot;</span>),
+            <span class="ident">Alignment::NeutralGood</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;neutral good&quot;</span>),
+            <span class="ident">Alignment::ChaoticGood</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;chaotic good&quot;</span>),
+            <span class="ident">Alignment::LawfulNeutral</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;lawful neutral&quot;</span>),
+            <span class="ident">Alignment::Neutral</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;neutral&quot;</span>),
+            <span class="ident">Alignment::ChaoticNeutral</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;chaotic neutral&quot;</span>),
+            <span class="ident">Alignment::LawfulEvil</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;lawful evil&quot;</span>),
+            <span class="ident">Alignment::NeutralEvil</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;neutral evil&quot;</span>),
+            <span class="ident">Alignment::ChaoticEvil</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;chaotic evil&quot;</span>),
+            <span class="ident">Alignment::Unaligned</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;unaligned&quot;</span>),
+            <span class="ident">Alignment::Custom</span>(<span class="ident">a</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;{}&quot;</span>,<span class="ident">a</span>)
         }
 
     }
@@ -1464,12 +1475,12 @@ Represents the possible types of armor from the player&#39;s handbook, plus a co
 
 <span class="kw">impl</span> <span class="ident">std::fmt::Display</span> <span class="kw">for</span> <span class="ident">ParseChallengeRatingError</span> {
 
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::InvalidDenominator</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;invalid denominator&quot;</span>),
-            <span class="ident"><span class="self">Self</span>::InvalidNumerator</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;invalid numerator&quot;</span>),
-            <span class="ident"><span class="self">Self</span>::ChallengeRatingTooBig</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;challenge ratings over 30 not supported&quot;</span>),
-            <span class="ident"><span class="self">Self</span>::CouldNotParseAsNumber</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;could not parse as integer&quot;</span>),
+            <span class="ident"><span class="self">Self</span>::InvalidDenominator</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;invalid denominator&quot;</span>),
+            <span class="ident"><span class="self">Self</span>::InvalidNumerator</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;invalid numerator&quot;</span>),
+            <span class="ident"><span class="self">Self</span>::ChallengeRatingTooBig</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;challenge ratings over 30 not supported&quot;</span>),
+            <span class="ident"><span class="self">Self</span>::CouldNotParseAsNumber</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;could not parse as integer&quot;</span>),
         }
     }
 }
@@ -1487,115 +1498,115 @@ Represents the possible types of armor from the player&#39;s handbook, plus a co
 
 <span class="kw">impl</span> <span class="ident">ChallengeRating</span> {
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_proficiency_bonus</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_proficiency_bonus</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u8</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">ChallengeRating::Whole</span>(<span class="ident">a</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">a</span> {
-                <span class="number">0</span>..<span class="op">=</span><span class="number">4</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">2</span>,
-                <span class="number">5</span>..<span class="op">=</span><span class="number">8</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">3</span>,
-                <span class="number">9</span>..<span class="op">=</span><span class="number">12</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">4</span>,
-                <span class="number">13</span>..<span class="op">=</span><span class="number">16</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">5</span>,
-                <span class="number">17</span>..<span class="op">=</span><span class="number">20</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">6</span>,
-                <span class="number">21</span>..<span class="op">=</span><span class="number">24</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">7</span>,
-                <span class="number">25</span>..<span class="op">=</span><span class="number">28</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">8</span>,
-                <span class="number">29</span>..<span class="op">=</span><span class="number">30</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">9</span>,
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unimplemented!</span>(<span class="string">&quot;Challenge ratings above 30&quot;</span>)
+            <span class="ident">ChallengeRating::Whole</span>(<span class="ident">a</span>) =&gt; <span class="kw">match</span> <span class="ident">a</span> {
+                <span class="number">0</span>..<span class="op">=</span><span class="number">4</span> =&gt; <span class="number">2</span>,
+                <span class="number">5</span>..<span class="op">=</span><span class="number">8</span> =&gt; <span class="number">3</span>,
+                <span class="number">9</span>..<span class="op">=</span><span class="number">12</span> =&gt; <span class="number">4</span>,
+                <span class="number">13</span>..<span class="op">=</span><span class="number">16</span> =&gt; <span class="number">5</span>,
+                <span class="number">17</span>..<span class="op">=</span><span class="number">20</span> =&gt; <span class="number">6</span>,
+                <span class="number">21</span>..<span class="op">=</span><span class="number">24</span> =&gt; <span class="number">7</span>,
+                <span class="number">25</span>..<span class="op">=</span><span class="number">28</span> =&gt; <span class="number">8</span>,
+                <span class="number">29</span>..<span class="op">=</span><span class="number">30</span> =&gt; <span class="number">9</span>,
+                <span class="kw">_</span> =&gt; <span class="macro">unimplemented!</span>(<span class="string">&quot;Challenge ratings above 30&quot;</span>)
             },
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">2</span>
+            <span class="kw">_</span> =&gt; <span class="number">2</span>
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_xp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_xp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u32</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">0</span>,
-            <span class="ident"><span class="self">Self</span>::Eighth</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">25</span>,
-            <span class="ident"><span class="self">Self</span>::Quarter</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">50</span>,
-            <span class="ident"><span class="self">Self</span>::Half</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">100</span>,
-            <span class="ident"><span class="self">Self</span>::Whole</span>(<span class="ident">num</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">num</span> {
-                <span class="number">0</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">10</span>,
-                <span class="number">1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">200</span>,
-                <span class="number">2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">450</span>,
-                <span class="number">3</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">700</span>,
-                <span class="number">4</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">1100</span>,
-                <span class="number">5</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">1800</span>,
-                <span class="number">6</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">2300</span>,
-                <span class="number">7</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">2900</span>,
-                <span class="number">8</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">3900</span>,
-                <span class="number">9</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">5000</span>,
-                <span class="number">10</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">5900</span>,
-                <span class="number">11</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">7200</span>,
-                <span class="number">12</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">8400</span>,
-                <span class="number">13</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">10000</span>,
-                <span class="number">14</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">11500</span>,
-                <span class="number">15</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">13000</span>,
-                <span class="number">16</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">15000</span>,
-                <span class="number">17</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">18000</span>,
-                <span class="number">18</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">20000</span>,
-                <span class="number">19</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">22000</span>,
-                <span class="number">20</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">25000</span>,
-                <span class="number">21</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">33000</span>,
-                <span class="number">22</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">41000</span>,
-                <span class="number">23</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">50000</span>,
-                <span class="number">24</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">62000</span>,
-                <span class="number">25</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">75000</span>,
-                <span class="number">26</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">90000</span>,
-                <span class="number">27</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">105000</span>,
-                <span class="number">28</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">120000</span>,
-                <span class="number">29</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">135000</span>,
-                <span class="number">30</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">155000</span>,
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unimplemented!</span>(<span class="string">&quot;Challenge ratings above 30&quot;</span>)
+            <span class="ident"><span class="self">Self</span>::None</span> =&gt; <span class="number">0</span>,
+            <span class="ident"><span class="self">Self</span>::Eighth</span> =&gt; <span class="number">25</span>,
+            <span class="ident"><span class="self">Self</span>::Quarter</span> =&gt; <span class="number">50</span>,
+            <span class="ident"><span class="self">Self</span>::Half</span> =&gt; <span class="number">100</span>,
+            <span class="ident"><span class="self">Self</span>::Whole</span>(<span class="ident">num</span>) =&gt; <span class="kw">match</span> <span class="ident">num</span> {
+                <span class="number">0</span> =&gt; <span class="number">10</span>,
+                <span class="number">1</span> =&gt; <span class="number">200</span>,
+                <span class="number">2</span> =&gt; <span class="number">450</span>,
+                <span class="number">3</span> =&gt; <span class="number">700</span>,
+                <span class="number">4</span> =&gt; <span class="number">1100</span>,
+                <span class="number">5</span> =&gt; <span class="number">1800</span>,
+                <span class="number">6</span> =&gt; <span class="number">2300</span>,
+                <span class="number">7</span> =&gt; <span class="number">2900</span>,
+                <span class="number">8</span> =&gt; <span class="number">3900</span>,
+                <span class="number">9</span> =&gt; <span class="number">5000</span>,
+                <span class="number">10</span> =&gt; <span class="number">5900</span>,
+                <span class="number">11</span> =&gt; <span class="number">7200</span>,
+                <span class="number">12</span> =&gt; <span class="number">8400</span>,
+                <span class="number">13</span> =&gt; <span class="number">10000</span>,
+                <span class="number">14</span> =&gt; <span class="number">11500</span>,
+                <span class="number">15</span> =&gt; <span class="number">13000</span>,
+                <span class="number">16</span> =&gt; <span class="number">15000</span>,
+                <span class="number">17</span> =&gt; <span class="number">18000</span>,
+                <span class="number">18</span> =&gt; <span class="number">20000</span>,
+                <span class="number">19</span> =&gt; <span class="number">22000</span>,
+                <span class="number">20</span> =&gt; <span class="number">25000</span>,
+                <span class="number">21</span> =&gt; <span class="number">33000</span>,
+                <span class="number">22</span> =&gt; <span class="number">41000</span>,
+                <span class="number">23</span> =&gt; <span class="number">50000</span>,
+                <span class="number">24</span> =&gt; <span class="number">62000</span>,
+                <span class="number">25</span> =&gt; <span class="number">75000</span>,
+                <span class="number">26</span> =&gt; <span class="number">90000</span>,
+                <span class="number">27</span> =&gt; <span class="number">105000</span>,
+                <span class="number">28</span> =&gt; <span class="number">120000</span>,
+                <span class="number">29</span> =&gt; <span class="number">135000</span>,
+                <span class="number">30</span> =&gt; <span class="number">155000</span>,
+                <span class="kw">_</span> =&gt; <span class="macro">unimplemented!</span>(<span class="string">&quot;Challenge ratings above 30&quot;</span>)
             }
         }
 
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">display_with_xp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">display_with_xp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
         <span class="macro">format!</span>(<span class="string">&quot;{} ({} XP)&quot;</span>,<span class="self">self</span>,<span class="self">self</span>.<span class="ident">get_xp</span>().<span class="ident">display_with_thousands</span>())
     }
 }
 
 <span class="kw">impl</span> <span class="ident">std::cmp::PartialOrd</span> <span class="kw">for</span> <span class="ident">ChallengeRating</span> {
 
-    <span class="kw">fn</span> <span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">std::cmp::Ordering</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">std::cmp::Ordering</span><span class="op">&gt;</span> {
         <span class="prelude-val">Some</span>(<span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">ChallengeRating::None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">other</span> {
-                <span class="ident">ChallengeRating::None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">std::cmp::Ordering::Equal</span>,
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">std::cmp::Ordering::Less</span>
+            <span class="ident">ChallengeRating::None</span> =&gt; <span class="kw">match</span> <span class="ident">other</span> {
+                <span class="ident">ChallengeRating::None</span> =&gt; <span class="ident">std::cmp::Ordering::Equal</span>,
+                <span class="kw">_</span> =&gt; <span class="ident">std::cmp::Ordering::Less</span>
             },
-            <span class="ident">ChallengeRating::Eighth</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">other</span> {
-                <span class="ident">ChallengeRating::None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">std::cmp::Ordering::Greater</span>,
-                <span class="ident">ChallengeRating::Whole</span>(<span class="number">0</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">std::cmp::Ordering::Greater</span>,
-                <span class="ident">ChallengeRating::Eighth</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">std::cmp::Ordering::Equal</span>,
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">std::cmp::Ordering::Less</span>
+            <span class="ident">ChallengeRating::Eighth</span> =&gt; <span class="kw">match</span> <span class="ident">other</span> {
+                <span class="ident">ChallengeRating::None</span> =&gt; <span class="ident">std::cmp::Ordering::Greater</span>,
+                <span class="ident">ChallengeRating::Whole</span>(<span class="number">0</span>) =&gt; <span class="ident">std::cmp::Ordering::Greater</span>,
+                <span class="ident">ChallengeRating::Eighth</span> =&gt; <span class="ident">std::cmp::Ordering::Equal</span>,
+                <span class="kw">_</span> =&gt; <span class="ident">std::cmp::Ordering::Less</span>
             },
-            <span class="ident">ChallengeRating::Quarter</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">other</span> {
+            <span class="ident">ChallengeRating::Quarter</span> =&gt; <span class="kw">match</span> <span class="ident">other</span> {
                 <span class="ident">ChallengeRating::None</span> <span class="op">|</span> 
-                <span class="ident">ChallengeRating::Eighth</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">std::cmp::Ordering::Greater</span>,
-                <span class="ident">ChallengeRating::Whole</span>(<span class="number">0</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">std::cmp::Ordering::Greater</span>,
-                <span class="ident">ChallengeRating::Quarter</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">std::cmp::Ordering::Equal</span>,
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">std::cmp::Ordering::Less</span>
+                <span class="ident">ChallengeRating::Eighth</span> =&gt; <span class="ident">std::cmp::Ordering::Greater</span>,
+                <span class="ident">ChallengeRating::Whole</span>(<span class="number">0</span>) =&gt; <span class="ident">std::cmp::Ordering::Greater</span>,
+                <span class="ident">ChallengeRating::Quarter</span> =&gt; <span class="ident">std::cmp::Ordering::Equal</span>,
+                <span class="kw">_</span> =&gt; <span class="ident">std::cmp::Ordering::Less</span>
             },
-            <span class="ident">ChallengeRating::Half</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">other</span> {
+            <span class="ident">ChallengeRating::Half</span> =&gt; <span class="kw">match</span> <span class="ident">other</span> {
                 <span class="ident">ChallengeRating::None</span> <span class="op">|</span> 
                 <span class="ident">ChallengeRating::Eighth</span> <span class="op">|</span>
-                <span class="ident">ChallengeRating::Quarter</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">std::cmp::Ordering::Greater</span>,
-                <span class="ident">ChallengeRating::Whole</span>(<span class="number">0</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">std::cmp::Ordering::Greater</span>,
-                <span class="ident">ChallengeRating::Half</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">std::cmp::Ordering::Equal</span>,
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">std::cmp::Ordering::Less</span>
+                <span class="ident">ChallengeRating::Quarter</span> =&gt; <span class="ident">std::cmp::Ordering::Greater</span>,
+                <span class="ident">ChallengeRating::Whole</span>(<span class="number">0</span>) =&gt; <span class="ident">std::cmp::Ordering::Greater</span>,
+                <span class="ident">ChallengeRating::Half</span> =&gt; <span class="ident">std::cmp::Ordering::Equal</span>,
+                <span class="kw">_</span> =&gt; <span class="ident">std::cmp::Ordering::Less</span>
             },
-            <span class="ident">ChallengeRating::Whole</span>(<span class="number">0</span>) <span class="op">=</span><span class="op">&gt;</span>  <span class="kw">match</span> <span class="ident">other</span> {
-                <span class="ident">ChallengeRating::None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">std::cmp::Ordering::Greater</span>,
-                <span class="ident">ChallengeRating::Eighth</span> <span class="op">|</span>
-                <span class="ident">ChallengeRating::Quarter</span> <span class="op">|</span>
-                <span class="ident">ChallengeRating::Half</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">std::cmp::Ordering::Less</span>,
-                <span class="ident">ChallengeRating::Whole</span>(<span class="number">0</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">std::cmp::Ordering::Equal</span>,
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">std::cmp::Ordering::Less</span>
-            },
-            <span class="ident">ChallengeRating::Whole</span>(<span class="ident">lhs</span>) <span class="op">=</span><span class="op">&gt;</span>  <span class="kw">match</span> <span class="ident">other</span> {
-                <span class="ident">ChallengeRating::None</span> <span class="op">|</span> 
+            <span class="ident">ChallengeRating::Whole</span>(<span class="number">0</span>) =&gt;  <span class="kw">match</span> <span class="ident">other</span> {
+                <span class="ident">ChallengeRating::None</span> =&gt; <span class="ident">std::cmp::Ordering::Greater</span>,
                 <span class="ident">ChallengeRating::Eighth</span> <span class="op">|</span>
                 <span class="ident">ChallengeRating::Quarter</span> <span class="op">|</span>
-                <span class="ident">ChallengeRating::Half</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">std::cmp::Ordering::Greater</span>,
-                <span class="ident">ChallengeRating::Whole</span>(<span class="ident">rhs</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">lhs</span>.<span class="ident">partial_cmp</span>(<span class="ident">rhs</span>)<span class="question-mark">?</span>
+                <span class="ident">ChallengeRating::Half</span> =&gt; <span class="ident">std::cmp::Ordering::Less</span>,
+                <span class="ident">ChallengeRating::Whole</span>(<span class="number">0</span>) =&gt; <span class="ident">std::cmp::Ordering::Equal</span>,
+                <span class="kw">_</span> =&gt; <span class="ident">std::cmp::Ordering::Less</span>
+            },
+            <span class="ident">ChallengeRating::Whole</span>(<span class="ident">lhs</span>) =&gt;  <span class="kw">match</span> <span class="ident">other</span> {
+                <span class="ident">ChallengeRating::None</span> <span class="op">|</span> 
+                <span class="ident">ChallengeRating::Eighth</span> <span class="op">|</span>
+                <span class="ident">ChallengeRating::Quarter</span> <span class="op">|</span>
+                <span class="ident">ChallengeRating::Half</span> =&gt; <span class="ident">std::cmp::Ordering::Greater</span>,
+                <span class="ident">ChallengeRating::Whole</span>(<span class="ident">rhs</span>) =&gt; <span class="ident">lhs</span>.<span class="ident">partial_cmp</span>(<span class="ident">rhs</span>)<span class="question-mark">?</span>
             },
         })
 
@@ -1605,13 +1616,13 @@ Represents the possible types of armor from the player&#39;s handbook, plus a co
 
 <span class="kw">impl</span> <span class="ident">std::fmt::Display</span> <span class="kw">for</span> <span class="ident">ChallengeRating</span> {
 
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">ChallengeRating::None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;0&quot;</span>),
-            <span class="ident">ChallengeRating::Eighth</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;1/8&quot;</span>),
-            <span class="ident">ChallengeRating::Quarter</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;1/4&quot;</span>),
-            <span class="ident">ChallengeRating::Half</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;1/2&quot;</span>),
-            <span class="ident">ChallengeRating::Whole</span>(<span class="ident">a</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;{}&quot;</span>,<span class="ident">a</span>)
+            <span class="ident">ChallengeRating::None</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;0&quot;</span>),
+            <span class="ident">ChallengeRating::Eighth</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;1/8&quot;</span>),
+            <span class="ident">ChallengeRating::Quarter</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;1/4&quot;</span>),
+            <span class="ident">ChallengeRating::Half</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;1/2&quot;</span>),
+            <span class="ident">ChallengeRating::Whole</span>(<span class="ident">a</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;{}&quot;</span>,<span class="ident">a</span>)
         }
     }
 }
@@ -1619,15 +1630,15 @@ Represents the possible types of armor from the player&#39;s handbook, plus a co
 <span class="kw">impl</span> <span class="ident">std::str::FromStr</span> <span class="kw">for</span> <span class="ident">ChallengeRating</span> {
     <span class="kw">type</span> <span class="prelude-val">Err</span> <span class="op">=</span> <span class="ident">ParseChallengeRatingError</span>;
     
-    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">trimmed</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">trim</span>();
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>((<span class="ident">numerator</span>,<span class="ident">denominator</span>)) <span class="op">=</span> <span class="ident">trimmed</span>.<span class="ident">split_once</span>(<span class="string">&#39;/&#39;</span>) {
-            <span class="kw">if</span> <span class="ident">numerator</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;1&quot;</span> {
+            <span class="kw">if</span> <span class="ident">numerator</span> <span class="op">==</span> <span class="string">&quot;1&quot;</span> {
                 <span class="kw">match</span> <span class="ident">denominator</span> {
-                    <span class="string">&quot;2&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">ChallengeRating::Half</span>),
-                    <span class="string">&quot;4&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">ChallengeRating::Quarter</span>),
-                    <span class="string">&quot;8&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">ChallengeRating::Eighth</span>),
-                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ParseChallengeRatingError::InvalidDenominator</span>)
+                    <span class="string">&quot;2&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">ChallengeRating::Half</span>),
+                    <span class="string">&quot;4&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">ChallengeRating::Quarter</span>),
+                    <span class="string">&quot;8&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">ChallengeRating::Eighth</span>),
+                    <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ParseChallengeRatingError::InvalidDenominator</span>)
                 }
             } <span class="kw">else</span> {
                 <span class="prelude-val">Err</span>(<span class="ident">ParseChallengeRatingError::InvalidNumerator</span>)
@@ -1635,8 +1646,8 @@ Represents the possible types of armor from the player&#39;s handbook, plus a co
 
         } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">value</span>) <span class="op">=</span> <span class="ident">trimmed</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>() {
             <span class="kw">match</span> <span class="ident">value</span> {
-                <span class="number">0</span>..<span class="op">=</span><span class="number">30</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">ChallengeRating::Whole</span>(<span class="ident">value</span> <span class="kw">as</span> <span class="ident">u8</span>)),
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ParseChallengeRatingError::ChallengeRatingTooBig</span>)
+                <span class="number">0</span>..<span class="op">=</span><span class="number">30</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">ChallengeRating::Whole</span>(<span class="ident">value</span> <span class="kw">as</span> <span class="ident">u8</span>)),
+                <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ParseChallengeRatingError::ChallengeRatingTooBig</span>)
             }
         } <span class="kw">else</span> {
             <span class="prelude-val">Err</span>(<span class="ident">ParseChallengeRatingError::CouldNotParseAsNumber</span>)
@@ -1646,11 +1657,10 @@ Represents the possible types of armor from the player&#39;s handbook, plus a co
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">ChallengeRating</span> {
 
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
         <span class="ident">ChallengeRating::None</span>
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="monstorr_lib" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
-    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="monstorr_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0 (fe5b13d68 2022-05-18)" ></div>
 </body></html>

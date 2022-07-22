@@ -1,102 +1,107 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `monstorr-lib&#x2F;src&#x2F;dice_expression.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>dice_expression.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../monstorr_lib/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
-<span id="2">  2</span>
-<span id="3">  3</span>
-<span id="4">  4</span>
-<span id="5">  5</span>
-<span id="6">  6</span>
-<span id="7">  7</span>
-<span id="8">  8</span>
-<span id="9">  9</span>
-<span id="10"> 10</span>
-<span id="11"> 11</span>
-<span id="12"> 12</span>
-<span id="13"> 13</span>
-<span id="14"> 14</span>
-<span id="15"> 15</span>
-<span id="16"> 16</span>
-<span id="17"> 17</span>
-<span id="18"> 18</span>
-<span id="19"> 19</span>
-<span id="20"> 20</span>
-<span id="21"> 21</span>
-<span id="22"> 22</span>
-<span id="23"> 23</span>
-<span id="24"> 24</span>
-<span id="25"> 25</span>
-<span id="26"> 26</span>
-<span id="27"> 27</span>
-<span id="28"> 28</span>
-<span id="29"> 29</span>
-<span id="30"> 30</span>
-<span id="31"> 31</span>
-<span id="32"> 32</span>
-<span id="33"> 33</span>
-<span id="34"> 34</span>
-<span id="35"> 35</span>
-<span id="36"> 36</span>
-<span id="37"> 37</span>
-<span id="38"> 38</span>
-<span id="39"> 39</span>
-<span id="40"> 40</span>
-<span id="41"> 41</span>
-<span id="42"> 42</span>
-<span id="43"> 43</span>
-<span id="44"> 44</span>
-<span id="45"> 45</span>
-<span id="46"> 46</span>
-<span id="47"> 47</span>
-<span id="48"> 48</span>
-<span id="49"> 49</span>
-<span id="50"> 50</span>
-<span id="51"> 51</span>
-<span id="52"> 52</span>
-<span id="53"> 53</span>
-<span id="54"> 54</span>
-<span id="55"> 55</span>
-<span id="56"> 56</span>
-<span id="57"> 57</span>
-<span id="58"> 58</span>
-<span id="59"> 59</span>
-<span id="60"> 60</span>
-<span id="61"> 61</span>
-<span id="62"> 62</span>
-<span id="63"> 63</span>
-<span id="64"> 64</span>
-<span id="65"> 65</span>
-<span id="66"> 66</span>
-<span id="67"> 67</span>
-<span id="68"> 68</span>
-<span id="69"> 69</span>
-<span id="70"> 70</span>
-<span id="71"> 71</span>
-<span id="72"> 72</span>
-<span id="73"> 73</span>
-<span id="74"> 74</span>
-<span id="75"> 75</span>
-<span id="76"> 76</span>
-<span id="77"> 77</span>
-<span id="78"> 78</span>
-<span id="79"> 79</span>
-<span id="80"> 80</span>
-<span id="81"> 81</span>
-<span id="82"> 82</span>
-<span id="83"> 83</span>
-<span id="84"> 84</span>
-<span id="85"> 85</span>
-<span id="86"> 86</span>
-<span id="87"> 87</span>
-<span id="88"> 88</span>
-<span id="89"> 89</span>
-<span id="90"> 90</span>
-<span id="91"> 91</span>
-<span id="92"> 92</span>
-<span id="93"> 93</span>
-<span id="94"> 94</span>
-<span id="95"> 95</span>
-<span id="96"> 96</span>
-<span id="97"> 97</span>
-<span id="98"> 98</span>
-<span id="99"> 99</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `monstorr-lib/src/dice_expression.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>dice_expression.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../monstorr_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../monstorr_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../monstorr_lib/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
 <span id="100">100</span>
 <span id="101">101</span>
 <span id="102">102</span>
@@ -836,50 +841,50 @@ For more information on how this will work, see notes on proofs at the bottom of
 
 <span class="kw">impl</span> <span class="ident">FactoredDice</span> {
 
-    <span class="kw">fn</span> <span class="ident">serialize_to_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>,<span class="ident">as_predicate</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">fn</span> <span class="ident">serialize_to_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>,<span class="ident">as_predicate</span>: <span class="ident">bool</span>) -&gt; <span class="ident">String</span> {
         <span class="kw">if</span> <span class="ident">as_predicate</span> {
             <span class="kw">match</span> <span class="self">self</span>.<span class="ident">factor</span> {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot; - {}&quot;</span>,<span class="self">self</span>.<span class="ident">dice</span>),
-                <span class="number">1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot; + {}&quot;</span>,<span class="self">self</span>.<span class="ident">dice</span>),
-                <span class="ident">factor</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot; + ({} × {})&quot;</span>,<span class="self">self</span>.<span class="ident">dice</span>,<span class="ident">factor</span>)
+                <span class="op">-</span><span class="number">1</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot; - {}&quot;</span>,<span class="self">self</span>.<span class="ident">dice</span>),
+                <span class="number">1</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot; + {}&quot;</span>,<span class="self">self</span>.<span class="ident">dice</span>),
+                <span class="ident">factor</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot; + ({} × {})&quot;</span>,<span class="self">self</span>.<span class="ident">dice</span>,<span class="ident">factor</span>)
             }
         } <span class="kw">else</span> {
             <span class="kw">match</span> <span class="self">self</span>.<span class="ident">factor</span> {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;-{}&quot;</span>,<span class="self">self</span>.<span class="ident">dice</span>),
-                <span class="number">1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">dice</span>.<span class="ident">to_string</span>(),
-                <span class="ident">factor</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;({} × {})&quot;</span>,<span class="self">self</span>.<span class="ident">dice</span>,<span class="ident">factor</span>)
+                <span class="op">-</span><span class="number">1</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;-{}&quot;</span>,<span class="self">self</span>.<span class="ident">dice</span>),
+                <span class="number">1</span> =&gt; <span class="self">self</span>.<span class="ident">dice</span>.<span class="ident">to_string</span>(),
+                <span class="ident">factor</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;({} × {})&quot;</span>,<span class="self">self</span>.<span class="ident">dice</span>,<span class="ident">factor</span>)
             }
         }
 
     }
 
-    <span class="kw">fn</span> <span class="ident">average</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="kw">fn</span> <span class="ident">average</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">f64</span> {
         <span class="kw">let</span> <span class="ident">average</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">dice</span>.<span class="ident">average</span>();
         (<span class="ident">average</span> <span class="kw">as</span> <span class="ident">f64</span>) <span class="op">*</span> (<span class="self">self</span>.<span class="ident">factor</span> <span class="kw">as</span> <span class="ident">f64</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">multiply</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">factor</span>: <span class="kw-2">&amp;</span><span class="ident">isize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">multiply</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">factor</span>: <span class="kw-2">&amp;</span><span class="ident">isize</span>) -&gt; <span class="self">Self</span> {
         <span class="ident">FactoredDice</span> {
             <span class="ident">dice</span>: <span class="self">self</span>.<span class="ident">dice</span>.<span class="ident">clone</span>(),
             <span class="ident">factor</span>: <span class="self">self</span>.<span class="ident">factor</span> <span class="op">*</span> <span class="ident">factor</span>
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">div_ceiling</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">factor</span>: <span class="kw-2">&amp;</span><span class="ident">isize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">div_ceiling</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">factor</span>: <span class="kw-2">&amp;</span><span class="ident">isize</span>) -&gt; <span class="self">Self</span> {
         <span class="ident">FactoredDice</span> {
             <span class="ident">dice</span>: <span class="self">self</span>.<span class="ident">dice</span>.<span class="ident">clone</span>(),
             <span class="ident">factor</span>: <span class="self">self</span>.<span class="ident">factor</span>.<span class="ident">div_ceiling</span>(<span class="ident">factor</span>)
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">div_floor</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">factor</span>: <span class="kw-2">&amp;</span><span class="ident">isize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">div_floor</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">factor</span>: <span class="kw-2">&amp;</span><span class="ident">isize</span>) -&gt; <span class="self">Self</span> {
         <span class="ident">FactoredDice</span> {
             <span class="ident">dice</span>: <span class="self">self</span>.<span class="ident">dice</span>.<span class="ident">clone</span>(),
-            <span class="ident">factor</span>: <span class="self">self</span>.<span class="ident">factor</span>.<span class="ident">div_floor</span>(<span class="ident">factor</span>)
+            <span class="ident">factor</span>: <span class="self">self</span>.<span class="ident">factor</span>.<span class="ident">nms_div_floor</span>(<span class="ident">factor</span>)
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">is_negative</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">is_negative</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">factor</span> <span class="op">&lt;</span> <span class="number">0</span>
     }
 }
@@ -902,27 +907,27 @@ For more information on how this will work, see notes on proofs at the bottom of
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">TokenError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ParseDiceExpressionError</span> {
 
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">TokenError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">TokenError</span>) -&gt; <span class="self">Self</span> {
         <span class="ident">ParseDiceExpressionError::ScanError</span>(<span class="ident">error</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">std::fmt::Display</span> <span class="kw">for</span> <span class="ident">ParseDiceExpressionError</span> {
 
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">ParseDiceExpressionError::ScanError</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Tokenizing error: {}&quot;</span>,<span class="ident">err</span>),
-            <span class="ident">ParseDiceExpressionError::ExpectedNumberAfterMinus</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Expected number after minus in factor&quot;</span>),
-            <span class="ident">ParseDiceExpressionError::ExpectedNumberAfterMultiply</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Expected number after multiply symbol in factor&quot;</span>),
-            <span class="ident">ParseDiceExpressionError::ExpectedMultiplySymbolAfterDiceInParens</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Expected multiply symbol after dice in factored dice&quot;</span>),
-            <span class="ident">ParseDiceExpressionError::ExpectedDiceAfterOpenParen</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Expected dice term after open parenthesis in factored dice&quot;</span>),
-            <span class="ident">ParseDiceExpressionError::ExpectedCloseParen</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Expected closing parenthesis in factored dice&quot;</span>),
-            <span class="ident">ParseDiceExpressionError::ExpectedDiceAfterFirstMinus</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Expected dice after initial minus&quot;</span>),
-            <span class="ident">ParseDiceExpressionError::ExpectedMinusParenOrDiceAsFirstToken</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Expected minus, open parenthesis or dice term as first token&quot;</span>),
-            <span class="ident">ParseDiceExpressionError::UnexpectedContentAfterAddend</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;No content is allowed after the final addend&quot;</span>),
-            <span class="ident">ParseDiceExpressionError::ExpectedNumberOrDiceAfterMinus</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Expected number or dice after minus symbol in term&quot;</span>),
-            <span class="ident">ParseDiceExpressionError::ExpectedNumberDiceOrParenAfterPlus</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Expected number, dice or open parenthesis after plus symbol in term&quot;</span>),
-            <span class="ident">ParseDiceExpressionError::ExpectedPlusOrMinusAfterTerm</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Only plus or minus operators are allowed after each term&quot;</span>),
+            <span class="ident">ParseDiceExpressionError::ScanError</span>(<span class="ident">err</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Tokenizing error: {}&quot;</span>,<span class="ident">err</span>),
+            <span class="ident">ParseDiceExpressionError::ExpectedNumberAfterMinus</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Expected number after minus in factor&quot;</span>),
+            <span class="ident">ParseDiceExpressionError::ExpectedNumberAfterMultiply</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Expected number after multiply symbol in factor&quot;</span>),
+            <span class="ident">ParseDiceExpressionError::ExpectedMultiplySymbolAfterDiceInParens</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Expected multiply symbol after dice in factored dice&quot;</span>),
+            <span class="ident">ParseDiceExpressionError::ExpectedDiceAfterOpenParen</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Expected dice term after open parenthesis in factored dice&quot;</span>),
+            <span class="ident">ParseDiceExpressionError::ExpectedCloseParen</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Expected closing parenthesis in factored dice&quot;</span>),
+            <span class="ident">ParseDiceExpressionError::ExpectedDiceAfterFirstMinus</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Expected dice after initial minus&quot;</span>),
+            <span class="ident">ParseDiceExpressionError::ExpectedMinusParenOrDiceAsFirstToken</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Expected minus, open parenthesis or dice term as first token&quot;</span>),
+            <span class="ident">ParseDiceExpressionError::UnexpectedContentAfterAddend</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;No content is allowed after the final addend&quot;</span>),
+            <span class="ident">ParseDiceExpressionError::ExpectedNumberOrDiceAfterMinus</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Expected number or dice after minus symbol in term&quot;</span>),
+            <span class="ident">ParseDiceExpressionError::ExpectedNumberDiceOrParenAfterPlus</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Expected number, dice or open parenthesis after plus symbol in term&quot;</span>),
+            <span class="ident">ParseDiceExpressionError::ExpectedPlusOrMinusAfterTerm</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Only plus or minus operators are allowed after each term&quot;</span>),
         
         }
    }
@@ -941,7 +946,7 @@ For more information on how this will work, see notes on proofs at the bottom of
 
 <span class="kw">impl</span> <span class="ident">DiceExpression</span> {
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_dice</span>(<span class="ident">dice</span>: <span class="ident">Dice</span>, <span class="ident">addend</span>: <span class="ident">isize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_dice</span>(<span class="ident">dice</span>: <span class="ident">Dice</span>, <span class="ident">addend</span>: <span class="ident">isize</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">head</span>: <span class="ident">FactoredDice</span> {
                 <span class="ident">dice</span>,
@@ -952,7 +957,7 @@ For more information on how this will work, see notes on proofs at the bottom of
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">serialize_to_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">serialize_to_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">String::new</span>();
         <span class="ident">result</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">head</span>.<span class="ident">serialize_to_string</span>(<span class="bool-val">false</span>));
         <span class="kw">for</span> <span class="ident">factored</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">medial</span> {
@@ -966,7 +971,7 @@ For more information on how this will work, see notes on proofs at the bottom of
         <span class="ident">result</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">average</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">isize</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">average</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">isize</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">average</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">average</span>();
         <span class="kw">for</span> <span class="ident">factored</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">medial</span> {
             <span class="ident">average</span> <span class="op">+</span><span class="op">=</span> <span class="ident">factored</span>.<span class="ident">average</span>();
@@ -975,11 +980,11 @@ For more information on how this will work, see notes on proofs at the bottom of
         <span class="ident">average</span>.<span class="ident">floor</span>() <span class="kw">as</span> <span class="ident">isize</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">display_with_alternate_average</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">average</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">isize</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">display_with_alternate_average</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">average</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">isize</span><span class="op">&gt;</span>) -&gt; <span class="ident">String</span> {
         <span class="macro">format!</span>(<span class="string">&quot;{} ({})&quot;</span>,<span class="ident">average</span>.<span class="ident">unwrap_or</span>(<span class="self">self</span>.<span class="ident">average</span>()),<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">serialize_to_string</span>())
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">multiply</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">factor</span>: <span class="kw-2">&amp;</span><span class="ident">isize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">multiply</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">factor</span>: <span class="kw-2">&amp;</span><span class="ident">isize</span>) -&gt; <span class="self">Self</span> {
         <span class="comment">// distribute and multiply against each thing...</span>
         <span class="kw">let</span> <span class="ident">head</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">multiply</span>(<span class="ident">factor</span>);
         <span class="kw">let</span> <span class="ident">medial</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">medial</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">multiply</span>(<span class="ident">factor</span>)).<span class="ident">collect</span>();
@@ -991,7 +996,7 @@ For more information on how this will work, see notes on proofs at the bottom of
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_ceiling</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">factor</span>: <span class="kw-2">&amp;</span><span class="ident">isize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_ceiling</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">factor</span>: <span class="kw-2">&amp;</span><span class="ident">isize</span>) -&gt; <span class="self">Self</span> {
         <span class="comment">// distribute and multiply</span>
         <span class="kw">let</span> <span class="ident">head</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">div_ceiling</span>(<span class="ident">factor</span>);
         <span class="kw">let</span> <span class="ident">medial</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">medial</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">div_ceiling</span>(<span class="ident">factor</span>)).<span class="ident">collect</span>();
@@ -1003,11 +1008,11 @@ For more information on how this will work, see notes on proofs at the bottom of
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_floor</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">factor</span>: <span class="kw-2">&amp;</span><span class="ident">isize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">div_floor</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">factor</span>: <span class="kw-2">&amp;</span><span class="ident">isize</span>) -&gt; <span class="self">Self</span> {
         <span class="comment">// distribute and multiply</span>
         <span class="kw">let</span> <span class="ident">head</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">div_floor</span>(<span class="ident">factor</span>);
         <span class="kw">let</span> <span class="ident">medial</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">medial</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">div_floor</span>(<span class="ident">factor</span>)).<span class="ident">collect</span>();
-        <span class="kw">let</span> <span class="ident">addend</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">addend</span>.<span class="ident">div_floor</span>(<span class="ident">factor</span>);
+        <span class="kw">let</span> <span class="ident">addend</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">addend</span>.<span class="ident">nms_div_floor</span>(<span class="ident">factor</span>);
         <span class="self">Self</span> {
             <span class="ident">head</span>,
             <span class="ident">medial</span>,
@@ -1015,7 +1020,7 @@ For more information on how this will work, see notes on proofs at the bottom of
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">addend</span>: <span class="kw-2">&amp;</span><span class="ident">isize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">addend</span>: <span class="kw-2">&amp;</span><span class="ident">isize</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">head</span>: <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">clone</span>(),
             <span class="ident">medial</span>: <span class="self">self</span>.<span class="ident">medial</span>.<span class="ident">clone</span>(),
@@ -1023,14 +1028,14 @@ For more information on how this will work, see notes on proofs at the bottom of
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">add_dice_factor</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">dice</span>: <span class="kw-2">&amp;</span><span class="ident">FactoredDice</span>) {
-        <span class="kw">if</span> (<span class="self">self</span>.<span class="ident">head</span>.<span class="ident">dice</span>.<span class="ident">die</span> <span class="op">=</span><span class="op">=</span> <span class="ident">dice</span>.<span class="ident">dice</span>.<span class="ident">die</span>) <span class="op">&amp;&amp;</span>
-           (<span class="self">self</span>.<span class="ident">head</span>.<span class="ident">factor</span> <span class="op">=</span><span class="op">=</span> <span class="ident">dice</span>.<span class="ident">factor</span>) {
+    <span class="kw">fn</span> <span class="ident">add_dice_factor</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">dice</span>: <span class="kw-2">&amp;</span><span class="ident">FactoredDice</span>) {
+        <span class="kw">if</span> (<span class="self">self</span>.<span class="ident">head</span>.<span class="ident">dice</span>.<span class="ident">die</span> <span class="op">==</span> <span class="ident">dice</span>.<span class="ident">dice</span>.<span class="ident">die</span>) <span class="op">&amp;&amp;</span>
+           (<span class="self">self</span>.<span class="ident">head</span>.<span class="ident">factor</span> <span class="op">==</span> <span class="ident">dice</span>.<span class="ident">factor</span>) {
             <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">dice</span>.<span class="ident">coefficient</span> <span class="op">+</span><span class="op">=</span> <span class="ident">dice</span>.<span class="ident">dice</span>.<span class="ident">coefficient</span>;
         } <span class="kw">else</span> {
-            <span class="kw">for</span> <span class="ident">factored</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">medial</span> {
-                <span class="kw">if</span> (<span class="ident">factored</span>.<span class="ident">dice</span>.<span class="ident">die</span> <span class="op">=</span><span class="op">=</span> <span class="ident">dice</span>.<span class="ident">dice</span>.<span class="ident">die</span>) <span class="op">&amp;&amp;</span>
-                   (<span class="ident">factored</span>.<span class="ident">factor</span> <span class="op">=</span><span class="op">=</span> <span class="ident">dice</span>.<span class="ident">factor</span>) {
+            <span class="kw">for</span> <span class="ident">factored</span> <span class="kw">in</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">medial</span> {
+                <span class="kw">if</span> (<span class="ident">factored</span>.<span class="ident">dice</span>.<span class="ident">die</span> <span class="op">==</span> <span class="ident">dice</span>.<span class="ident">dice</span>.<span class="ident">die</span>) <span class="op">&amp;&amp;</span>
+                   (<span class="ident">factored</span>.<span class="ident">factor</span> <span class="op">==</span> <span class="ident">dice</span>.<span class="ident">factor</span>) {
                     <span class="ident">factored</span>.<span class="ident">dice</span>.<span class="ident">coefficient</span> <span class="op">+</span><span class="op">=</span> <span class="ident">dice</span>.<span class="ident">dice</span>.<span class="ident">coefficient</span>;
                     <span class="kw">return</span>;
                 }
@@ -1039,7 +1044,7 @@ For more information on how this will work, see notes on proofs at the bottom of
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_dice</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">dice</span>: <span class="kw-2">&amp;</span><span class="ident">DiceExpression</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_dice</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">dice</span>: <span class="kw-2">&amp;</span><span class="ident">DiceExpression</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span>();
         <span class="ident">result</span>.<span class="ident">add_dice_factor</span>(<span class="kw-2">&amp;</span><span class="ident">dice</span>.<span class="ident">head</span>);
         <span class="kw">for</span> <span class="ident">factored</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">dice</span>.<span class="ident">medial</span> {
@@ -1055,7 +1060,7 @@ For more information on how this will work, see notes on proofs at the bottom of
     <span class="comment">// idea, since that can easily be optional if 0, but it makes things wordier.</span>
     <span class="comment">// Revisit this if I ever create an actual parser for the Monstor creature format instead of just using serde, </span>
     <span class="comment">// which would allow me more control over skipping optional arguments in a tuple.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">coefficient_add</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">count</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">coefficient_add</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">count</span>: <span class="ident">u8</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_dice</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">clone</span>();
         <span class="ident">new_dice</span>.<span class="ident">dice</span>.<span class="ident">coefficient</span> <span class="op">=</span> <span class="ident">count</span>;
@@ -1063,7 +1068,7 @@ For more information on how this will work, see notes on proofs at the bottom of
         <span class="ident">result</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">subtract</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">addend</span>: <span class="kw-2">&amp;</span><span class="ident">isize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">subtract</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">addend</span>: <span class="kw-2">&amp;</span><span class="ident">isize</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">head</span>: <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">clone</span>(),
             <span class="ident">medial</span>: <span class="self">self</span>.<span class="ident">medial</span>.<span class="ident">clone</span>(),
@@ -1071,11 +1076,11 @@ For more information on how this will work, see notes on proofs at the bottom of
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">subtract_dice</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">dice</span>: <span class="kw-2">&amp;</span><span class="ident">DiceExpression</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">subtract_dice</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">dice</span>: <span class="kw-2">&amp;</span><span class="ident">DiceExpression</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">head</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">clone</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">medial</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">medial</span>.<span class="ident">clone</span>();
         <span class="ident">medial</span>.<span class="ident">push</span>(<span class="ident">dice</span>.<span class="ident">head</span>.<span class="ident">clone</span>().<span class="ident">multiply</span>(<span class="kw-2">&amp;</span><span class="op">-</span><span class="number">1</span>));
-        <span class="ident">medial</span>.<span class="ident">append</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">dice</span>.<span class="ident">medial</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">multiply</span>(<span class="kw-2">&amp;</span><span class="op">-</span><span class="number">1</span>)).<span class="ident">collect</span>());
+        <span class="ident">medial</span>.<span class="ident">append</span>(<span class="kw-2">&amp;mut</span> <span class="ident">dice</span>.<span class="ident">medial</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">multiply</span>(<span class="kw-2">&amp;</span><span class="op">-</span><span class="number">1</span>)).<span class="ident">collect</span>());
         <span class="self">Self</span> {
             <span class="ident">head</span>,
             <span class="ident">medial</span>,
@@ -1083,7 +1088,7 @@ For more information on how this will work, see notes on proofs at the bottom of
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_negative</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_negative</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">is_negative</span>()
     }
 
@@ -1092,7 +1097,7 @@ For more information on how this will work, see notes on proofs at the bottom of
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Dice</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">DiceExpression</span> {
 
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">dice</span>: <span class="ident">Dice</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">dice</span>: <span class="ident">Dice</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">head</span>: <span class="ident">FactoredDice</span> {
                 <span class="ident">dice</span>,
@@ -1107,7 +1112,7 @@ For more information on how this will work, see notes on proofs at the bottom of
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Die</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">DiceExpression</span> {
 
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">die</span>: <span class="ident">Die</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">die</span>: <span class="ident">Die</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">head</span>: <span class="ident">FactoredDice</span> {
                 <span class="ident">dice</span>: <span class="ident">die</span>.<span class="ident">into</span>(),
@@ -1125,16 +1130,16 @@ For more information on how this will work, see notes on proofs at the bottom of
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Source</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span><span class="op">=</span><span class="ident">char</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">Tokenizer</span><span class="op">&lt;</span>()<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">DiceExpressionTokenizer</span><span class="op">&lt;</span><span class="ident">Source</span><span class="op">&gt;</span> {
 
-    <span class="kw">fn</span> <span class="ident">resolve_keyword</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">resolve_keyword</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
 
 
-    <span class="kw">fn</span> <span class="ident">next_char</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">next_char</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">next</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">peek_char</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">char</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">peek_char</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">char</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">peek</span>()
     }
 
@@ -1142,24 +1147,24 @@ For more information on how this will work, see notes on proofs at the bottom of
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Source</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span><span class="op">=</span><span class="ident">char</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">DiceExpressionTokenizer</span><span class="op">&lt;</span><span class="ident">Source</span><span class="op">&gt;</span> {
 
-    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">source</span>: <span class="ident">Source</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">source</span>: <span class="ident">Source</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span>(<span class="ident">source</span>.<span class="ident">peekable</span>())
     }
 
-    <span class="kw">fn</span> <span class="ident">parse_factored_dice</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">FactoredDice</span>,<span class="ident">ParseDiceExpressionError</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">parse_factored_dice</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">FactoredDice</span>,<span class="ident">ParseDiceExpressionError</span><span class="op">&gt;</span> {
         <span class="comment">// factored_dice = &#39;(&#39; dice &#39;×&#39; &#39;-&#39;? number &#39;)&#39;</span>
         <span class="comment">// we already have the &#39;(&#39;</span>
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">next_ok</span>()<span class="question-mark">?</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">Token::Dice</span>(<span class="ident">dice</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">Token::Dice</span>(<span class="ident">dice</span>)) =&gt; {
 
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">Token::Asterisk</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">next_ok</span>()<span class="question-mark">?</span> {
                     <span class="kw">let</span> <span class="ident">factor</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">next_ok</span>()<span class="question-mark">?</span> {
-                        <span class="prelude-val">Some</span>(<span class="ident">Token::Minus</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">next_ok</span>()<span class="question-mark">?</span> {
-                            <span class="prelude-val">Some</span>(<span class="ident">Token::Number</span>(<span class="ident">num</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="op">-</span><span class="ident">num</span>, 
-                            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ParseDiceExpressionError::ExpectedNumberAfterMinus</span>)<span class="question-mark">?</span>
+                        <span class="prelude-val">Some</span>(<span class="ident">Token::Minus</span>) =&gt; <span class="kw">match</span> <span class="self">self</span>.<span class="ident">next_ok</span>()<span class="question-mark">?</span> {
+                            <span class="prelude-val">Some</span>(<span class="ident">Token::Number</span>(<span class="ident">num</span>)) =&gt; <span class="op">-</span><span class="ident">num</span>, 
+                            <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ParseDiceExpressionError::ExpectedNumberAfterMinus</span>)<span class="question-mark">?</span>
                         },
-                        <span class="prelude-val">Some</span>(<span class="ident">Token::Number</span>(<span class="ident">num</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">num</span>, 
-                        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ParseDiceExpressionError::ExpectedNumberAfterMultiply</span>)<span class="question-mark">?</span>
+                        <span class="prelude-val">Some</span>(<span class="ident">Token::Number</span>(<span class="ident">num</span>)) =&gt; <span class="ident">num</span>, 
+                        <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ParseDiceExpressionError::ExpectedNumberAfterMultiply</span>)<span class="question-mark">?</span>
                     };
                     <span class="ident">FactoredDice</span> {
                         <span class="ident">dice</span>,
@@ -1172,7 +1177,7 @@ For more information on how this will work, see notes on proofs at the bottom of
 
 
             },
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ParseDiceExpressionError::ExpectedDiceAfterOpenParen</span>)<span class="question-mark">?</span> 
+            <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ParseDiceExpressionError::ExpectedDiceAfterOpenParen</span>)<span class="question-mark">?</span> 
         };
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">Token::CloseParenthesis</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">next_ok</span>()<span class="question-mark">?</span> {
@@ -1182,7 +1187,7 @@ For more information on how this will work, see notes on proofs at the bottom of
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">parse</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DiceExpression</span>,<span class="ident">ParseDiceExpressionError</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">parse</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DiceExpression</span>,<span class="ident">ParseDiceExpressionError</span><span class="op">&gt;</span> {
         <span class="comment">// dice_expression = head predicate?</span>
         <span class="comment">// head = (&#39;-&#39; dice) | dice | factored_dice</span>
         <span class="comment">// predicate = &#39;-&#39; number | (dice predicate?)</span>
@@ -1192,19 +1197,19 @@ For more information on how this will work, see notes on proofs at the bottom of
 
         <span class="comment">// head = (&#39;-&#39; dice) | dice | factored_dice</span>
         <span class="kw">let</span> <span class="ident">head</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">next_ok</span>()<span class="question-mark">?</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">Token::Minus</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">next_ok</span>()<span class="question-mark">?</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">Token::Dice</span>(<span class="ident">dice</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">FactoredDice</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">Token::Minus</span>) =&gt; <span class="kw">match</span> <span class="self">self</span>.<span class="ident">next_ok</span>()<span class="question-mark">?</span> {
+                <span class="prelude-val">Some</span>(<span class="ident">Token::Dice</span>(<span class="ident">dice</span>)) =&gt; <span class="ident">FactoredDice</span> {
                     <span class="ident">dice</span>,
                     <span class="ident">factor</span>: <span class="op">-</span><span class="number">1</span>
                 }, 
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ParseDiceExpressionError::ExpectedDiceAfterFirstMinus</span>)<span class="question-mark">?</span>, 
+                <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ParseDiceExpressionError::ExpectedDiceAfterFirstMinus</span>)<span class="question-mark">?</span>, 
             },
-            <span class="prelude-val">Some</span>(<span class="ident">Token::Dice</span>(<span class="ident">dice</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">FactoredDice</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">Token::Dice</span>(<span class="ident">dice</span>)) =&gt; <span class="ident">FactoredDice</span> {
                 <span class="ident">dice</span>,
                 <span class="ident">factor</span>: <span class="number">1</span>
             }, 
-            <span class="prelude-val">Some</span>(<span class="ident">Token::OpenParenthesis</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">parse_factored_dice</span>()<span class="question-mark">?</span>, 
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ParseDiceExpressionError::ExpectedMinusParenOrDiceAsFirstToken</span>)<span class="question-mark">?</span> 
+            <span class="prelude-val">Some</span>(<span class="ident">Token::OpenParenthesis</span>) =&gt; <span class="self">self</span>.<span class="ident">parse_factored_dice</span>()<span class="question-mark">?</span>, 
+            <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ParseDiceExpressionError::ExpectedMinusParenOrDiceAsFirstToken</span>)<span class="question-mark">?</span> 
         };
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">medial</span> <span class="op">=</span> <span class="macro">vec!</span>[];
@@ -1213,38 +1218,38 @@ For more information on how this will work, see notes on proofs at the bottom of
             <span class="comment">// predicate = &#39;-&#39; number | (dice predicate?)</span>
             <span class="comment">//             &#39;+&#39; number | (dice predicate?) | (factored_dice predicate?)</span>
             <span class="kw">match</span> <span class="self">self</span>.<span class="ident">next_ok</span>()<span class="question-mark">?</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">Token::Minus</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">next_ok</span>()<span class="question-mark">?</span> {
-                    <span class="prelude-val">Some</span>(<span class="ident">Token::Number</span>(<span class="ident">num</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">next_ok</span>()<span class="question-mark">?</span> {
-                        <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">break</span> <span class="op">-</span><span class="ident">num</span>, <span class="comment">// return the addend</span>
-                        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ParseDiceExpressionError::UnexpectedContentAfterAddend</span>)<span class="question-mark">?</span>, 
+                <span class="prelude-val">Some</span>(<span class="ident">Token::Minus</span>) =&gt; <span class="kw">match</span> <span class="self">self</span>.<span class="ident">next_ok</span>()<span class="question-mark">?</span> {
+                    <span class="prelude-val">Some</span>(<span class="ident">Token::Number</span>(<span class="ident">num</span>)) =&gt; <span class="kw">match</span> <span class="self">self</span>.<span class="ident">next_ok</span>()<span class="question-mark">?</span> {
+                        <span class="prelude-val">None</span> =&gt; <span class="kw">break</span> <span class="op">-</span><span class="ident">num</span>, <span class="comment">// return the addend</span>
+                        <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ParseDiceExpressionError::UnexpectedContentAfterAddend</span>)<span class="question-mark">?</span>, 
                     },
-                    <span class="prelude-val">Some</span>(<span class="ident">Token::Dice</span>(<span class="ident">dice</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="prelude-val">Some</span>(<span class="ident">Token::Dice</span>(<span class="ident">dice</span>)) =&gt; {
                         <span class="ident">medial</span>.<span class="ident">push</span>(<span class="ident">FactoredDice</span> {
                             <span class="ident">dice</span>,
                             <span class="ident">factor</span>: <span class="op">-</span><span class="number">1</span>
                         })
                     }, <span class="comment">// continue parsing more terms</span>
-                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ParseDiceExpressionError::ExpectedNumberOrDiceAfterMinus</span>)<span class="question-mark">?</span>, 
+                    <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ParseDiceExpressionError::ExpectedNumberOrDiceAfterMinus</span>)<span class="question-mark">?</span>, 
                 },
-                <span class="prelude-val">Some</span>(<span class="ident">Token::Plus</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">next_ok</span>()<span class="question-mark">?</span> {
-                    <span class="prelude-val">Some</span>(<span class="ident">Token::Number</span>(<span class="ident">num</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">next_ok</span>()<span class="question-mark">?</span> {
-                        <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">break</span> <span class="ident">num</span>, <span class="comment">// return the addend</span>
-                        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ParseDiceExpressionError::UnexpectedContentAfterAddend</span>)<span class="question-mark">?</span>, 
+                <span class="prelude-val">Some</span>(<span class="ident">Token::Plus</span>) =&gt; <span class="kw">match</span> <span class="self">self</span>.<span class="ident">next_ok</span>()<span class="question-mark">?</span> {
+                    <span class="prelude-val">Some</span>(<span class="ident">Token::Number</span>(<span class="ident">num</span>)) =&gt; <span class="kw">match</span> <span class="self">self</span>.<span class="ident">next_ok</span>()<span class="question-mark">?</span> {
+                        <span class="prelude-val">None</span> =&gt; <span class="kw">break</span> <span class="ident">num</span>, <span class="comment">// return the addend</span>
+                        <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ParseDiceExpressionError::UnexpectedContentAfterAddend</span>)<span class="question-mark">?</span>, 
                     },
-                    <span class="prelude-val">Some</span>(<span class="ident">Token::Dice</span>(<span class="ident">dice</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="prelude-val">Some</span>(<span class="ident">Token::Dice</span>(<span class="ident">dice</span>)) =&gt; {
                         <span class="ident">medial</span>.<span class="ident">push</span>(<span class="ident">FactoredDice</span> {
                             <span class="ident">dice</span>,
                             <span class="ident">factor</span>: <span class="number">1</span>
                         })
                     }, <span class="comment">// continue parsing more terms</span>
-                    <span class="prelude-val">Some</span>(<span class="ident">Token::OpenParenthesis</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="prelude-val">Some</span>(<span class="ident">Token::OpenParenthesis</span>) =&gt; {
                         <span class="ident">medial</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">parse_factored_dice</span>()<span class="question-mark">?</span>)
                         <span class="comment">// but continue parsing more terms</span>
                     },
-                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ParseDiceExpressionError::ExpectedNumberDiceOrParenAfterPlus</span>)<span class="question-mark">?</span>, 
+                    <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ParseDiceExpressionError::ExpectedNumberDiceOrParenAfterPlus</span>)<span class="question-mark">?</span>, 
                 },
-                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">break</span> <span class="number">0</span>, <span class="comment">// no further predicate found, so the addend must be 0</span>
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ParseDiceExpressionError::ExpectedPlusOrMinusAfterTerm</span>)<span class="question-mark">?</span>, 
+                <span class="prelude-val">None</span> =&gt; <span class="kw">break</span> <span class="number">0</span>, <span class="comment">// no further predicate found, so the addend must be 0</span>
+                <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ParseDiceExpressionError::ExpectedPlusOrMinusAfterTerm</span>)<span class="question-mark">?</span>, 
             }
         };
         
@@ -1262,20 +1267,20 @@ For more information on how this will work, see notes on proofs at the bottom of
 
     <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Token</span><span class="op">&lt;</span>()<span class="op">&gt;</span>,<span class="ident">TokenError</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
 
         <span class="self">self</span>.<span class="ident">skip_whitespace</span>();
 
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">next_char</span>() {
-            <span class="prelude-val">Some</span>(<span class="ident">char</span>) <span class="kw">if</span> <span class="macro">matches!</span>(<span class="ident">char</span>,<span class="macro">digit!</span>()) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">number_or_dice</span>(<span class="ident">char</span>)),
-            <span class="prelude-val">Some</span>(<span class="string">&#39;+&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">Token::Plus</span>)),
-            <span class="prelude-val">Some</span>(<span class="string">&#39;-&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">Token::Minus</span>)),
-            <span class="prelude-val">Some</span>(<span class="string">&#39;×&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">Token::Asterisk</span>)), <span class="comment">// it&#39;s an alias so the display looks better</span>
-            <span class="prelude-val">Some</span>(<span class="string">&#39;*&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">Token::Asterisk</span>)),
-            <span class="prelude-val">Some</span>(<span class="string">&#39;(&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">Token::OpenParenthesis</span>)),
-            <span class="prelude-val">Some</span>(<span class="string">&#39;)&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">Token::CloseParenthesis</span>)),
-            <span class="prelude-val">Some</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">TokenError::UnexpectedCharacter</span>)),
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>
+            <span class="prelude-val">Some</span>(<span class="ident">char</span>) <span class="kw">if</span> <span class="macro">matches!</span>(<span class="ident">char</span>,<span class="macro">digit!</span>()) =&gt; <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">number_or_dice</span>(<span class="ident">char</span>)),
+            <span class="prelude-val">Some</span>(<span class="string">&#39;+&#39;</span>) =&gt; <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">Token::Plus</span>)),
+            <span class="prelude-val">Some</span>(<span class="string">&#39;-&#39;</span>) =&gt; <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">Token::Minus</span>)),
+            <span class="prelude-val">Some</span>(<span class="string">&#39;×&#39;</span>) =&gt; <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">Token::Asterisk</span>)), <span class="comment">// it&#39;s an alias so the display looks better</span>
+            <span class="prelude-val">Some</span>(<span class="string">&#39;*&#39;</span>) =&gt; <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">Token::Asterisk</span>)),
+            <span class="prelude-val">Some</span>(<span class="string">&#39;(&#39;</span>) =&gt; <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">Token::OpenParenthesis</span>)),
+            <span class="prelude-val">Some</span>(<span class="string">&#39;)&#39;</span>) =&gt; <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">Token::CloseParenthesis</span>)),
+            <span class="prelude-val">Some</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">TokenError::UnexpectedCharacter</span>)),
+            <span class="prelude-val">None</span> =&gt; <span class="prelude-val">None</span>
         }
 
 
@@ -1287,7 +1292,7 @@ For more information on how this will work, see notes on proofs at the bottom of
 
 <span class="kw">impl</span> <span class="ident">std::fmt::Display</span> <span class="kw">for</span> <span class="ident">DiceExpression</span> {
 
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
         <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;{} ({})&quot;</span>,<span class="self">self</span>.<span class="ident">average</span>(),<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">serialize_to_string</span>())
    }
 }
@@ -1296,7 +1301,7 @@ For more information on how this will work, see notes on proofs at the bottom of
 <span class="kw">impl</span> <span class="ident">std::str::FromStr</span> <span class="kw">for</span> <span class="ident">DiceExpression</span> {
     <span class="kw">type</span> <span class="prelude-val">Err</span> <span class="op">=</span> <span class="ident">ParseDiceExpressionError</span>;
     
-    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
 
         <span class="ident">DiceExpressionTokenizer::new</span>(<span class="ident">s</span>.<span class="ident">chars</span>()).<span class="ident">parse</span>()
 
@@ -1307,7 +1312,7 @@ For more information on how this will work, see notes on proofs at the bottom of
 
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">ParseDiceExpressionError</span>;
 
-    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">value</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">value</span>: <span class="ident">String</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="ident">value</span>.<span class="ident">parse</span>()
 
     }
@@ -1316,7 +1321,7 @@ For more information on how this will work, see notes on proofs at the bottom of
 
 <span class="kw">impl</span> <span class="ident">Serialize</span> <span class="kw">for</span> <span class="ident">DiceExpression</span> {
 
-    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S::Ok</span>, <span class="ident">S::Error</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S::Ok</span>, <span class="ident">S::Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">S</span>: <span class="ident">Serializer</span>,
     {
@@ -1562,6 +1567,5 @@ Sort of Proof:
 25. We get the same formulat for each one
    &lt;dice&gt; * &lt;number&gt; + (&lt;dice&gt; + &lt;number&gt;)... + &lt;number&gt;
 */</span></code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="monstorr_lib" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
-    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="monstorr_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0 (fe5b13d68 2022-05-18)" ></div>
 </body></html>

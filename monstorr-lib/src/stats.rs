@@ -35,7 +35,7 @@ pub enum Ability {
 impl Ability {
 
     pub fn score_to_mod(score: u8) -> i8 {
-        (score as i8-10).div_floor(&2)
+        (score as i8-10).nms_div_floor(&2)
     }
 
     pub fn to_short_str(&self) -> &'static str {

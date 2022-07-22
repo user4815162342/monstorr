@@ -93,7 +93,7 @@ impl FactoredDice {
     fn div_floor(&self, factor: &isize) -> Self {
         FactoredDice {
             dice: self.dice.clone(),
-            factor: self.factor.div_floor(factor)
+            factor: self.factor.nms_div_floor(factor)
         }
     }
 
@@ -225,7 +225,7 @@ impl DiceExpression {
         // distribute and multiply
         let head = self.head.div_floor(factor);
         let medial = self.medial.iter().map(|a| a.div_floor(factor)).collect();
-        let addend = self.addend.div_floor(factor);
+        let addend = self.addend.nms_div_floor(factor);
         Self {
             head,
             medial,

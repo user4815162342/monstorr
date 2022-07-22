@@ -29,9 +29,11 @@ impl<T,ItemType,ErrorType> NextOk<ItemType,ErrorType> for T where T: Iterator<It
 }
 
 
+// FUTURE: I was warned that some future version of this will create a div_floor method. When that happens, we
+// can probably get rid of this trait.
 pub trait FloorDiv {
 
-    fn div_floor(&self, rhs: &Self) -> Self;
+    fn nms_div_floor(&self, rhs: &Self) -> Self;
 
 }
 
@@ -41,7 +43,7 @@ macro_rules! impl_floor_div {
     
             // this is done in the 'num-integer' crate, but I don't want to import an entire crate just for this.
             // FUTURE: This may be implemented in standard rust someday https://github.com/rust-lang/rust/issues/88581
-            fn div_floor(&self, rhs: &Self) -> Self {
+            fn nms_div_floor(&self, rhs: &Self) -> Self {
                 let d = self/rhs; // this just does integer division
                 let r = self%rhs; // mod keeps sign of the numerator, ignores sign of denominator
                 if (r > 0 && *rhs < 0) || (r < 0 && *rhs > 0) {

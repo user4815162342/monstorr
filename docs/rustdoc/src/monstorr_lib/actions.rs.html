@@ -1,102 +1,107 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `monstorr-lib&#x2F;src&#x2F;actions.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>actions.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../monstorr_lib/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
-<span id="2">  2</span>
-<span id="3">  3</span>
-<span id="4">  4</span>
-<span id="5">  5</span>
-<span id="6">  6</span>
-<span id="7">  7</span>
-<span id="8">  8</span>
-<span id="9">  9</span>
-<span id="10"> 10</span>
-<span id="11"> 11</span>
-<span id="12"> 12</span>
-<span id="13"> 13</span>
-<span id="14"> 14</span>
-<span id="15"> 15</span>
-<span id="16"> 16</span>
-<span id="17"> 17</span>
-<span id="18"> 18</span>
-<span id="19"> 19</span>
-<span id="20"> 20</span>
-<span id="21"> 21</span>
-<span id="22"> 22</span>
-<span id="23"> 23</span>
-<span id="24"> 24</span>
-<span id="25"> 25</span>
-<span id="26"> 26</span>
-<span id="27"> 27</span>
-<span id="28"> 28</span>
-<span id="29"> 29</span>
-<span id="30"> 30</span>
-<span id="31"> 31</span>
-<span id="32"> 32</span>
-<span id="33"> 33</span>
-<span id="34"> 34</span>
-<span id="35"> 35</span>
-<span id="36"> 36</span>
-<span id="37"> 37</span>
-<span id="38"> 38</span>
-<span id="39"> 39</span>
-<span id="40"> 40</span>
-<span id="41"> 41</span>
-<span id="42"> 42</span>
-<span id="43"> 43</span>
-<span id="44"> 44</span>
-<span id="45"> 45</span>
-<span id="46"> 46</span>
-<span id="47"> 47</span>
-<span id="48"> 48</span>
-<span id="49"> 49</span>
-<span id="50"> 50</span>
-<span id="51"> 51</span>
-<span id="52"> 52</span>
-<span id="53"> 53</span>
-<span id="54"> 54</span>
-<span id="55"> 55</span>
-<span id="56"> 56</span>
-<span id="57"> 57</span>
-<span id="58"> 58</span>
-<span id="59"> 59</span>
-<span id="60"> 60</span>
-<span id="61"> 61</span>
-<span id="62"> 62</span>
-<span id="63"> 63</span>
-<span id="64"> 64</span>
-<span id="65"> 65</span>
-<span id="66"> 66</span>
-<span id="67"> 67</span>
-<span id="68"> 68</span>
-<span id="69"> 69</span>
-<span id="70"> 70</span>
-<span id="71"> 71</span>
-<span id="72"> 72</span>
-<span id="73"> 73</span>
-<span id="74"> 74</span>
-<span id="75"> 75</span>
-<span id="76"> 76</span>
-<span id="77"> 77</span>
-<span id="78"> 78</span>
-<span id="79"> 79</span>
-<span id="80"> 80</span>
-<span id="81"> 81</span>
-<span id="82"> 82</span>
-<span id="83"> 83</span>
-<span id="84"> 84</span>
-<span id="85"> 85</span>
-<span id="86"> 86</span>
-<span id="87"> 87</span>
-<span id="88"> 88</span>
-<span id="89"> 89</span>
-<span id="90"> 90</span>
-<span id="91"> 91</span>
-<span id="92"> 92</span>
-<span id="93"> 93</span>
-<span id="94"> 94</span>
-<span id="95"> 95</span>
-<span id="96"> 96</span>
-<span id="97"> 97</span>
-<span id="98"> 98</span>
-<span id="99"> 99</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `monstorr-lib/src/actions.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>actions.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../monstorr_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../monstorr_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../monstorr_lib/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
 <span id="100">100</span>
 <span id="101">101</span>
 <span id="102">102</span>
@@ -455,14 +460,14 @@ Specifies usage limits for actions, reactions and other features.
 
 <span class="kw">impl</span> <span class="ident">std::fmt::Display</span> <span class="kw">for</span> <span class="ident">UsageLimit</span> {
 
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(),<span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">UsageLimit::Recharge</span>(<span class="number">6</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Recharge 6&quot;</span>),
-            <span class="ident">UsageLimit::Recharge</span>(<span class="ident">roll</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Recharge {}-6&quot;</span>,<span class="ident">roll</span>),
-            <span class="ident">UsageLimit::PerDay</span>(<span class="ident">count</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;{}/Day&quot;</span>,<span class="ident">count</span>),
-            <span class="ident">UsageLimit::PerTurn</span>(<span class="ident">count</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;{}/Turn&quot;</span>,<span class="ident">count</span>),
-            <span class="ident">UsageLimit::RechargeAfterRest</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;Recharges after a Short or Long Rest&quot;</span>),
-            <span class="ident">UsageLimit::AlternateFormOnly</span>(<span class="ident">form</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;{} Form Only&quot;</span>,<span class="ident">form</span>)
+            <span class="ident">UsageLimit::Recharge</span>(<span class="number">6</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Recharge 6&quot;</span>),
+            <span class="ident">UsageLimit::Recharge</span>(<span class="ident">roll</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;Recharge {}-6&quot;</span>,<span class="ident">roll</span>),
+            <span class="ident">UsageLimit::PerDay</span>(<span class="ident">count</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;{}/Day&quot;</span>,<span class="ident">count</span>),
+            <span class="ident">UsageLimit::PerTurn</span>(<span class="ident">count</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;{}/Turn&quot;</span>,<span class="ident">count</span>),
+            <span class="ident">UsageLimit::RechargeAfterRest</span> =&gt; <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;Recharges after a Short or Long Rest&quot;</span>),
+            <span class="ident">UsageLimit::AlternateFormOnly</span>(<span class="ident">form</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>,<span class="string">&quot;{} Form Only&quot;</span>,<span class="ident">form</span>)
         }
     }
 
@@ -615,133 +620,133 @@ Many of the variants in this value are attempts to mimic common actions found in
 <span class="kw">impl</span> <span class="ident">Action</span> {
 
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Action::ChangeShape</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Change Shape&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Action::Charm</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Charm&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Action::Enlarge</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Enlarge&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Action::Etherealness</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Etherealness&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Action::FrightfulPresence</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Frightful Presence&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Action::HorrifyingVisage</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Horrifying Visage&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Action::IllusoryAppearance</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Illusory Appearance&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Action::Leadership</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Leadership&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Action::Possession</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Possession&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Action::ReadThoughts</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Read Thoughts&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Action::Reel</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Reel&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Action::Swallow</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Swallow&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Action::Teleport</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Teleport&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Action::Attack</span>(<span class="ident">name</span>,..) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">name</span>.<span class="ident">clone</span>(),
-            <span class="ident">Action::Action</span>(<span class="ident">name</span>,..) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">name</span>.<span class="ident">clone</span>(),
-            <span class="ident">Action::BreathWeapon</span>(<span class="ident">name</span>,..) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">name</span>.<span class="ident">clone</span>(),
+            <span class="ident">Action::ChangeShape</span>(..) =&gt; <span class="string">&quot;Change Shape&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::Charm</span>(..) =&gt; <span class="string">&quot;Charm&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::Enlarge</span> =&gt; <span class="string">&quot;Enlarge&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::Etherealness</span> =&gt; <span class="string">&quot;Etherealness&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::FrightfulPresence</span>(..) =&gt; <span class="string">&quot;Frightful Presence&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::HorrifyingVisage</span>(..) =&gt; <span class="string">&quot;Horrifying Visage&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::IllusoryAppearance</span>(..) =&gt; <span class="string">&quot;Illusory Appearance&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::Leadership</span> =&gt; <span class="string">&quot;Leadership&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::Possession</span>(..) =&gt; <span class="string">&quot;Possession&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::ReadThoughts</span>(..) =&gt; <span class="string">&quot;Read Thoughts&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::Reel</span> =&gt; <span class="string">&quot;Reel&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::Swallow</span>(..) =&gt; <span class="string">&quot;Swallow&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::Teleport</span>(..) =&gt; <span class="string">&quot;Teleport&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Action::Attack</span>(<span class="ident">name</span>,..) =&gt; <span class="ident">name</span>.<span class="ident">clone</span>(),
+            <span class="ident">Action::Action</span>(<span class="ident">name</span>,..) =&gt; <span class="ident">name</span>.<span class="ident">clone</span>(),
+            <span class="ident">Action::BreathWeapon</span>(<span class="ident">name</span>,..) =&gt; <span class="ident">name</span>.<span class="ident">clone</span>(),
         }
     }
 
 
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-          <span class="ident">Action::ChangeShape</span>(<span class="ident">form</span>) <span class="op">=</span><span class="op">&gt;</span> 
+          <span class="ident">Action::ChangeShape</span>(<span class="ident">form</span>) =&gt; 
                 <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} magically polymorphs into {}, or back into ${{posspro}} true form. It reverts to ${{posspro}} true form if ${{subjpro}} dies. Any equipment ${{subjpro}} is wearing or carrying is absorbed or borne by the new form (${{poss}} choice). In a new form, ${{subj}} retains ${{posspro}} alignment, hit points, Hit Dice, ability to speak, proficiencies, Legendary Resistance, lair actions, and Intelligence, Wisdom, and Charisma scores, as well as this action. Its statistics and capabilities are otherwise replaced by those of the new form, except any class features or legendary actions of that form.&quot;</span>,<span class="ident">form</span>), 
-            <span class="ident">Action::Charm</span>(<span class="ident">distance</span>,<span class="ident">save_dc</span>) <span class="op">=</span><span class="op">&gt;</span> 
+            <span class="ident">Action::Charm</span>(<span class="ident">distance</span>,<span class="ident">save_dc</span>) =&gt; 
                 <span class="macro">format!</span>(<span class="string">&quot;One humanoid ${{subj}} can see within {} feet of ${{subjpro}} must succeed on a DC {} Wisdom saving throw or be magically charmed for 1 day. The charmed target obeys ${{poss}} verbal or telepathic commands. If the target suffers any harm or receives a suicidal command, it can repeat the saving throw, ending the effect on a success. If the target successfully saves against the effect, or if the effect on it ends, the target is immune to this ${{name}}&#39;s Charm for the next 24 hours.${{par}}${{Subj}} can have only one target charmed at a time. If ${{subjpro}} charms another, the effect on the previous target ends.&quot;</span>,<span class="ident">distance</span>,<span class="ident">save_dc</span>), 
-            <span class="ident">Action::Enlarge</span> <span class="op">=</span><span class="op">&gt;</span> 
+            <span class="ident">Action::Enlarge</span> =&gt; 
                 <span class="macro">format!</span>(<span class="string">&quot;For 1 minute, ${{subj}} magically increases in size, along with anything ${{subjpro}} is wearing or carrying. While enlarged, ${{subj}} is Large, doubles ${{posspro}} damage dice on Strength-based weapon attacks (included in the attacks), and makes Strength checks and Strength saving throws with advantage. If ${{subj}} lacks the room to become Large, ${{subjpro}} attains the maximum size possible in the space available.&quot;</span>),
-            <span class="ident">Action::Etherealness</span> <span class="op">=</span><span class="op">&gt;</span> 
+            <span class="ident">Action::Etherealness</span> =&gt; 
                 <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} enters the Ethereal Plane from the Material Plane, or vice versa. It is visible on the Material Plane while ${{subjpro}} is in the Border Ethereal, and vice versa, yet ${{subjpro}} can&#39;t affect or be affected by anything on the other plane.&quot;</span>),
-            <span class="ident">Action::FrightfulPresence</span>(<span class="ident">distance</span>,<span class="ident">save_dc</span>,<span class="ident">resave_disadvantage</span>) <span class="op">=</span><span class="op">&gt;</span> 
+            <span class="ident">Action::FrightfulPresence</span>(<span class="ident">distance</span>,<span class="ident">save_dc</span>,<span class="ident">resave_disadvantage</span>) =&gt; 
                 <span class="macro">format!</span>(<span class="string">&quot;Each creature of ${{poss}} choice that is within {} feet of ${{subj}} and aware of ${{objpro}} must succeed on a DC {} Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, {}ending the effect on itself on a success. If a creature&#39;s saving throw is successful or the effect ends for it, the creature is immune to ${{poss}} Frightful Presence for the next 24 hours.&quot;</span>,<span class="ident">distance</span>,<span class="ident">save_dc</span>,<span class="kw">if</span> <span class="kw-2">*</span><span class="ident">resave_disadvantage</span> {<span class="string">&quot;with disadvantage if ${{subj}} is within line of sight, &quot;</span>} <span class="kw">else</span> {<span class="string">&quot;&quot;</span>}),
-            <span class="ident">Action::HorrifyingVisage</span>(<span class="ident">distance</span>,<span class="ident">save_dc</span>) <span class="op">=</span><span class="op">&gt;</span> 
+            <span class="ident">Action::HorrifyingVisage</span>(<span class="ident">distance</span>,<span class="ident">save_dc</span>) =&gt; 
                 <span class="macro">format!</span>(<span class="string">&quot;Each non-undead creature within {} ft. of ${{subj}} that can see ${{subjpro}} must succeed on a DC {} Wisdom saving throw or be frightened for 1 minute. If the save fails by 5 or more, the target also ages 1d4 x 10 years. A frightened target can repeat the saving throw at the end of each of its turns, ending the frightened condition on ${{refpro}} on a success. If a target&#39;s saving throw is successful or the effect ends for it, the target is immune to this ${{name}}&#39;s Horrifying Visage for the next 24 hours. The aging effect can be reversed with a greater restoration spell, but only within 24 hours of it occurring.&quot;</span>,<span class="ident">distance</span>,<span class="ident">save_dc</span>), 
-            <span class="ident">Action::IllusoryAppearance</span>(<span class="ident">discern_dc</span>) <span class="op">=</span><span class="op">&gt;</span> 
+            <span class="ident">Action::IllusoryAppearance</span>(<span class="ident">discern_dc</span>) =&gt; 
                 <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} covers ${{refpro}} and anything ${{subjpro}} is wearing or carrying with a magical illusion that makes ${{objpro}} look like another creature of ${{posspro}} general size and humanoid shape. The illusion ends if ${{subj}} takes a bonus action to end it or if ${{subjpro}} dies.${{par}}The changes wrought by this effect fail to hold up to physical inspection. Otherwise, a creature must take an action to visually inspect the illusion and succeed on a DC {} Intelligence (Investigation) check to discern that ${{subj}} is disguised.&quot;</span>,<span class="ident">discern_dc</span>), 
-            <span class="ident">Action::Leadership</span> <span class="op">=</span><span class="op">&gt;</span> 
+            <span class="ident">Action::Leadership</span> =&gt; 
                 <span class="macro">format!</span>(<span class="string">&quot;For 1 minute, ${{subj}} can utter a special command or warning whenever a nonhostile creature that ${{subjpro}} can see within 30 ft. of it makes an attack roll or a saving throw. The creature can add a d4 to its roll provided it can hear and understand ${{subj}}. A creature can benefit from only one Leadership die at a time. This effect ends if the knight is incapacitated.&quot;</span>),
-            <span class="ident">Action::Possession</span>(<span class="ident">save_dc</span>) <span class="op">=</span><span class="op">&gt;</span> 
+            <span class="ident">Action::Possession</span>(<span class="ident">save_dc</span>) =&gt; 
                 <span class="macro">format!</span>(<span class="string">&quot;One humanoid that ${{subj}} can see within 5 ft. of ${{objpro}} must succeed on a DC {} Charisma saving throw or be possessed by ${{subj}}; ${{subj}} then disappears, and the target is incapacitated and loses control of its body. ${{Subj}} now controls the body but doesn&#39;t deprive the target of awareness. ${{Subj}} can&#39;t be targeted by any attack, spell, or other effect, except ones that turn undead, and it retains its alignment, Intelligence, Wisdom, Charisma, and immunity to being charmed and frightened. It otherwise uses the possessed target&#39;s statistics, but doesn&#39;t gain access to the target&#39;s knowledge, class features, or proficiencies.${{par}}The possession lasts until the body drops to 0 hit points, the ghost ends it as a bonus action, or ${{subj}} is turned or forced out by an effect like the dispel evil and good spell. When the possession ends, ${{subj}} reappears in an unoccupied space within 5 ft. of the body. The target is immune to this ghost&#39;s Possession for 24 hours after succeeding on the saving throw or after the possession ends.&quot;</span>,<span class="ident">save_dc</span>), 
-            <span class="ident">Action::ReadThoughts</span>(<span class="ident">distance</span>) <span class="op">=</span><span class="op">&gt;</span> 
+            <span class="ident">Action::ReadThoughts</span>(<span class="ident">distance</span>) =&gt; 
                 <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} magically reads the surface thoughts of one creature within {} ft. of ${{objpro}}. The effect can penetrate barriers, but 3 ft. of wood or dirt, 2 ft. of stone, 2 inches of metal, or a thin sheet of lead blocks it. While the target is in range, ${{subj}} can continue reading its thoughts, as long as ${{poss}} concentration isn&#39;t broken (as if concentrating on a spell). While reading the target&#39;s mind, ${{subj}} has advantage on Wisdom (Insight) and Charisma (Deception, Intimidation, and Persuasion) checks against the target.&quot;</span>,<span class="ident">distance</span>), 
-            <span class="ident">Action::Reel</span> <span class="op">=</span><span class="op">&gt;</span> 
+            <span class="ident">Action::Reel</span> =&gt; 
                 <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} pulls each creature grappled by ${{objpro}} up to 25 ft. straight toward ${{objpro}}.&quot;</span>),
-            <span class="ident">Action::Swallow</span>(<span class="ident">damage</span>,<span class="ident">vomit_damage</span>,<span class="ident">vomit_save_dc</span>,<span class="ident">escape_distance</span>) <span class="op">=</span><span class="op">&gt;</span> 
+            <span class="ident">Action::Swallow</span>(<span class="ident">damage</span>,<span class="ident">vomit_damage</span>,<span class="ident">vomit_save_dc</span>,<span class="ident">escape_distance</span>) =&gt; 
                 <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} makes one bite attack against a Medium or smaller creature ${{subjpro}} is grappling. If the attack hits, that creature takes the bite&#39;s damage and is swallowed, and the grapple ends. While swallowed, the creature is blinded and restrained, it has total cover against attacks and other effects outside ${{subj}}, and it takes {} acid damage at the start of each of ${{poss}} turns.${{par}}If ${{subj}} takes {} damage or more on a single turn from a creature inside ${{objpro}}, ${{subj}} must succeed on a DC {} Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet oft he ${{name}}. If ${{subj}} dies, a swallowed creature is no longer restrained by ${{objpro}} and can escape from the corpse using {} feet of movement, exiting prone.&quot;</span>,<span class="ident">damage</span>,<span class="ident">vomit_damage</span>,<span class="ident">vomit_save_dc</span>,<span class="ident">escape_distance</span>), 
-            <span class="ident">Action::Teleport</span>(<span class="ident">distance</span>,<span class="ident">opt_attack</span>) <span class="op">=</span><span class="op">&gt;</span> 
+            <span class="ident">Action::Teleport</span>(<span class="ident">distance</span>,<span class="ident">opt_attack</span>) =&gt; 
                 <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} magically teleports, along with any equipment ${{subjpro}} is wearing or carrying, up to {} ft. to an unoccupied space ${{subjpro}} can see.{}&quot;</span>,<span class="ident">distance</span>,<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">attack</span>) <span class="op">=</span> <span class="ident">opt_attack</span> {
                      <span class="macro">format!</span>(<span class="string">&quot; Before or after teleporting, ${{subj}} can make one {} attack.&quot;</span>,<span class="ident">attack</span>)
                  } <span class="kw">else</span> { <span class="string">&quot;&quot;</span>.<span class="ident">to_owned</span>() }),
-            <span class="ident">Action::Attack</span>(<span class="kw">_</span>,<span class="ident">attack</span>,<span class="ident">effect</span>,<span class="ident">compound_effect</span>) <span class="op">=</span><span class="op">&gt;</span> 
+            <span class="ident">Action::Attack</span>(<span class="kw">_</span>,<span class="ident">attack</span>,<span class="ident">effect</span>,<span class="ident">compound_effect</span>) =&gt; 
                 <span class="ident">attack</span>.<span class="ident">get_description</span>(<span class="prelude-val">Some</span>(<span class="ident">effect</span>),<span class="ident">compound_effect</span>),
             <span class="comment">// This is for custom actions that aren&#39;t attacks. Although some might still cause damage, these actions don&#39;t require an attack roll.</span>
-            <span class="ident">Action::Action</span>(<span class="kw">_</span>,<span class="ident">description</span>,..) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">description</span>.<span class="ident">clone</span>(),
-            <span class="ident">Action::BreathWeapon</span>(<span class="kw">_</span>,<span class="ident">description</span>,..) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">description</span>.<span class="ident">clone</span>()
+            <span class="ident">Action::Action</span>(<span class="kw">_</span>,<span class="ident">description</span>,..) =&gt; <span class="ident">description</span>.<span class="ident">clone</span>(),
+            <span class="ident">Action::BreathWeapon</span>(<span class="kw">_</span>,<span class="ident">description</span>,..) =&gt; <span class="ident">description</span>.<span class="ident">clone</span>()
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_attack</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Attack</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_attack</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Attack</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Action::ChangeShape</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Charm</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Enlarge</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Etherealness</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::FrightfulPresence</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::HorrifyingVisage</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::IllusoryAppearance</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Leadership</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Possession</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::ReadThoughts</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Reel</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Swallow</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Teleport</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Attack</span>(<span class="kw">_</span>,<span class="ident">attack</span>,..) <span class="op">=</span><span class="op">&gt;</span> 
+            <span class="ident">Action::ChangeShape</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Charm</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Enlarge</span> =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Etherealness</span> =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::FrightfulPresence</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::HorrifyingVisage</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::IllusoryAppearance</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Leadership</span> =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Possession</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::ReadThoughts</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Reel</span> =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Swallow</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Teleport</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Attack</span>(<span class="kw">_</span>,<span class="ident">attack</span>,..) =&gt; 
                  <span class="prelude-val">Some</span>(<span class="ident">attack</span>.<span class="ident">clone</span>()),
             <span class="comment">// This is for custom actions that aren&#39;t attacks. Although some might still cause damage, these actions don&#39;t require an attack roll.</span>
-            <span class="ident">Action::Action</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::BreathWeapon</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">Action::Action</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::BreathWeapon</span>(..) =&gt; <span class="prelude-val">None</span>,
         }        
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_effect</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">AttackEffect</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_effect</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">AttackEffect</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Action::ChangeShape</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Charm</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Enlarge</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Etherealness</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::FrightfulPresence</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::HorrifyingVisage</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::IllusoryAppearance</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Leadership</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Possession</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::ReadThoughts</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Reel</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Swallow</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Teleport</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Attack</span>(<span class="kw">_</span>,<span class="kw">_</span>,<span class="ident">effect</span>,<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> 
+            <span class="ident">Action::ChangeShape</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Charm</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Enlarge</span> =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Etherealness</span> =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::FrightfulPresence</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::HorrifyingVisage</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::IllusoryAppearance</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Leadership</span> =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Possession</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::ReadThoughts</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Reel</span> =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Swallow</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Teleport</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Attack</span>(<span class="kw">_</span>,<span class="kw">_</span>,<span class="ident">effect</span>,<span class="kw">_</span>) =&gt; 
                  <span class="prelude-val">Some</span>(<span class="ident">effect</span>.<span class="ident">clone</span>()),
             <span class="comment">// This is for custom actions that aren&#39;t attacks. Although some might still cause damage, these actions don&#39;t require an attack roll.</span>
-            <span class="ident">Action::Action</span>(<span class="kw">_</span>,<span class="kw">_</span>,<span class="ident">effect</span>,<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">effect</span>.<span class="ident">clone</span>(),
-            <span class="ident">Action::BreathWeapon</span>(<span class="kw">_</span>,<span class="kw">_</span>,<span class="ident">effect</span>,<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">effect</span>.<span class="ident">clone</span>(),
+            <span class="ident">Action::Action</span>(<span class="kw">_</span>,<span class="kw">_</span>,<span class="ident">effect</span>,<span class="kw">_</span>) =&gt; <span class="ident">effect</span>.<span class="ident">clone</span>(),
+            <span class="ident">Action::BreathWeapon</span>(<span class="kw">_</span>,<span class="kw">_</span>,<span class="ident">effect</span>,<span class="kw">_</span>) =&gt; <span class="ident">effect</span>.<span class="ident">clone</span>(),
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_compound_effect</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CompoundAttackEffect</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_compound_effect</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CompoundAttackEffect</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Action::ChangeShape</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Charm</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Enlarge</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Etherealness</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::FrightfulPresence</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::HorrifyingVisage</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::IllusoryAppearance</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Leadership</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Possession</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::ReadThoughts</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Reel</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Swallow</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Teleport</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">Action::Attack</span>(<span class="kw">_</span>,<span class="kw">_</span>,<span class="kw">_</span>,<span class="ident">compound_effect</span>) <span class="op">=</span><span class="op">&gt;</span> 
+            <span class="ident">Action::ChangeShape</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Charm</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Enlarge</span> =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Etherealness</span> =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::FrightfulPresence</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::HorrifyingVisage</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::IllusoryAppearance</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Leadership</span> =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Possession</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::ReadThoughts</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Reel</span> =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Swallow</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Teleport</span>(..) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident">Action::Attack</span>(<span class="kw">_</span>,<span class="kw">_</span>,<span class="kw">_</span>,<span class="ident">compound_effect</span>) =&gt; 
                  <span class="ident">compound_effect</span>.<span class="ident">clone</span>(),
             <span class="comment">// This is for custom actions that aren&#39;t attacks. Although some might still cause damage, these actions don&#39;t require an attack roll.</span>
-            <span class="ident">Action::Action</span>(<span class="kw">_</span>,<span class="kw">_</span>,<span class="kw">_</span>,<span class="ident">compound_effect</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">compound_effect</span>.<span class="ident">clone</span>(),
-            <span class="ident">Action::BreathWeapon</span>(<span class="kw">_</span>,<span class="kw">_</span>,<span class="kw">_</span>,<span class="ident">compound_effect</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">compound_effect</span>.<span class="ident">clone</span>()
+            <span class="ident">Action::Action</span>(<span class="kw">_</span>,<span class="kw">_</span>,<span class="kw">_</span>,<span class="ident">compound_effect</span>) =&gt; <span class="ident">compound_effect</span>.<span class="ident">clone</span>(),
+            <span class="ident">Action::BreathWeapon</span>(<span class="kw">_</span>,<span class="kw">_</span>,<span class="kw">_</span>,<span class="ident">compound_effect</span>) =&gt; <span class="ident">compound_effect</span>.<span class="ident">clone</span>()
         }        
     }
 
@@ -791,12 +796,11 @@ Used to add legendary actions to the descriptions.
 
 <span class="kw">impl</span> <span class="ident">LegendaryAction</span> {
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_main_description</span>(<span class="ident">amount</span>: <span class="kw-2">&amp;</span><span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_main_description</span>(<span class="ident">amount</span>: <span class="kw-2">&amp;</span><span class="ident">u8</span>) -&gt; <span class="ident">String</span> {
         <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can take {} legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature&#39;s turn. ${{Subj}} regains spent legendary actions at the start of ${{posspro}} turn.&quot;</span>,<span class="ident">amount</span>)
     }
 
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="monstorr_lib" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
-    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="monstorr_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0 (fe5b13d68 2022-05-18)" ></div>
 </body></html>

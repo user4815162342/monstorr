@@ -1,102 +1,107 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `monstorr-lib&#x2F;src&#x2F;features.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>features.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../monstorr_lib/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
-<span id="2">  2</span>
-<span id="3">  3</span>
-<span id="4">  4</span>
-<span id="5">  5</span>
-<span id="6">  6</span>
-<span id="7">  7</span>
-<span id="8">  8</span>
-<span id="9">  9</span>
-<span id="10"> 10</span>
-<span id="11"> 11</span>
-<span id="12"> 12</span>
-<span id="13"> 13</span>
-<span id="14"> 14</span>
-<span id="15"> 15</span>
-<span id="16"> 16</span>
-<span id="17"> 17</span>
-<span id="18"> 18</span>
-<span id="19"> 19</span>
-<span id="20"> 20</span>
-<span id="21"> 21</span>
-<span id="22"> 22</span>
-<span id="23"> 23</span>
-<span id="24"> 24</span>
-<span id="25"> 25</span>
-<span id="26"> 26</span>
-<span id="27"> 27</span>
-<span id="28"> 28</span>
-<span id="29"> 29</span>
-<span id="30"> 30</span>
-<span id="31"> 31</span>
-<span id="32"> 32</span>
-<span id="33"> 33</span>
-<span id="34"> 34</span>
-<span id="35"> 35</span>
-<span id="36"> 36</span>
-<span id="37"> 37</span>
-<span id="38"> 38</span>
-<span id="39"> 39</span>
-<span id="40"> 40</span>
-<span id="41"> 41</span>
-<span id="42"> 42</span>
-<span id="43"> 43</span>
-<span id="44"> 44</span>
-<span id="45"> 45</span>
-<span id="46"> 46</span>
-<span id="47"> 47</span>
-<span id="48"> 48</span>
-<span id="49"> 49</span>
-<span id="50"> 50</span>
-<span id="51"> 51</span>
-<span id="52"> 52</span>
-<span id="53"> 53</span>
-<span id="54"> 54</span>
-<span id="55"> 55</span>
-<span id="56"> 56</span>
-<span id="57"> 57</span>
-<span id="58"> 58</span>
-<span id="59"> 59</span>
-<span id="60"> 60</span>
-<span id="61"> 61</span>
-<span id="62"> 62</span>
-<span id="63"> 63</span>
-<span id="64"> 64</span>
-<span id="65"> 65</span>
-<span id="66"> 66</span>
-<span id="67"> 67</span>
-<span id="68"> 68</span>
-<span id="69"> 69</span>
-<span id="70"> 70</span>
-<span id="71"> 71</span>
-<span id="72"> 72</span>
-<span id="73"> 73</span>
-<span id="74"> 74</span>
-<span id="75"> 75</span>
-<span id="76"> 76</span>
-<span id="77"> 77</span>
-<span id="78"> 78</span>
-<span id="79"> 79</span>
-<span id="80"> 80</span>
-<span id="81"> 81</span>
-<span id="82"> 82</span>
-<span id="83"> 83</span>
-<span id="84"> 84</span>
-<span id="85"> 85</span>
-<span id="86"> 86</span>
-<span id="87"> 87</span>
-<span id="88"> 88</span>
-<span id="89"> 89</span>
-<span id="90"> 90</span>
-<span id="91"> 91</span>
-<span id="92"> 92</span>
-<span id="93"> 93</span>
-<span id="94"> 94</span>
-<span id="95"> 95</span>
-<span id="96"> 96</span>
-<span id="97"> 97</span>
-<span id="98"> 98</span>
-<span id="99"> 99</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `monstorr-lib/src/features.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>features.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../monstorr_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../monstorr_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../monstorr_lib/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
 <span id="100">100</span>
 <span id="101">101</span>
 <span id="102">102</span>
@@ -901,154 +906,153 @@ Features which make changes to the creature are done after the creature is mostl
 <span class="kw">impl</span> <span class="ident">Feature</span> {
 
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Feature::Aggressive</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Aggressive&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Ambusher</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Ambusher&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Amorphous</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Amorphous&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Amphibious</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Amphibious&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::AngelicWeapons</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Angelic Weapons&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::AntimagicSusceptibility</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Antimagic Susceptibility&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::BlindSenses</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Blind Senses&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::BloodFrenzy</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Blood Frenzy&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Brute</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Brute&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Charge</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Charge&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::DamageTransfer</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Damage Transfer&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::DeathBurst</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Death Burst&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::DevilSight</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Devil Sight&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Echolocation</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Echolocation&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::FalseAppearance</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;False Appearance&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::FeyAncestry</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Fey Ancestry&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Flyby</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Flyby&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Grappler</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Grappler&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::HoldBreath</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Hold Breath&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Illumination</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Illumination&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::ImmutableForm</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Immutable Form&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::IncorporealMovement</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Incorporeal Movement&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Inscrutable</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Inscrutable&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Invisibility</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Invisibility&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::KeenSenses</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Keen Senses&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::LabyrinthineRecall</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Labyrinthine Recall&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::LegendaryResistance</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Legendary Resistance&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::LightSensitivity</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Light Sensitivity&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::MagicResistance</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Magic Resistance&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::MagicWeapons</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Magic Weapons&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::MartialAdvantage</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Martial Advantage&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Mimicry</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Mimicry&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::NimbleEscape</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Nimble Escape&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::PackTactics</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Pack Tactics&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Pounce</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Pounce&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Rampage</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Rampage&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Reactive</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Reactive&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Reckless</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Reckless&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Regeneration</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Regeneration&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Rejuvenation</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Rejuvenation&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Relentless</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Relentless&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::ShadowStealth</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Shadow Stealth&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Shapechanger</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Shapechanger&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::SiegeMonster</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Siege Monster&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::SpiderClimb</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Spider Climb&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::StandingLeap</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Standing Leap&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Steadfast</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Steadfast&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Stench</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Stench&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::SunlightSensitivity</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Sunlight Sensitivity&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::SureFooted</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Sure Footed&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::SurpriseAttack</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Surprise Attack&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Swarm</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Swarm&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Tunneler</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Tunneler&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::TurnResistance</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Turn Resistance&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::TwoHeads</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Two Heads&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::UndeadFortitude</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Undead Fortitude&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::WebSense</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Web Sense&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::WebWalker</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Web Walker&quot;</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::Feature</span>(<span class="ident">name</span>,..) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">name</span>.<span class="ident">clone</span>(),
+            <span class="ident">Feature::Aggressive</span> =&gt; <span class="string">&quot;Aggressive&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Ambusher</span> =&gt; <span class="string">&quot;Ambusher&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Amorphous</span> =&gt; <span class="string">&quot;Amorphous&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Amphibious</span> =&gt; <span class="string">&quot;Amphibious&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::AngelicWeapons</span>(..) =&gt; <span class="string">&quot;Angelic Weapons&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::AntimagicSusceptibility</span> =&gt; <span class="string">&quot;Antimagic Susceptibility&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::BlindSenses</span> =&gt; <span class="string">&quot;Blind Senses&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::BloodFrenzy</span> =&gt; <span class="string">&quot;Blood Frenzy&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Brute</span>(..) =&gt; <span class="string">&quot;Brute&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Charge</span>(..) =&gt; <span class="string">&quot;Charge&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::DamageTransfer</span> =&gt; <span class="string">&quot;Damage Transfer&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::DeathBurst</span>(..) =&gt; <span class="string">&quot;Death Burst&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::DevilSight</span> =&gt; <span class="string">&quot;Devil Sight&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Echolocation</span> =&gt; <span class="string">&quot;Echolocation&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::FalseAppearance</span>(..) =&gt; <span class="string">&quot;False Appearance&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::FeyAncestry</span> =&gt; <span class="string">&quot;Fey Ancestry&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Flyby</span> =&gt; <span class="string">&quot;Flyby&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Grappler</span> =&gt; <span class="string">&quot;Grappler&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::HoldBreath</span>(..) =&gt; <span class="string">&quot;Hold Breath&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Illumination</span>(<span class="kw">_</span>) =&gt; <span class="string">&quot;Illumination&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::ImmutableForm</span> =&gt; <span class="string">&quot;Immutable Form&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::IncorporealMovement</span>(<span class="kw">_</span>) =&gt; <span class="string">&quot;Incorporeal Movement&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Inscrutable</span> =&gt; <span class="string">&quot;Inscrutable&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Invisibility</span> =&gt; <span class="string">&quot;Invisibility&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::KeenSenses</span>(..) =&gt; <span class="string">&quot;Keen Senses&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::LabyrinthineRecall</span> =&gt; <span class="string">&quot;Labyrinthine Recall&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::LegendaryResistance</span> =&gt; <span class="string">&quot;Legendary Resistance&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::LightSensitivity</span> =&gt; <span class="string">&quot;Light Sensitivity&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::MagicResistance</span> =&gt; <span class="string">&quot;Magic Resistance&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::MagicWeapons</span> =&gt; <span class="string">&quot;Magic Weapons&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::MartialAdvantage</span>(<span class="kw">_</span>) =&gt; <span class="string">&quot;Martial Advantage&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Mimicry</span>(..) =&gt; <span class="string">&quot;Mimicry&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::NimbleEscape</span> =&gt; <span class="string">&quot;Nimble Escape&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::PackTactics</span> =&gt; <span class="string">&quot;Pack Tactics&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Pounce</span>(..) =&gt; <span class="string">&quot;Pounce&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Rampage</span> =&gt; <span class="string">&quot;Rampage&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Reactive</span> =&gt; <span class="string">&quot;Reactive&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Reckless</span> =&gt; <span class="string">&quot;Reckless&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Regeneration</span>(..) =&gt; <span class="string">&quot;Regeneration&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Rejuvenation</span>(<span class="kw">_</span>) =&gt; <span class="string">&quot;Rejuvenation&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Relentless</span>(<span class="kw">_</span>) =&gt; <span class="string">&quot;Relentless&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::ShadowStealth</span> =&gt; <span class="string">&quot;Shadow Stealth&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Shapechanger</span>(..) =&gt; <span class="string">&quot;Shapechanger&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::SiegeMonster</span> =&gt; <span class="string">&quot;Siege Monster&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::SpiderClimb</span> =&gt; <span class="string">&quot;Spider Climb&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::StandingLeap</span>(<span class="kw">_</span>) =&gt; <span class="string">&quot;Standing Leap&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Steadfast</span> =&gt; <span class="string">&quot;Steadfast&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Stench</span>(..) =&gt; <span class="string">&quot;Stench&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::SunlightSensitivity</span> =&gt; <span class="string">&quot;Sunlight Sensitivity&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::SureFooted</span> =&gt; <span class="string">&quot;Sure Footed&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::SurpriseAttack</span>(<span class="kw">_</span>) =&gt; <span class="string">&quot;Surprise Attack&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Swarm</span> =&gt; <span class="string">&quot;Swarm&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Tunneler</span>(<span class="kw">_</span>) =&gt; <span class="string">&quot;Tunneler&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::TurnResistance</span> =&gt; <span class="string">&quot;Turn Resistance&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::TwoHeads</span> =&gt; <span class="string">&quot;Two Heads&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::UndeadFortitude</span> =&gt; <span class="string">&quot;Undead Fortitude&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::WebSense</span> =&gt; <span class="string">&quot;Web Sense&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::WebWalker</span> =&gt; <span class="string">&quot;Web Walker&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::Feature</span>(<span class="ident">name</span>,..) =&gt; <span class="ident">name</span>.<span class="ident">clone</span>(),
        
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Feature::Aggressive</span> <span class="op">=</span><span class="op">&gt;</span><span class="macro">format!</span>(<span class="string">&quot;As a bonus action, ${{subj}} can move up to ${{posspro}} speed toward a hostile creature that ${{subjpro}} can see.&quot;</span>),
-            <span class="ident">Feature::Ambusher</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} has advantage on attack rolls against any creature ${{subjpro}} has surprised.&quot;</span>),
-            <span class="ident">Feature::Amorphous</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can move through a space as narrow as 1 inch wide without squeezing.&quot;</span>),
-            <span class="ident">Feature::Amphibious</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can breathe air and water.&quot;</span>),
-            <span class="ident">Feature::AngelicWeapons</span>(<span class="ident">dice</span>,..) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Poss}} weapon attacks are magical. When ${{subj}} hits with any weapon, the weapon deals an extra {} radiant damage (included in the attack).&quot;</span>,<span class="ident">dice</span>), 
-            <span class="ident">Feature::AntimagicSusceptibility</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} is incapacitated while in the area of an antimagic field. If targeted by dispel magic, ${{subj}} must succeed on a Constitution saving throw against the caster&#39;s spell save DC or fall unconscious for 1 minute.&quot;</span>),
-            <span class="ident">Feature::BlindSenses</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can&#39;t use ${{posspro}} blindsight while deafened and unable to smell.&quot;</span>),
-            <span class="ident">Feature::BloodFrenzy</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} has advantage on melee attack rolls against any creature that doesn&#39;t have all its hit points.&quot;</span>),
-            <span class="ident">Feature::Brute</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;A melee weapon deals one extra die of ${{posspro}} damage when ${{subj}} hits with it (included in the attack).&quot;</span>),
-            <span class="ident">Feature::Charge</span>(<span class="ident">distance</span>,<span class="ident">attack</span>,<span class="ident">extra_dice</span>,<span class="ident">damage</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;If ${{subj}} moves at least {} ft. straight toward a target and then hits it with a {} attack on the same turn, the target takes an extra {} {} damage.&quot;</span>,<span class="ident">distance</span>,<span class="ident">attack</span>,<span class="ident">extra_dice</span>,<span class="ident">damage</span>),
-            <span class="ident">Feature::DamageTransfer</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;While ${{subjpro}} is grappling a creature, ${{subj}} takes only half the damage dealt to ${{objpro}}, and the creature grappled by ${{subj}} takes the other half.&quot;</span>),
-            <span class="ident">Feature::DeathBurst</span>(<span class="ident">description</span>,<span class="ident">attack</span>,<span class="ident">compound</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;When ${{subj}} dies, ${{subjpro}} explodes in a cloud of {}, 5 ft. in radius. {}&quot;</span>,<span class="ident">description</span>,<span class="ident">attack</span>.<span class="ident">get_description</span>(<span class="string">&quot;0&quot;</span>,<span class="ident">compound</span>)), <span class="comment">// explode description, range,  effect of explosion</span>
-            <span class="ident">Feature::DevilSight</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;Magical darkness doesn&#39;t impede ${{poss}} darkvision.&quot;</span>),
-            <span class="ident">Feature::Echolocation</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can&#39;t use ${{posspro}} blindsight while deafened.&quot;</span>),
-            <span class="ident">Feature::FalseAppearance</span>(<span class="ident">description</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">description</span>.<span class="ident">clone</span>(),
-            <span class="ident">Feature::FeyAncestry</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} has advantage on saving throws against being charmed, and magic can&#39;t put ${{subj}} to sleep.&quot;</span>),
-            <span class="ident">Feature::Flyby</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} doesn&#39;t provoke opportunity attacks when ${{subjpro}} flies out of an enemy&#39;s reach.&quot;</span>),
-            <span class="ident">Feature::Grappler</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} has advantage on attack rolls against any creature grappled by ${{objpro}}.&quot;</span>),
-            <span class="ident">Feature::HoldBreath</span>(<span class="ident">duration</span>,<span class="ident">reversed</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">reversed</span> {
+            <span class="ident">Feature::Aggressive</span> =&gt;<span class="macro">format!</span>(<span class="string">&quot;As a bonus action, ${{subj}} can move up to ${{posspro}} speed toward a hostile creature that ${{subjpro}} can see.&quot;</span>),
+            <span class="ident">Feature::Ambusher</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} has advantage on attack rolls against any creature ${{subjpro}} has surprised.&quot;</span>),
+            <span class="ident">Feature::Amorphous</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can move through a space as narrow as 1 inch wide without squeezing.&quot;</span>),
+            <span class="ident">Feature::Amphibious</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can breathe air and water.&quot;</span>),
+            <span class="ident">Feature::AngelicWeapons</span>(<span class="ident">dice</span>,..) =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Poss}} weapon attacks are magical. When ${{subj}} hits with any weapon, the weapon deals an extra {} radiant damage (included in the attack).&quot;</span>,<span class="ident">dice</span>), 
+            <span class="ident">Feature::AntimagicSusceptibility</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} is incapacitated while in the area of an antimagic field. If targeted by dispel magic, ${{subj}} must succeed on a Constitution saving throw against the caster&#39;s spell save DC or fall unconscious for 1 minute.&quot;</span>),
+            <span class="ident">Feature::BlindSenses</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can&#39;t use ${{posspro}} blindsight while deafened and unable to smell.&quot;</span>),
+            <span class="ident">Feature::BloodFrenzy</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} has advantage on melee attack rolls against any creature that doesn&#39;t have all its hit points.&quot;</span>),
+            <span class="ident">Feature::Brute</span>(..) =&gt; <span class="macro">format!</span>(<span class="string">&quot;A melee weapon deals one extra die of ${{posspro}} damage when ${{subj}} hits with it (included in the attack).&quot;</span>),
+            <span class="ident">Feature::Charge</span>(<span class="ident">distance</span>,<span class="ident">attack</span>,<span class="ident">extra_dice</span>,<span class="ident">damage</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;If ${{subj}} moves at least {} ft. straight toward a target and then hits it with a {} attack on the same turn, the target takes an extra {} {} damage.&quot;</span>,<span class="ident">distance</span>,<span class="ident">attack</span>,<span class="ident">extra_dice</span>,<span class="ident">damage</span>),
+            <span class="ident">Feature::DamageTransfer</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;While ${{subjpro}} is grappling a creature, ${{subj}} takes only half the damage dealt to ${{objpro}}, and the creature grappled by ${{subj}} takes the other half.&quot;</span>),
+            <span class="ident">Feature::DeathBurst</span>(<span class="ident">description</span>,<span class="ident">attack</span>,<span class="ident">compound</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;When ${{subj}} dies, ${{subjpro}} explodes in a cloud of {}, 5 ft. in radius. {}&quot;</span>,<span class="ident">description</span>,<span class="ident">attack</span>.<span class="ident">get_description</span>(<span class="string">&quot;0&quot;</span>,<span class="ident">compound</span>)), <span class="comment">// explode description, range,  effect of explosion</span>
+            <span class="ident">Feature::DevilSight</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;Magical darkness doesn&#39;t impede ${{poss}} darkvision.&quot;</span>),
+            <span class="ident">Feature::Echolocation</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can&#39;t use ${{posspro}} blindsight while deafened.&quot;</span>),
+            <span class="ident">Feature::FalseAppearance</span>(<span class="ident">description</span>) =&gt; <span class="ident">description</span>.<span class="ident">clone</span>(),
+            <span class="ident">Feature::FeyAncestry</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} has advantage on saving throws against being charmed, and magic can&#39;t put ${{subj}} to sleep.&quot;</span>),
+            <span class="ident">Feature::Flyby</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} doesn&#39;t provoke opportunity attacks when ${{subjpro}} flies out of an enemy&#39;s reach.&quot;</span>),
+            <span class="ident">Feature::Grappler</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} has advantage on attack rolls against any creature grappled by ${{objpro}}.&quot;</span>),
+            <span class="ident">Feature::HoldBreath</span>(<span class="ident">duration</span>,<span class="ident">reversed</span>) =&gt; <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">reversed</span> {
                 <span class="macro">format!</span>(<span class="string">&quot;While out of water, ${{subj}} can hold ${{posspro}} breath for {} minutes.&quot;</span>,<span class="ident">duration</span>)
             } <span class="kw">else</span> {
                 <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can hold ${{posspro}} breath for {} minutes.&quot;</span>,<span class="ident">duration</span>)
             }, <span class="comment">// duration, reversed (&quot;out of water&quot;)</span>
-            <span class="ident">Feature::Illumination</span>(<span class="ident">radius</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} sheds bright light in a {}-foot radius and dim light in an additional {} ft.&quot;</span>,<span class="ident">radius</span>,<span class="ident">radius</span>), <span class="comment">// radius</span>
-            <span class="ident">Feature::ImmutableForm</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} is immune to any spell or effect that would alter ${{posspro}} form.&quot;</span>),
-            <span class="ident">Feature::IncorporealMovement</span>(<span class="ident">damage</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can move through other creatures and objects as if they were difficult terrain. ${{Subjpro}} takes {} force damage if ${{subjpro}} ends ${{posspro}} turn inside an object.&quot;</span>,<span class="ident">damage</span>), <span class="comment">// damage (force) if it ends its turn inside an object</span>
-            <span class="ident">Feature::Inscrutable</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} is immune to any effect that would sense ${{posspro}} emotions or read ${{posspro}} thoughts, as well as any divination spell that ${{subjpro}} refuses. Wisdom (Insight) checks made to ascertain ${{poss}} intentions or sincerity have disadvantage.&quot;</span>),
-            <span class="ident">Feature::Invisibility</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} magically turns invisible until ${{subjpro}} attacks, or until ${{posspro}} concentration ends (as if concentrating on a spell). Any equipment ${{subj}} wears or carries is invisible with ${{objpro}}.&quot;</span>),
-            <span class="ident">Feature::KeenSenses</span>(<span class="ident">sight</span>,<span class="ident">hearing</span>,<span class="ident">smell</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} has advantage on Wisdom (Perception) checks that rely on {}.&quot;</span>,<span class="kw">match</span> (<span class="ident">hearing</span>,<span class="ident">sight</span>,<span class="ident">smell</span>) {
-                (<span class="bool-val">true</span>,<span class="bool-val">true</span>,<span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;sight, hearing, or smell&quot;</span>,
-                (<span class="bool-val">true</span>,<span class="bool-val">true</span>,<span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;sight or hearing&quot;</span>,
-                (<span class="bool-val">true</span>,<span class="bool-val">false</span>,<span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;sight or smell&quot;</span>,
-                (<span class="bool-val">true</span>,<span class="bool-val">false</span>,<span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;sight&quot;</span>,
-                (<span class="bool-val">false</span>,<span class="bool-val">true</span>,<span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;hearing or smell&quot;</span>,
-                (<span class="bool-val">false</span>,<span class="bool-val">true</span>,<span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;hearing&quot;</span>,
-                (<span class="bool-val">false</span>,<span class="bool-val">false</span>,<span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;smell&quot;</span>,
-                (<span class="bool-val">false</span>,<span class="bool-val">false</span>,<span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;no senses&quot;</span>
+            <span class="ident">Feature::Illumination</span>(<span class="ident">radius</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} sheds bright light in a {}-foot radius and dim light in an additional {} ft.&quot;</span>,<span class="ident">radius</span>,<span class="ident">radius</span>), <span class="comment">// radius</span>
+            <span class="ident">Feature::ImmutableForm</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} is immune to any spell or effect that would alter ${{posspro}} form.&quot;</span>),
+            <span class="ident">Feature::IncorporealMovement</span>(<span class="ident">damage</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can move through other creatures and objects as if they were difficult terrain. ${{Subjpro}} takes {} force damage if ${{subjpro}} ends ${{posspro}} turn inside an object.&quot;</span>,<span class="ident">damage</span>), <span class="comment">// damage (force) if it ends its turn inside an object</span>
+            <span class="ident">Feature::Inscrutable</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} is immune to any effect that would sense ${{posspro}} emotions or read ${{posspro}} thoughts, as well as any divination spell that ${{subjpro}} refuses. Wisdom (Insight) checks made to ascertain ${{poss}} intentions or sincerity have disadvantage.&quot;</span>),
+            <span class="ident">Feature::Invisibility</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} magically turns invisible until ${{subjpro}} attacks, or until ${{posspro}} concentration ends (as if concentrating on a spell). Any equipment ${{subj}} wears or carries is invisible with ${{objpro}}.&quot;</span>),
+            <span class="ident">Feature::KeenSenses</span>(<span class="ident">sight</span>,<span class="ident">hearing</span>,<span class="ident">smell</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} has advantage on Wisdom (Perception) checks that rely on {}.&quot;</span>,<span class="kw">match</span> (<span class="ident">hearing</span>,<span class="ident">sight</span>,<span class="ident">smell</span>) {
+                (<span class="bool-val">true</span>,<span class="bool-val">true</span>,<span class="bool-val">true</span>) =&gt; <span class="string">&quot;sight, hearing, or smell&quot;</span>,
+                (<span class="bool-val">true</span>,<span class="bool-val">true</span>,<span class="bool-val">false</span>) =&gt; <span class="string">&quot;sight or hearing&quot;</span>,
+                (<span class="bool-val">true</span>,<span class="bool-val">false</span>,<span class="bool-val">true</span>) =&gt; <span class="string">&quot;sight or smell&quot;</span>,
+                (<span class="bool-val">true</span>,<span class="bool-val">false</span>,<span class="bool-val">false</span>) =&gt; <span class="string">&quot;sight&quot;</span>,
+                (<span class="bool-val">false</span>,<span class="bool-val">true</span>,<span class="bool-val">true</span>) =&gt; <span class="string">&quot;hearing or smell&quot;</span>,
+                (<span class="bool-val">false</span>,<span class="bool-val">true</span>,<span class="bool-val">false</span>) =&gt; <span class="string">&quot;hearing&quot;</span>,
+                (<span class="bool-val">false</span>,<span class="bool-val">false</span>,<span class="bool-val">true</span>) =&gt; <span class="string">&quot;smell&quot;</span>,
+                (<span class="bool-val">false</span>,<span class="bool-val">false</span>,<span class="bool-val">false</span>) =&gt; <span class="string">&quot;no senses&quot;</span>
             }), <span class="comment">// hearing, sight, smell</span>
-            <span class="ident">Feature::LabyrinthineRecall</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can perfectly recall any path ${{subjpro}} has traveled.&quot;</span>),
-            <span class="ident">Feature::LegendaryResistance</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;If ${{subj}} fails a saving throw, ${{subjpro}} can choose to succeed instead.&quot;</span>),
-            <span class="ident">Feature::LightSensitivity</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;While in bright light, ${{subj}} has disadvantage on attack rolls and Wisdom (Perception) checks that rely on sight.&quot;</span>),
-            <span class="ident">Feature::MagicResistance</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} has advantage on saving throws against spells and other magical effects.&quot;</span>),
-            <span class="ident">Feature::MagicWeapons</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Poss}} weapon attacks are magical.&quot;</span>),
-            <span class="ident">Feature::MartialAdvantage</span>(<span class="ident">dice</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;Once per turn, ${{subj}} can deal an extra {} damage to a creature ${{subjpro}} hits with a weapon attack if that creature is within 5 ft. of an ally of ${{subj}} that isn&#39;t incapacitated.&quot;</span>,<span class="ident">dice</span>), <span class="comment">// extra damage dice</span>
-            <span class="ident">Feature::Mimicry</span>(<span class="ident">sounds</span>,<span class="ident">check_dc</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can mimic {}. A creature that hears the sounds can tell they are imitations with a successful DC {} Wisdom (Insight) check.&quot;</span>,<span class="ident">sounds</span>,<span class="ident">check_dc</span>), <span class="comment">// description, Insight DC</span>
-            <span class="ident">Feature::NimbleEscape</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can take the Disengage or Hide action as a bonus action on each of ${{posspro}} turns.&quot;</span>),
-            <span class="ident">Feature::PackTactics</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} has advantage on an attack roll against a creature if at least one of ${{poss}} allies is within 5 ft. of the creature and the ally isn&#39;t incapacitated.&quot;</span>),
-            <span class="ident">Feature::Pounce</span>(<span class="ident">distance</span>,<span class="ident">save_dc</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;If ${{subj}} moves at least {} ft. straight toward a creature and then hits it with a claw attack on the same turn, that target must succeed on a DC {} Strength saving throw or be knocked prone. If the target is prone, ${{subj}} can make one bite attack against it as a bonus action.&quot;</span>,<span class="ident">distance</span>,<span class="ident">save_dc</span>), <span class="comment">// distance, save DC (Strength)</span>
-            <span class="ident">Feature::Rampage</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;When ${{subj}} reduces a creature to 0 hit points with a melee attack on ${{posspro}} turn, ${{subj}} can take a bonus action to move up to half ${{posspro}} speed and make a bite attack.&quot;</span>),
-            <span class="ident">Feature::Reactive</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can take one reaction on every turn in combat.&quot;</span>),
-            <span class="ident">Feature::Reckless</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;At the start of ${{posspro}} turn, ${{subj}} can gain advantage on all melee weapon attack rolls during that turn, but attack rolls against ${{objpro}} have advantage until the start of ${{posspro}} next turn.&quot;</span>),
-            <span class="ident">Feature::Regeneration</span>(<span class="ident">regain_hp</span>,<span class="ident">vulnerabilities</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} regains {} hit points at the start of ${{posspro}} turn if ${{subjpro}} has at least 1 hit point. If ${{subj}} takes {} damage, this trait doesn’t function at the start of ${{poss}} next turn. ${{Subj}} dies only if ${{subjpro}} starts ${{posspro}} turn with 0 hit points and doesn&#39;t regenerate.&quot;</span>,<span class="ident">regain_hp</span>,<span class="ident">vulnerabilities</span>.<span class="ident">or_join</span>()), <span class="comment">// number of hp, damage this doesn&#39;t apply to (might be based on vulnerabilities, in which case I don&#39;t need that)</span>
+            <span class="ident">Feature::LabyrinthineRecall</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can perfectly recall any path ${{subjpro}} has traveled.&quot;</span>),
+            <span class="ident">Feature::LegendaryResistance</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;If ${{subj}} fails a saving throw, ${{subjpro}} can choose to succeed instead.&quot;</span>),
+            <span class="ident">Feature::LightSensitivity</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;While in bright light, ${{subj}} has disadvantage on attack rolls and Wisdom (Perception) checks that rely on sight.&quot;</span>),
+            <span class="ident">Feature::MagicResistance</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} has advantage on saving throws against spells and other magical effects.&quot;</span>),
+            <span class="ident">Feature::MagicWeapons</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Poss}} weapon attacks are magical.&quot;</span>),
+            <span class="ident">Feature::MartialAdvantage</span>(<span class="ident">dice</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;Once per turn, ${{subj}} can deal an extra {} damage to a creature ${{subjpro}} hits with a weapon attack if that creature is within 5 ft. of an ally of ${{subj}} that isn&#39;t incapacitated.&quot;</span>,<span class="ident">dice</span>), <span class="comment">// extra damage dice</span>
+            <span class="ident">Feature::Mimicry</span>(<span class="ident">sounds</span>,<span class="ident">check_dc</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can mimic {}. A creature that hears the sounds can tell they are imitations with a successful DC {} Wisdom (Insight) check.&quot;</span>,<span class="ident">sounds</span>,<span class="ident">check_dc</span>), <span class="comment">// description, Insight DC</span>
+            <span class="ident">Feature::NimbleEscape</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can take the Disengage or Hide action as a bonus action on each of ${{posspro}} turns.&quot;</span>),
+            <span class="ident">Feature::PackTactics</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} has advantage on an attack roll against a creature if at least one of ${{poss}} allies is within 5 ft. of the creature and the ally isn&#39;t incapacitated.&quot;</span>),
+            <span class="ident">Feature::Pounce</span>(<span class="ident">distance</span>,<span class="ident">save_dc</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;If ${{subj}} moves at least {} ft. straight toward a creature and then hits it with a claw attack on the same turn, that target must succeed on a DC {} Strength saving throw or be knocked prone. If the target is prone, ${{subj}} can make one bite attack against it as a bonus action.&quot;</span>,<span class="ident">distance</span>,<span class="ident">save_dc</span>), <span class="comment">// distance, save DC (Strength)</span>
+            <span class="ident">Feature::Rampage</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;When ${{subj}} reduces a creature to 0 hit points with a melee attack on ${{posspro}} turn, ${{subj}} can take a bonus action to move up to half ${{posspro}} speed and make a bite attack.&quot;</span>),
+            <span class="ident">Feature::Reactive</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can take one reaction on every turn in combat.&quot;</span>),
+            <span class="ident">Feature::Reckless</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;At the start of ${{posspro}} turn, ${{subj}} can gain advantage on all melee weapon attack rolls during that turn, but attack rolls against ${{objpro}} have advantage until the start of ${{posspro}} next turn.&quot;</span>),
+            <span class="ident">Feature::Regeneration</span>(<span class="ident">regain_hp</span>,<span class="ident">vulnerabilities</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} regains {} hit points at the start of ${{posspro}} turn if ${{subjpro}} has at least 1 hit point. If ${{subj}} takes {} damage, this trait doesn’t function at the start of ${{poss}} next turn. ${{Subj}} dies only if ${{subjpro}} starts ${{posspro}} turn with 0 hit points and doesn&#39;t regenerate.&quot;</span>,<span class="ident">regain_hp</span>,<span class="ident">vulnerabilities</span>.<span class="ident">or_join</span>()), <span class="comment">// number of hp, damage this doesn&#39;t apply to (might be based on vulnerabilities, in which case I don&#39;t need that)</span>
             <span class="comment">// &quot;The vampire regains 20 hit points at the start of its turn if it has at least 1 hit point and isn&#39;t in sunlight or running water. If the vampire takes radiant damage or damage from holy water, this trait doesn&#39;t function at the start of the vampire&#39;s next turn.&quot;</span>
             <span class="comment">// &quot;The oni regains 10 hit points at the start of its turn if it has at least 1 hit point.&quot;</span>
             <span class="comment">// &quot;The troll regains 10 hit points at the start of its turn. If the troll takes acid or fire damage, this trait doesn&#39;t function at the start of the troll&#39;s next turn. The troll dies only if it starts its turn with 0 hit points and doesn&#39;t regenerate.&quot;</span>
-            <span class="ident">Feature::Rejuvenation</span>(<span class="ident">description</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">description</span>.<span class="ident">to_owned</span>(), <span class="comment">// needs a description, every rejuvenation is different</span>
-            <span class="ident">Feature::Relentless</span>(<span class="ident">limit</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;If ${{subj}} takes {} damage or less that would reduce ${{objpro}} to 0 hit points, ${{subjpro}} is reduced to 1 hit point instead.&quot;</span>,<span class="ident">limit</span>), <span class="comment">// damage limit</span>
-            <span class="ident">Feature::ShadowStealth</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;While in dim light or darkness, ${{subj}} can take the Hide action as a bonus action.&quot;</span>),
-            <span class="ident">Feature::Shapechanger</span>(<span class="ident">description</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">description</span>.<span class="ident">to_owned</span>(),
-            <span class="ident">Feature::SiegeMonster</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} deals double damage to objects and structures.&quot;</span>),
-            <span class="ident">Feature::SpiderClimb</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.&quot;</span>),
-            <span class="ident">Feature::StandingLeap</span>(<span class="ident">long</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Poss}} long jump is up to {} ft. and ${{posspro}} high jump is up to {} ft., with or without a running start.&quot;</span>,<span class="ident">long</span>,<span class="ident">long</span> <span class="op">/</span> <span class="number">2</span>), <span class="comment">// distance</span>
-            <span class="ident">Feature::Steadfast</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can&#39;t be frightened while ${{subjpro}} can see an allied creature within 30 feet of ${{objpro}}.&quot;</span>),
-            <span class="ident">Feature::Stench</span>(<span class="ident">range</span>,<span class="ident">save_dc</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;Any creature that starts its turn within {} ft. of ${{subj}} must succeed on a DC {} Constitution saving throw or be poisoned until the start of its next turn. On a successful saving throw, the creature is immune to ${{poss}} stench for 24 hours.&quot;</span>,<span class="ident">range</span>,<span class="ident">save_dc</span>), <span class="comment">// range, save DC (Constitution)</span>
-            <span class="ident">Feature::SunlightSensitivity</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;While in sunlight, ${{subj}} has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.&quot;</span>),
-            <span class="ident">Feature::SureFooted</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} has advantage on Strength and Dexterity saving throws made against effects that would knock ${{objpro}} prone.&quot;</span>),
-            <span class="ident">Feature::SurpriseAttack</span>(<span class="ident">damage</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;If ${{subj}} surprises a creature and hits it with an attack during the first round of combat, the target takes an extra {} damage from the attack.&quot;</span>,<span class="ident">damage</span>), <span class="comment">// extra damage</span>
-            <span class="ident">Feature::Swarm</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;The swarm can occupy another creature&#39;s space and vice versa, and the swarm can move through any opening large enough for a Tiny individual. The swarm can&#39;t regain hit points or gain temporary hit points.&quot;</span>),
-            <span class="ident">Feature::Tunneler</span>(<span class="ident">diameter</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can burrow through solid rock at half ${{posspro}} burrow speed and leaves a {}-foot-diameter tunnel in ${{posspro}} wake.&quot;</span>,<span class="ident">diameter</span>), <span class="comment">// width of tunnel</span>
-            <span class="ident">Feature::TurnResistance</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} has advantage on saving throws against any effect that turns undead.&quot;</span>),
-            <span class="ident">Feature::TwoHeads</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} has advantage on Wisdom (Perception) checks and on saving throws against being blinded, charmed, deafened, frightened, stunned, and knocked unconscious.&quot;</span>),
-            <span class="ident">Feature::UndeadFortitude</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;If damage reduces ${{subj}} to 0 hit points, ${{subjpro}} must make a Constitution saving throw with a DC of 5+the damage taken, unless the damage is radiant or from a critical hit. On a success, ${{subj}} drops to 1 hit point instead.&quot;</span>),
-            <span class="ident">Feature::WebSense</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;While in contact with a web, ${{subj}} knows the exact location of any other creature in contact with the same web.&quot;</span>),
-            <span class="ident">Feature::WebWalker</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} ignores movement restrictions caused by webbing.&quot;</span>),
-            <span class="ident">Feature::Feature</span>(<span class="kw">_</span>,<span class="ident">description</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">description</span>.<span class="ident">clone</span>(), <span class="comment">// name, description</span>
+            <span class="ident">Feature::Rejuvenation</span>(<span class="ident">description</span>) =&gt; <span class="ident">description</span>.<span class="ident">to_owned</span>(), <span class="comment">// needs a description, every rejuvenation is different</span>
+            <span class="ident">Feature::Relentless</span>(<span class="ident">limit</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;If ${{subj}} takes {} damage or less that would reduce ${{objpro}} to 0 hit points, ${{subjpro}} is reduced to 1 hit point instead.&quot;</span>,<span class="ident">limit</span>), <span class="comment">// damage limit</span>
+            <span class="ident">Feature::ShadowStealth</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;While in dim light or darkness, ${{subj}} can take the Hide action as a bonus action.&quot;</span>),
+            <span class="ident">Feature::Shapechanger</span>(<span class="ident">description</span>) =&gt; <span class="ident">description</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">Feature::SiegeMonster</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} deals double damage to objects and structures.&quot;</span>),
+            <span class="ident">Feature::SpiderClimb</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.&quot;</span>),
+            <span class="ident">Feature::StandingLeap</span>(<span class="ident">long</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Poss}} long jump is up to {} ft. and ${{posspro}} high jump is up to {} ft., with or without a running start.&quot;</span>,<span class="ident">long</span>,<span class="ident">long</span> <span class="op">/</span> <span class="number">2</span>), <span class="comment">// distance</span>
+            <span class="ident">Feature::Steadfast</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can&#39;t be frightened while ${{subjpro}} can see an allied creature within 30 feet of ${{objpro}}.&quot;</span>),
+            <span class="ident">Feature::Stench</span>(<span class="ident">range</span>,<span class="ident">save_dc</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;Any creature that starts its turn within {} ft. of ${{subj}} must succeed on a DC {} Constitution saving throw or be poisoned until the start of its next turn. On a successful saving throw, the creature is immune to ${{poss}} stench for 24 hours.&quot;</span>,<span class="ident">range</span>,<span class="ident">save_dc</span>), <span class="comment">// range, save DC (Constitution)</span>
+            <span class="ident">Feature::SunlightSensitivity</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;While in sunlight, ${{subj}} has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.&quot;</span>),
+            <span class="ident">Feature::SureFooted</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} has advantage on Strength and Dexterity saving throws made against effects that would knock ${{objpro}} prone.&quot;</span>),
+            <span class="ident">Feature::SurpriseAttack</span>(<span class="ident">damage</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;If ${{subj}} surprises a creature and hits it with an attack during the first round of combat, the target takes an extra {} damage from the attack.&quot;</span>,<span class="ident">damage</span>), <span class="comment">// extra damage</span>
+            <span class="ident">Feature::Swarm</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;The swarm can occupy another creature&#39;s space and vice versa, and the swarm can move through any opening large enough for a Tiny individual. The swarm can&#39;t regain hit points or gain temporary hit points.&quot;</span>),
+            <span class="ident">Feature::Tunneler</span>(<span class="ident">diameter</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} can burrow through solid rock at half ${{posspro}} burrow speed and leaves a {}-foot-diameter tunnel in ${{posspro}} wake.&quot;</span>,<span class="ident">diameter</span>), <span class="comment">// width of tunnel</span>
+            <span class="ident">Feature::TurnResistance</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} has advantage on saving throws against any effect that turns undead.&quot;</span>),
+            <span class="ident">Feature::TwoHeads</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} has advantage on Wisdom (Perception) checks and on saving throws against being blinded, charmed, deafened, frightened, stunned, and knocked unconscious.&quot;</span>),
+            <span class="ident">Feature::UndeadFortitude</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;If damage reduces ${{subj}} to 0 hit points, ${{subjpro}} must make a Constitution saving throw with a DC of 5+the damage taken, unless the damage is radiant or from a critical hit. On a success, ${{subj}} drops to 1 hit point instead.&quot;</span>),
+            <span class="ident">Feature::WebSense</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;While in contact with a web, ${{subj}} knows the exact location of any other creature in contact with the same web.&quot;</span>),
+            <span class="ident">Feature::WebWalker</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;${{Subj}} ignores movement restrictions caused by webbing.&quot;</span>),
+            <span class="ident">Feature::Feature</span>(<span class="kw">_</span>,<span class="ident">description</span>) =&gt; <span class="ident">description</span>.<span class="ident">clone</span>(), <span class="comment">// name, description</span>
         }
         
     }
 
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="monstorr_lib" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
-    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="monstorr_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0 (fe5b13d68 2022-05-18)" ></div>
 </body></html>

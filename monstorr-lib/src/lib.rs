@@ -88,9 +88,9 @@ use crate::template::TemplateSourceResolver;
 pub use creature_commands::MONSTORR_VERSION;
 
 pub enum InputFormat {
-    Creature,
-    Open5e,
-    Open5eList(String),
+    Creature(Option<String>),
+    Open5e(Option<String>),
+    Open5eList(Option<String>,String),
     Stored(String)
 }
 
@@ -102,7 +102,7 @@ pub enum ListInputFormat {
 impl Default for InputFormat {
 
     fn default() -> Self {
-        Self::Creature
+        Self::Creature(None)
     }
 }
 
@@ -192,7 +192,7 @@ fn get_source_file(working_dir: &PathBuf, input_file: Option<&str>) -> Result<Op
 
 }
 
-pub fn validate_creature(input_file: Option<&str>, input_format: InputFormat, 
+pub fn validate_creature(input_format: InputFormat, 
                          output_file: Option<&str>) -> Result<(),String> {
     let working_dir = get_default_working_dir()?;
 
@@ -203,8 +203,8 @@ pub fn validate_creature(input_file: Option<&str>, input_format: InputFormat,
     };
 
     let source = match input_format {
-        InputFormat::Creature => {
-            let source_file = get_source_file(&working_dir, input_file)?;
+        InputFormat::Creature(input_file) => {
+            let source_file = get_source_file(&working_dir, input_file.as_deref())?;
             // get the data from the file
             read_source(source_file.as_ref())?
         },
@@ -244,7 +244,7 @@ impl TemplateSourceResolver for PathBuf {
 
 
 
-pub fn create_stat_block(input_file: Option<&str>, input_format: InputFormat, 
+pub fn create_stat_block(input_format: InputFormat, 
                          output_file: Option<&str>, output_format: OutputFormat) -> Result<(),String> {
     let working_dir = get_default_working_dir()?;
 
@@ -256,8 +256,8 @@ pub fn create_stat_block(input_file: Option<&str>, input_format: InputFormat,
 
 
     let stat_block = match input_format {
-        InputFormat::Creature => {
-            let source_file = get_source_file(&working_dir, input_file)?;
+        InputFormat::Creature(input_file) => {
+            let source_file = get_source_file(&working_dir, input_file.as_deref())?;
             // get the data from the file
             let source = read_source(source_file.as_ref())?;
             // the final working directory should be the directory in which the source file is located.
@@ -267,8 +267,8 @@ pub fn create_stat_block(input_file: Option<&str>, input_format: InputFormat,
             let creature = creator.create_creature(&working_dir).map_err(|e| format!("{}",e))?;
             creature.try_into_stat_block().map_err(|e| format!("{}",e))?
         },
-        InputFormat::Open5e => {
-            let source_file = get_source_file(&working_dir, input_file)?;
+        InputFormat::Open5e(input_file) => {
+            let source_file = get_source_file(&working_dir, input_file.as_deref())?;
             // get the data from the file
             let source = read_source(source_file.as_ref())?;
             // deserialize the stat block
@@ -276,8 +276,8 @@ pub fn create_stat_block(input_file: Option<&str>, input_format: InputFormat,
             creature.try_into_stat_block().map_err(|e| format!("{}",e))?
 
         },
-        InputFormat::Open5eList(creature_name) => {
-            let source_file = get_source_file(&working_dir, input_file)?;
+        InputFormat::Open5eList(input_file,creature_name) => {
+            let source_file = get_source_file(&working_dir, input_file.as_deref())?;
             // get the data from the file
             let source = read_source(source_file.as_ref())?;
             // deserialize the stat block
