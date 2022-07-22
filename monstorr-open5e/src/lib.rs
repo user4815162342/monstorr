@@ -118,7 +118,7 @@ impl Open5eMonsterSkills {
         add_skill!(performance,"Performance");
         add_skill!(persuasion,"Persuasion");
         add_skill!(religion,"Religion");
-        add_skill!(sleight_of_hand,"Sleight of Hands");
+        add_skill!(sleight_of_hand,"Sleight of Hand");
         add_skill!(stealth,"Stealth");
         add_skill!(survival,"Survival");
 

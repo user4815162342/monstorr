@@ -361,7 +361,7 @@ impl CreatureProficiencies {
         add_skill!(performance,Performance,"Performance");
         add_skill!(persuasion,Persuasion,"Persuasion");
         add_skill!(religion,Religion,"Religion");
-        add_skill!(sleight_of_hand,SleightOfHand,"Sleight of Hands");
+        add_skill!(sleight_of_hand,SleightOfHand,"Sleight of Hand");
         add_skill!(stealth,Stealth,"Stealth");
         add_skill!(survival,Survival,"Survival");
 
