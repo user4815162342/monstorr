@@ -8,7 +8,7 @@
 
 [package]
 name = "monstorr-lib"
-version = "0.1.0"
+version = "0.1.2"
 authors = ["Neil M. Sheldon <neilmsheldon@townsedgetechnology.com>"]
 edition = "2018"
 
