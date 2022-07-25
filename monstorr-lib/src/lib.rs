@@ -73,6 +73,7 @@ mod creature_commands;
 mod stat_block;
 mod creature;
 mod open5e_convertor;
+mod text_escaper;
 mod template;
 #[cfg(test)] mod tests;
 
@@ -84,6 +85,8 @@ use crate::template::process_template;
 use crate::utils::path_relative_from;
 use crate::utils::to_kebab_case;
 use crate::template::TemplateSourceResolver;
+use crate::text_escaper::Escapable;
+use crate::text_escaper::escape_latex;
 
 pub use creature_commands::MONSTORR_VERSION;
 
@@ -348,6 +351,8 @@ pub fn create_stat_block(input_format: InputFormat,
         },
         OutputFormat::LaTeX() => {
             let main_template = monstorr_data::templates::LATEX_TEMPLATE;
+            // FUTURE: Allow this as a command line option for MiniJinja?
+            let stat_block = stat_block.escape(&escape_latex);
             process_template(&StoredTemplates::instance(TemplateOptions::latex()), main_template, &Vec::new(), &stat_block).map_err(|e| format!("Error producing LaTeX: {}",e))?
         },
         OutputFormat::Plain() => {

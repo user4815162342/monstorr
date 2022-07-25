@@ -23,6 +23,8 @@ use serde::Serialize;
 
 use crate::structured_text::TextBlock;
 
+
+
 #[derive(PartialEq,Debug)]
 #[derive(Serialize,Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -312,6 +314,7 @@ impl CreatureStatBlock {
         }
 
     }
+
 }
 
 
