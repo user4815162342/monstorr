@@ -8,7 +8,7 @@
 \begin{dnd5eStatBlock}
 \rpgCreatureHeading{ {{ name}} }{ {{size}} }{ {{type}} {% if subtype %} ({{subtype}}){%endif%} }{ {{ alignment}} }
 
-\dnd5eTaperedRule{}
+\dndTaperedRule{}
 
 \rpgCreatureStat{Armor Class}{ {{armor}} }
     
@@ -16,13 +16,13 @@
     
 \rpgCreatureStat{Speed}{ {{speed}} }
 
-\dnd5eTaperedRule{}
+\dndTaperedRule{}
 
 \begin{dnd5eAbilitiesTable}
     {{ strength }} & {{dexterity}} & {{constitution}} & {{intelligence}} & {{wisdom}} & {{charisma}}
 \end{dnd5eAbilitiesBlock}
 
-\dnd5eTaperedRule{}
+\dndTaperedRule{}
 
 {% if saving_throws %}\rpgCreatureStat{Saving Throws}{ {{ saving_throws }} }
 
@@ -42,7 +42,7 @@
 
 \rpgCreatureStat{Challenge}{ {{ challenge_rating }} }
     
-\dnd5eTaperedRule{}
+\dndTaperedRule{}
 {% for feature in special_abilities %}{% 
 include 'feature-template.tex' %}{% 
 endfor %}{% 
@@ -71,7 +71,7 @@ for feature in legendary_actions.actions %}{%
     endwith %}{% 
 endfor %}{% endif %}{%
 if source %}
-\dnd5eTaperedRule{}
+\dndTaperedRule{}
 
 \textit{\rpgCreatureStat{Source}{ {{source}} }}
 {%endif%}
