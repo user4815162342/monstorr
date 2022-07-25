@@ -27,8 +27,9 @@
     Action(Attack("Claws",(
         type: Some(Weapon),
         reach: Some(5),
-        target: "one creature"
-    ),Damage("1d4",Default,Slashing),
+        target: "one creature",
+        bonus: Dexterity
+    ),Damage("1d4",Dexterity,Slashing),
     Some(Plus(Damage("1d4",Zero,Fire))))),
     Action(Action("Steam Breath","${Subj} exhales a 15-foot cone of scalding steam. Each creature in that area must succeed on a DC 10 Dexterity saving throw, taking 4 (1d8) fire damage on a failed save, or half as much damage on a successful one.",Some(AreaSaveHalf(10,Dexterity,"1d8",Zero,Fire)),None),Some(Recharge(6)))
 ])

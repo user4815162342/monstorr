@@ -32,7 +32,8 @@
     Action(Attack("Claws",(
         type: Some(Weapon),
         reach: Some(5),
-        target: "one creature"
-    ),Damage("1d4",Default,Slashing),Some(Plus(Damage("1d4",Zero,Cold))))),
+        target: "one creature",
+        bonus: Dexterity
+    ),Damage("1d4",Dexterity,Slashing),Some(Plus(Damage("1d4",Zero,Cold))))),
     Action(Action("Frost Breath","${Subj} exhales a 15-­foot cone of cold air. Each creature in that area must succeed on a DC 10 Dexterity saving throw, taking ${2d4} cold damage on a failed save, or half as much damage on a successful one.",Some(AreaSaveHalf(10,Dexterity,"2d4",Zero,Cold)),None),Some(Recharge(6)))
 ])
