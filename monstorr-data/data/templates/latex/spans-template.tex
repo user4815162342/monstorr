@@ -10,17 +10,17 @@
             span.content
         }}{%
     elif span.style == "bold" 
-        %}\textbf{ {{
+        %}\textbf{{ "{" ~
             span.content
-        }} }{%
+        ~ "}"}}{%
     elif span.style == "italic" 
-        %}\textit{ {{
+        %}\textit{{ "{" ~
             span.content
-        }} }{%
+        ~ "}"}}{%
     elif span.style == "bolditalic" 
-        %}\textbf{\textit{ {{
+        %}\textbf{\textit{{ "{" ~
             span.content
-        }} } }{%
+        ~ "}"}}}{%
     else 
         %}\textbf{\textit{ UNKNOWN SPAN STYLE {{
             span.style

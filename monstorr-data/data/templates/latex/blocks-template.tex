@@ -8,30 +8,32 @@
 {%  for block in blocks %}{% 
     if block.block=="paragraph" %}{% 
         if block.heading 
-            %}\paragraph{ {% 
+            %}\paragraph{{"{"}}{% 
             with spans=block.heading %}{% 
                 include 'spans-template.tex' %}{% 
             endwith 
-            %} } {%
+            %}{{"}"}}{%
         endif %}{% 
         with spans=block.body %}{% 
             include 'spans-template.tex' %}{% 
         endwith 
         %}
-        {% 
-    elif block.block=="subparagraph" %}\subparagraph{ {%
+
+{% 
+    elif block.block=="subparagraph" %}\subparagraph{{"{"}}{%
         if block.heading 
             %}{% 
             with spans=block.heading %}{% 
                 include 'spans-template.tex' %}{% 
             endwith 
             %}{%
-        endif %} } {% 
+        endif %}{{"}"}}{% 
         with spans=block.body %}{% 
             include 'spans-template.tex' %}{% 
         endwith 
         %}
-        {% 
+
+{% 
     else
         %}
         \textit{\textbf{UNKNOWN BLOCK TYPE {{ block.block }} }}{% 

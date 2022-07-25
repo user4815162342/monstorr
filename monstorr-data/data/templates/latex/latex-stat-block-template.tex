@@ -6,41 +6,41 @@
     file, You can obtain one at https://mozilla.org/MPL/2.0/.
 #}{% autoescape false %}
 \begin{dnd5eStatBlock}
-\rpgCreatureHeading{ {{ name}} }{ {{size}} }{ {{type}} {% if subtype %} ({{subtype}}){%endif%} }{ {{ alignment}} }
+\rpgCreatureHeading{{ "{" ~ name ~ "}"}}{{ "{" ~ size ~ "}" }}{{ "{" ~ type}} {% if subtype %} ({{subtype}}){%endif%}}{{ "{" ~  alignment ~ "}" }}
 
 \dndTaperedRule{}
 
-\rpgCreatureStat{Armor Class}{ {{armor}} }
+\rpgCreatureStat{Armor Class}{{ "{" ~ armor ~ "}" }}
     
-\rpgCreatureStat{Hit Points}{ {{hit_points}} }
+\rpgCreatureStat{Hit Points}{{ "{" ~ hit_points ~ "}" }}
     
-\rpgCreatureStat{Speed}{ {{speed}} }
+\rpgCreatureStat{Speed}{{ "{" ~ speed ~ "}" }}
 
 \dndTaperedRule{}
 
 \begin{dnd5eAbilitiesTable}
-    {{ strength }} & {{dexterity}} & {{constitution}} & {{intelligence}} & {{wisdom}} & {{charisma}}
+{{ strength }} & {{dexterity}} & {{constitution}} & {{intelligence}} & {{wisdom}} & {{charisma}}
 \end{dnd5eAbilitiesTable}
 
 \dndTaperedRule{}
 
-{% if saving_throws %}\rpgCreatureStat{Saving Throws}{ {{ saving_throws }} }
+{% if saving_throws %}\rpgCreatureStat{Saving Throws}{{ "{" ~  saving_throws  ~ "}" }}
 
-{% endif %}{% if skills %}\rpgCreatureStat{Skills}{ {{ skills }} }
+{% endif %}{% if skills %}\rpgCreatureStat{Skills}{{ "{" ~  skills  ~ "}" }}
 
-{% endif %}{% if damage_vulnerabilities %}\rpgCreatureStat{Damage Vulnerabilities}{ {{ damage_vulnerabilities }} }
+{% endif %}{% if damage_vulnerabilities %}\rpgCreatureStat{Damage Vulnerabilities}{{ "{" ~  damage_vulnerabilities  ~ "}" }}
 
-{% endif %}{% if damage_resistances %}\rpgCreatureStat{Damage Resistances}{ {{ damage_resistances }} }
+{% endif %}{% if damage_resistances %}\rpgCreatureStat{Damage Resistances}{{ "{" ~  damage_resistances  ~ "}" }}
 
-{% endif %}{% if damage_immunities %}\rpgCreatureStat{Damage Immunities}{ {{ damage_immunities }} }
+{% endif %}{% if damage_immunities %}\rpgCreatureStat{Damage Immunities}{{ "{" ~  damage_immunities  ~ "}" }}
 
-{% endif %}{% if condition_immunities %}\rpgCreatureStat{Condition Immunities}{ {{ condition_immunities }} }
+{% endif %}{% if condition_immunities %}\rpgCreatureStat{Condition Immunities}{{ "{" ~  condition_immunities  ~ "}" }}
 
-{% endif %}{% if senses %}\rpgCreatureStat{Senses}{ {{ senses }} }
+{% endif %}{% if senses %}\rpgCreatureStat{Senses}{{ "{" ~  senses  ~ "}" }}
 
-{% endif %}\rpgCreatureStat{Languages}{ {% if languages %}{{ languages }}{% else %}—{% endif %} }
+{% endif %}\rpgCreatureStat{Languages}{% if languages %}{{ "{" ~ languages ~ "}" }}{% else %}{—}{% endif %}
 
-\rpgCreatureStat{Challenge}{ {{ challenge_rating }} }
+\rpgCreatureStat{Challenge}{{ "{" ~  challenge_rating  ~ "}" }}
     
 \dndTaperedRule{}
 {% for feature in special_abilities %}{% 
@@ -73,7 +73,7 @@ endfor %}{% endif %}{%
 if source %}
 \dndTaperedRule{}
 
-\textit{\rpgCreatureStat{Source}{ {{source}} }}
+\rpgCreatureStat{\textit{Source}}{{ "{" ~ source ~ "}" }}
 {%endif%}
 \end{dnd5eStatBlock}
 {% endautoescape %}
